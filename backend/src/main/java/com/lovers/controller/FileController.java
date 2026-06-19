@@ -2,7 +2,7 @@ package com.lovers.controller;
 
 import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
-import com.lovers.service.FileService;
+import com.lovers.service.IFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class FileController {
 
     @Autowired
-    private FileService fileService;
+    private IFileService fileService;
 
     /**
      * 上传文件

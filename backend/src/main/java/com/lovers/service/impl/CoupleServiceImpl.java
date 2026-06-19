@@ -1,4 +1,4 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Anniversary;
@@ -6,7 +6,9 @@ import com.lovers.model.Couple;
 import com.lovers.model.User;
 import com.lovers.repository.CoupleRepository;
 import com.lovers.repository.UserRepository;
-import com.lovers.service.AnniversaryService;
+import com.lovers.service.IAnniversaryService;
+import com.lovers.service.ICoupleService;
+import com.lovers.service.IFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,7 +22,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class CoupleService {
+public class CoupleServiceImpl implements ICoupleService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -32,7 +34,10 @@ public class CoupleService {
     private UserRepository userRepository;
 
     @Autowired
-    private AnniversaryService anniversaryService;
+    private IAnniversaryService anniversaryService;
+
+    @Autowired
+    private IFileService fileService;
 
     @Value("${invite.code-length}")
     private int codeLength;
@@ -145,11 +150,12 @@ public class CoupleService {
             partner = userRepository.findById(couple.getUserA()).orElse(null);
         }
 
+        String partnerAvatarUrl = partner != null ? fileService.getFileUrl(partner.getAvatar()) : null;
         return Map.of(
                 "coupleId", couple.getId(),
                 "loveDate", couple.getLoveDate() != null ? couple.getLoveDate().toString() : null,
                 "partnerNickname", partner != null ? partner.getNickname() : "未知",
-                "partnerAvatar", partner != null ? partner.getAvatar() : "",
+                "partnerAvatar", partnerAvatarUrl != null ? partnerAvatarUrl : "",
                 "partnerId", partner != null ? partner.getId() : null
         );
     }

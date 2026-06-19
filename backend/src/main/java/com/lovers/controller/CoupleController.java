@@ -2,7 +2,7 @@ package com.lovers.controller;
 
 import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
-import com.lovers.service.CoupleService;
+import com.lovers.service.ICoupleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 public class CoupleController {
 
     @Autowired
-    private CoupleService coupleService;
+    private ICoupleService coupleService;
 
     /**
      * 创建邀请码

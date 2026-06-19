@@ -4,7 +4,7 @@ import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
 import com.lovers.model.User;
 import com.lovers.repository.UserRepository;
-import com.lovers.service.ActivityService;
+import com.lovers.service.IActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 public class ActivityController {
 
     @Autowired
-    private ActivityService activityService;
+    private IActivityService activityService;
 
     @Autowired
     private UserRepository userRepository;

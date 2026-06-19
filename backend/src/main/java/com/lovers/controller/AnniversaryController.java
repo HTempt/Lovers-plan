@@ -4,7 +4,7 @@ import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
 import com.lovers.model.User;
 import com.lovers.repository.UserRepository;
-import com.lovers.service.AnniversaryService;
+import com.lovers.service.IAnniversaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 public class AnniversaryController {
 
     @Autowired
-    private AnniversaryService anniversaryService;
+    private IAnniversaryService anniversaryService;
 
     @Autowired
     private UserRepository userRepository;

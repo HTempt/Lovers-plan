@@ -2,7 +2,7 @@ package com.lovers.controller;
 
 import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
-import com.lovers.service.StatisticsService;
+import com.lovers.service.IStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class StatisticsController {
 
     @Autowired
-    private StatisticsService statisticsService;
+    private IStatisticsService statisticsService;
 
     /**
      * 获取统计概览

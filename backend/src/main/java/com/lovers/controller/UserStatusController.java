@@ -3,7 +3,7 @@ package com.lovers.controller;
 import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
 import com.lovers.model.UserStatus;
-import com.lovers.service.UserStatusService;
+import com.lovers.service.IUserStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 public class UserStatusController {
 
     @Autowired
-    private UserStatusService userStatusService;
+    private IUserStatusService userStatusService;
 
     /**
      * 设置状态
@@ -75,8 +75,8 @@ public class UserStatusController {
     @GetMapping("/templates")
     public Result<Map<String, Object>> getTemplates() {
         return Result.success(Map.of(
-                "statusTemplates", UserStatusService.STATUS_TEMPLATES,
-                "moodTags", UserStatusService.MOOD_TAGS
+                "statusTemplates", IUserStatusService.STATUS_TEMPLATES,
+                "moodTags", IUserStatusService.MOOD_TAGS
         ));
     }
 }

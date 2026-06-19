@@ -1,4 +1,4 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.lovers.model.Activity;
 import com.lovers.model.Diary;
@@ -8,6 +8,7 @@ import com.lovers.repository.ActivityRepository;
 import com.lovers.repository.DiaryRepository;
 import com.lovers.repository.TaskRepository;
 import com.lovers.repository.WishRepository;
+import com.lovers.service.IActivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ActivityService {
+public class ActivityServiceImpl implements IActivityService {
 
-    private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
+    private static final Logger log = LoggerFactory.getLogger(ActivityServiceImpl.class);
 
     @Autowired
     private ActivityRepository activityRepository;

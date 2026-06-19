@@ -1,5 +1,9 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.IDiaryService;
+import com.lovers.service.IFileService;
+import com.lovers.service.IActivityService;
+import com.lovers.service.ILoveTreeService;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Diary;
 import com.lovers.model.DiaryMedia;
@@ -21,9 +25,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DiaryService {
+public class DiaryServiceImpl implements IDiaryService {
 
-    private static final Logger log = LoggerFactory.getLogger(DiaryService.class);
+    private static final Logger log = LoggerFactory.getLogger(DiaryServiceImpl.class);
 
     @Autowired
     private DiaryRepository diaryRepository;
@@ -35,10 +39,13 @@ public class DiaryService {
     private UserRepository userRepository;
 
     @Autowired
-    private FileService fileService;
+    private IFileService fileService;
 
     @Autowired
-    private ActivityService activityService;
+    private IActivityService activityService;
+
+    @Autowired
+    private ILoveTreeService loveTreeService;
 
     /**
      * 创建日记
@@ -76,6 +83,14 @@ public class DiaryService {
             activityService.recordActivity(coupleId, "diary", "📝 " + title, desc, diary.getId(), "📝");
         } catch (Exception e) {
             log.warn("Failed to record diary activity", e);
+        }
+
+        // 爱情树成长值 +5
+        try {
+            loveTreeService.addGrowth(coupleId, "diary", ILoveTreeService.GROWTH_DIARY,
+                    diary.getId(), "写日记：" + title);
+        } catch (Exception e) {
+            log.warn("Failed to add love tree growth for diary", e);
         }
 
         return diary;

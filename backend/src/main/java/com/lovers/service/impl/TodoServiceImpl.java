@@ -1,10 +1,11 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Todo;
 import com.lovers.model.User;
 import com.lovers.repository.TodoRepository;
 import com.lovers.repository.UserRepository;
+import com.lovers.service.ITodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-public class TodoService {
+public class TodoServiceImpl implements ITodoService {
 
     @Autowired
     private TodoRepository todoRepository;

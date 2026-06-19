@@ -21,8 +21,8 @@ Page({
     // 伴侣信息 + 状态（保留双人卡片）
     partner: null,
     partnerName: '',
-    myAvatar: '',
-    partnerAvatar: '',
+    myAvatar: '/images/icon/user-girl.png',
+    partnerAvatar: '/images/icon/user-girl.png',
     myStatus: '',
     myMood: '',
     myStatusDuration: '',
@@ -35,6 +35,19 @@ Page({
     feedPage: 0,
     feedHasMore: true,
     feedLoading: false,
+
+    // 今日提醒
+    reminders: [],
+
+    // 爱情树
+    loveTree: null,
+
+    // 签到
+    signedInToday: false,
+    signInStreak: 0,
+
+    // 每日一言
+    dailySentence: { text: '', page: '' },
 
     // 当前活跃tab
     activeTab: 'index'
@@ -92,6 +105,12 @@ Page({
         _timeDisplay: util.timeAgo(item.createTime)
       }));
 
+      // 爱情树信息
+      const loveTree = data.loveTree || null;
+
+      // 签到状态
+      const signIn = data.signIn || {};
+
       this.setData({
         hasCouple: true,
         loveDays: data.loveDays || 0,
@@ -102,14 +121,24 @@ Page({
         marriedDate: data.marriedDate || '',
         partner: data.partner,
         partnerName: data.partner ? data.partner.nickname || '另一半' : '对方',
-        myAvatar: data.myUserInfo ? (data.myUserInfo.avatar || defaultMyAvatar) : defaultMyAvatar,
-        partnerAvatar: data.partner ? (data.partner.avatar || defaultPartnerAvatar) : defaultPartnerAvatar,
+        myAvatar: data.myUserInfo && data.myUserInfo.avatar ? data.myUserInfo.avatar : (myGender === 1 ? '/images/icon/user-boy.png' : '/images/icon/user-girl.png'),
+        partnerAvatar: data.partner && data.partner.avatar ? data.partner.avatar : defaultPartnerAvatar,
         myStatus: myStatusStr,
         myMood: data.myStatus ? data.myStatus.mood : '',
         myStatusDuration: myStatusDur,
         partnerStatus: partnerStatusStr,
         partnerMood: data.partnerStatus ? data.partnerStatus.mood : '',
         partnerStatusDuration: partnerStatusDur,
+        loveTree: loveTree,
+        signedInToday: signIn.signedInToday || false,
+        signInStreak: signIn.streakDays || 0,
+        dailySentence: data.dailySentence || '',
+        reminders: this.buildReminders(data),
+        // 每日一言（后端返回 { text, page }）
+        dailySentence: typeof data.dailySentence === 'object' && data.dailySentence
+          ? { text: data.dailySentence.text || '', page: data.dailySentence.page || '' }
+          : { text: data.dailySentence || '', page: '' },
+
         activityFeed: feedItems,
         feedPage: feed.page || 0,
         feedHasMore: feed.hasMore || false,
@@ -170,6 +199,67 @@ Page({
     }
   },
 
+  // 构建提醒列表
+  buildReminders(data) {
+    const reminders = [];
+    // 1. 最近纪念日
+    if (data.upcomingAnniversary) {
+      reminders.push({
+        type: 'anniversary',
+        icon: data.upcomingAnniversary.icon || '❤️',
+        title: data.upcomingAnniversary.title,
+        desc: `还有 ${data.upcomingAnniversary.daysLeft} 天`,
+        daysLeft: data.upcomingAnniversary.daysLeft,
+        page: 'anniversary',
+        id: data.upcomingAnniversary.id
+      });
+    }
+    // 2. 进行中任务
+    if (data.taskList && data.taskList.length > 0) {
+      data.taskList.slice(0, 1).forEach(t => {
+        if (reminders.length >= 3) return;
+        const target = t.targetCount || 1;
+        const current = t.currentCount || 0;
+        const progress = Math.min(100, Math.round(current / target * 100));
+        reminders.push({
+          type: 'task',
+          icon: '🎯',
+          title: t.title,
+          desc: `还差 ${target - current} 次完成`,
+          progressValue: progress,
+          page: 'task',
+          id: t.id
+        });
+      });
+    }
+    // 3. 未完成待办
+    if (data.todoList && data.todoList.length > 0) {
+      data.todoList.slice(0, 1).forEach(t => {
+        if (reminders.length >= 3) return;
+        reminders.push({
+          type: 'todo',
+          icon: '📝',
+          title: t.title,
+          desc: t.deadline ? `截止 ${t.deadline}` : '待完成',
+          page: 'todo',
+          id: t.id
+        });
+      });
+    }
+    return reminders;
+  },
+
+  // 提醒点击跳转
+  onReminderTap(e) {
+    const page = e.currentTarget.dataset.page;
+    const tabPages = { task: '/pages/task/task' };
+    const navPages = { anniversary: '/pages/anniversary/anniversary', todo: '/pages/todo/todo' };
+    const tabUrl = tabPages[page];
+    const navUrl = navPages[page];
+    if (tabUrl) wx.switchTab({ url: tabUrl });
+    else if (navUrl) wx.navigateTo({ url: navUrl });
+  },
+
   // 动态点击跳转
   onFeedItemTap(e) {
     const item = e.currentTarget.dataset.item;
@@ -195,6 +285,20 @@ Page({
     }
   },
 
+  // 头像加载失败 → 使用默认图片
+  onMyAvatarError() {
+    this.setData({ myAvatar: '/images/icon/user-girl.png' });
+  },
+
+  onPartnerAvatarError() {
+    this.setData({ partnerAvatar: '/images/icon/user-girl.png' });
+  },
+
+  // 去爱情树页面
+  goToLoveTree() {
+    wx.navigateTo({ url: '/pages/love-tree/love-tree' });
+  },
+
   // 设置我的状态
   setMyStatus() {
     wx.navigateTo({ url: '/pages/status/status' });
@@ -208,6 +312,26 @@ Page({
   // 去个人页
   goToProfile() {
     wx.navigateTo({ url: '/pages/profile/profile' });
+  },
+
+  // 每日一言点击跳转
+  onSentenceTap(e) {
+    const page = e.currentTarget.dataset.page;
+    if (!page) return;
+    const navMap = {
+      diary: '/pages/diary/diary',
+      task: '/pages/task/task',
+      wish: '/pages/wish/wish',
+      'love-tree': '/pages/love-tree/love-tree'
+    };
+    const url = navMap[page];
+    if (url) {
+      if (page === 'love-tree') {
+        wx.navigateTo({ url });
+      } else {
+        wx.switchTab({ url });
+      }
+    }
   },
 
   onShareAppMessage() {

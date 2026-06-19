@@ -1,8 +1,11 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.IActivityService;
+import com.lovers.service.ILoveTreeService;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Wish;
 import com.lovers.repository.WishRepository;
+import com.lovers.service.IWishService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +17,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class WishService {
+public class WishServiceImpl implements IWishService {
 
     @Autowired
     private WishRepository wishRepository;
 
     @Autowired
-    private ActivityService activityService;
+    private IActivityService activityService;
 
-    private static final Logger log = LoggerFactory.getLogger(WishService.class);
+    @Autowired
+    private ILoveTreeService loveTreeService;
+
+    private static final Logger log = LoggerFactory.getLogger(WishServiceImpl.class);
 
     public static final List<String> CATEGORIES = List.of("travel", "life", "growth");
 
@@ -78,6 +84,14 @@ public class WishService {
             } catch (Exception e) {
                 log.warn("Failed to record wish activity", e);
             }
+            // 爱情树成长值 +30
+            try {
+                loveTreeService.addGrowth(wish.getCoupleId(), "wish",
+                        ILoveTreeService.GROWTH_WISH, wish.getId(),
+                        "愿望达成：" + wish.getTitle());
+            } catch (Exception e) {
+                log.warn("Failed to add love tree growth for wish", e);
+            }
         }
 
         return wishRepository.save(wish);
@@ -103,6 +117,15 @@ public class WishService {
                     wish.getId(), "✨");
         } catch (Exception e) {
             log.warn("Failed to record wish activity", e);
+        }
+
+        // 爱情树成长值 +30
+        try {
+            loveTreeService.addGrowth(wish.getCoupleId(), "wish",
+                    ILoveTreeService.GROWTH_WISH, wish.getId(),
+                    "愿望达成：" + wish.getTitle());
+        } catch (Exception e) {
+            log.warn("Failed to add love tree growth for wish", e);
         }
 
         return saved;

@@ -1,8 +1,10 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.IActivityService;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Anniversary;
 import com.lovers.repository.AnniversaryRepository;
+import com.lovers.service.IAnniversaryService;
 import com.xhinliang.lunarcalendar.LunarCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +17,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
-public class AnniversaryService {
+public class AnniversaryServiceImpl implements IAnniversaryService {
 
     @Autowired
     private AnniversaryRepository anniversaryRepository;
 
     @Autowired
-    private ActivityService activityService;
+    private IActivityService activityService;
 
-    private static final Logger log = LoggerFactory.getLogger(AnniversaryService.class);
+    private static final Logger log = LoggerFactory.getLogger(AnniversaryServiceImpl.class);
 
     /**
      * 创建自定义纪念日

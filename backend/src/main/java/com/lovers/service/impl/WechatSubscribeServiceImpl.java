@@ -1,6 +1,7 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lovers.service.IWechatSubscribeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class WechatSubscribeService {
+public class WechatSubscribeServiceImpl implements IWechatSubscribeService {
 
-    private static final Logger log = LoggerFactory.getLogger(WechatSubscribeService.class);
+    private static final Logger log = LoggerFactory.getLogger(WechatSubscribeServiceImpl.class);
     private static final String ACCESS_TOKEN_KEY = "wechat:access_token";
     private static final long TOKEN_EXPIRE_SECONDS = 7000; // 稍小于2小时
 

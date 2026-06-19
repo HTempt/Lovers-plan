@@ -1,5 +1,7 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.IReminderService;
+import com.lovers.service.IWechatSubscribeService;
 import com.lovers.model.*;
 import com.lovers.repository.*;
 import org.slf4j.Logger;
@@ -14,9 +16,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-public class ReminderService {
+public class ReminderServiceImpl implements IReminderService {
 
-    private static final Logger log = LoggerFactory.getLogger(ReminderService.class);
+    private static final Logger log = LoggerFactory.getLogger(ReminderServiceImpl.class);
 
     @Autowired
     private AnniversaryRepository anniversaryRepository;
@@ -40,7 +42,7 @@ public class ReminderService {
     private CoupleRepository coupleRepository;
 
     @Autowired
-    private WechatSubscribeService wechatSubscribeService;
+    private IWechatSubscribeService wechatSubscribeService;
 
     /**
      * 每天凌晨 8:00 检查纪念日提醒

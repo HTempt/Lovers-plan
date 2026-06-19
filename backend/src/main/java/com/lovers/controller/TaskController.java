@@ -7,8 +7,8 @@ import com.lovers.model.TaskRecord;
 import com.lovers.model.User;
 import com.lovers.repository.UserRepository;
 import com.lovers.model.Badge;
-import com.lovers.service.BadgeService;
-import com.lovers.service.TaskService;
+import com.lovers.service.IBadgeService;
+import com.lovers.service.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +21,10 @@ import java.util.Map;
 public class TaskController {
 
     @Autowired
-    private TaskService taskService;
+    private ITaskService taskService;
 
     @Autowired
-    private BadgeService badgeService;
+    private IBadgeService badgeService;
 
     @Autowired
     private UserRepository userRepository;

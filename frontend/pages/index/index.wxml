@@ -44,15 +44,17 @@
             <text class="hero-day-number" wx:else>{{loveDays}}</text>
             <text class="hero-day-unit">天</text>
           </view>
-          <text class="hero-quote">"今天也在认真爱你"</text>
+          <text class="hero-quote" bindtap="onSentenceTap" data-page="{{dailySentence.page || ''}}">"{{dailySentence.text || dailySentence}}"</text>
         </view>
       </view>
     </view>
 
+
+
     <!-- ===== 双人状态卡片 ===== -->
     <view class="status-dual-card">
       <view class="status-person" bindtap="setMyStatus">
-        <image class="status-avatar" src="{{myAvatar || '/images/icon/user-girl.png'}}" />
+        <image class="status-avatar" src="{{myAvatar || '/images/icon/user-girl.png'}}" binderror="onMyAvatarError" />
         <view class="status-info">
           <text class="status-name">我</text>
           <view class="status-tag {{myStatus ? 'status-tag-active' : ''}}">
@@ -65,13 +67,70 @@
         <text class="status-heart-icon">💗</text>
       </view>
       <view class="status-person status-person-right">
-        <image class="status-avatar" src="{{partnerAvatar || '/images/icon/user-girl.png'}}" />
+        <image class="status-avatar" src="{{partnerAvatar || '/images/icon/user-girl.png'}}" binderror="onPartnerAvatarError" />
         <view class="status-info">
           <text class="status-name">{{partnerName}}</text>
           <view class="status-tag {{partnerStatus ? 'status-tag-active' : ''}}">
             <text>{{partnerStatus || '暂无状态'}}</text>
           </view>
           <text class="status-duration" wx:if="{{partnerStatusDuration}}">{{partnerStatusDuration}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 爱情树（含签到状态） ===== -->
+    <view class="love-tree-section" wx:if="{{loveTree}}">
+      <view class="love-tree-card" bindtap="goToLoveTree">
+        <view class="love-tree-top">
+          <view class="love-tree-left">
+            <text class="love-tree-icon">{{loveTree.levelIcon || '🌱'}}</text>
+            <view class="love-tree-info">
+              <text class="love-tree-name">🌱 爱情树 Lv{{loveTree.level}}</text>
+              <text class="love-tree-level-name">{{loveTree.levelName}}</text>
+            </view>
+          </view>
+          <view class="love-tree-sign-status" wx:if="{{signedInToday}}">
+            <text class="love-tree-sign-text">✅ 已签到</text>
+          </view>
+        </view>
+        <view class="love-tree-progress-row">
+          <view class="love-tree-progress-bar">
+            <view class="love-tree-progress-fill" style="width: {{loveTree.progress}}%;"></view>
+          </view>
+          <text class="love-tree-progress-text">{{loveTree.growthValue}} / {{loveTree.nextThreshold}}</text>
+        </view>
+        <view class="love-tree-footer">
+          <text class="love-tree-sign-hint" wx:if="{{signedInToday}}">今日签到 +2 成长值 · 连续 {{signInStreak}} 天</text>
+          <text class="love-tree-sign-hint" wx:else>每日访问自动签到 🌱</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 今日提醒 ===== -->
+    <view class="reminder-section" wx:if="{{reminders && reminders.length > 0}}">
+      <view class="reminder-scroll-x">
+        <view class="reminder-card {{item.type === 'anniversary' ? 'reminder-anni' : ''}} {{item.type === 'task' ? 'reminder-task' : ''}} {{item.type === 'todo' ? 'reminder-todo' : ''}}"
+              wx:for="{{reminders}}" wx:key="index"
+              bindtap="onReminderTap" data-page="{{item.page}}" data-id="{{item.id}}">
+          <view class="reminder-accent {{item.type === 'anniversary' ? 'accent-anni' : ''}} {{item.type === 'task' ? 'accent-task' : ''}} {{item.type === 'todo' ? 'accent-todo' : ''}}">
+            <text class="reminder-accent-icon">{{item.icon}}</text>
+          </view>
+          <view class="reminder-body">
+            <view class="reminder-body-top">
+              <text class="reminder-title">{{item.title}}</text>
+            </view>
+            <view wx:if="{{item.type === 'anniversary'}}" class="reminder-countdown-wrap">
+              <text class="reminder-countdown-num">{{item.daysLeft}}</text>
+              <text class="reminder-countdown-unit">天</text>
+            </view>
+            <view wx:elif="{{item.type === 'task' && item.progressValue >= 0}}" class="reminder-progress-wrap">
+              <view class="reminder-progress-bar">
+                <view class="reminder-progress-fill" style="width: {{item.progressValue}}%;"></view>
+              </view>
+              <text class="reminder-progress-text">{{item.desc}}</text>
+            </view>
+            <text wx:else class="reminder-desc">{{item.desc}}</text>
+          </view>
         </view>
       </view>
     </view>

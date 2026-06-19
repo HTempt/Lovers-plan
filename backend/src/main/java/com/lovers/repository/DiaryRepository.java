@@ -19,6 +19,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     List<Diary> findByCoupleIdAndStatusOrderByCreateTimeDesc(Long coupleId, Integer status);
 
+    long countByCoupleIdAndStatus(Long coupleId, Integer status);
+
     Optional<Diary> findByIdAndCreatorId(Long id, Long creatorId);
 
     @Query("SELECT DISTINCT d.location FROM Diary d WHERE d.coupleId = :coupleId AND d.status = :status AND d.location IS NOT NULL AND d.location <> ''")

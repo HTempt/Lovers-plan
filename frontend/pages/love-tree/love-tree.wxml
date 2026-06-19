@@ -1,0 +1,156 @@
+<view class="page-wrap">
+  <!-- 加载状态 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-icon">🌱</text>
+    <text class="loading-text">爱情树正在成长...</text>
+  </view>
+
+  <view class="content-scroll" wx:elif="{{treeInfo}}" scroll-y>
+    
+    <!-- ===== 顶部 Tab 切换 ===== -->
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab === 'info' ? 'tab-active' : ''}}" data-tab="info" bindtap="switchTab">
+        <text>🌳 我的树</text>
+      </view>
+      <view class="tab-item {{activeTab === 'history' ? 'tab-active' : ''}}" data-tab="history" bindtap="switchTab">
+        <text>📜 成长记录</text>
+      </view>
+      <view class="tab-item {{activeTab === 'levels' ? 'tab-active' : ''}}" data-tab="levels" bindtap="switchTab">
+        <text>🏆 等级</text>
+      </view>
+    </view>
+
+    <!-- ===== Tab 1: 我的树 ===== -->
+    <view wx:if="{{activeTab === 'info'}}" class="info-section">
+      <!-- 树展示区 -->
+      <view class="tree-display">
+        <view class="tree-canvas">
+          <text class="tree-icon-big">{{treeInfo.levelIcon || '🌱'}}</text>
+        </view>
+        <text class="tree-level-text">Lv{{treeInfo.level}} {{treeInfo.levelName}}</text>
+      </view>
+
+      <!-- 成长进度条 -->
+      <view class="growth-progress-card">
+        <view class="growth-progress-header">
+          <text class="growth-progress-label">成长值</text>
+          <text class="growth-progress-value">{{treeInfo.growthValue}} / {{treeInfo.nextThreshold}}</text>
+        </view>
+        <view class="growth-progress-bar">
+          <view class="growth-progress-fill" style="width: {{treeInfo.progress}}%;"></view>
+        </view>
+        <text class="growth-progress-next" wx:if="{{treeInfo.level < 7}}">
+          距离 Lv{{treeInfo.level + 1}} {{treeInfo.nextLevelName}} 还差 {{treeInfo.nextThreshold - treeInfo.growthValue}}
+        </text>
+        <text class="growth-progress-next" wx:else>✨ 已达最高等级！</text>
+      </view>
+
+      <!-- 成长值规则 -->
+      <view class="section-card">
+        <view class="section-title">🌱 获得成长值</view>
+        <view class="rule-list">
+          <view class="rule-item">
+            <text class="rule-icon">📝</text>
+            <text class="rule-name">写日记</text>
+            <text class="rule-value">+5</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-icon">🎯</text>
+            <text class="rule-name">完成任务</text>
+            <text class="rule-value">+10</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-icon">✨</text>
+            <text class="rule-name">愿望达成</text>
+            <text class="rule-value">+30</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-icon">✅</text>
+            <text class="rule-name">每日访问</text>
+            <text class="rule-value">+2</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-icon">🟢</text>
+            <text class="rule-name">更新状态</text>
+            <text class="rule-value">+1</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 解锁奖励 -->
+      <view class="section-card" wx:if="{{rewards && Object.keys(rewards).length > 0}}">
+        <view class="section-title">🎁 解锁奖励</view>
+        <view class="reward-list">
+          <view class="reward-item {{treeInfo.level >= 3 ? 'reward-unlocked' : 'reward-locked'}}">
+            <text class="reward-icon">{{treeInfo.level >= 3 ? '🌟' : '🔒'}}</text>
+            <view class="reward-info">
+              <text class="reward-name">Lv3 {{rewards[3] || '情侣头像框'}}</text>
+              <text class="reward-status">{{treeInfo.level >= 3 ? '已解锁' : '未解锁'}}</text>
+            </view>
+          </view>
+          <view class="reward-item {{treeInfo.level >= 5 ? 'reward-unlocked' : 'reward-locked'}}">
+            <text class="reward-icon">{{treeInfo.level >= 5 ? '🌟' : '🔒'}}</text>
+            <view class="reward-info">
+              <text class="reward-name">Lv5 {{rewards[5] || '爱情树主题'}}</text>
+              <text class="reward-status">{{treeInfo.level >= 5 ? '已解锁' : '未解锁'}}</text>
+            </view>
+          </view>
+          <view class="reward-item {{treeInfo.level >= 7 ? 'reward-unlocked' : 'reward-locked'}}">
+            <text class="reward-icon">{{treeInfo.level >= 7 ? '🌟' : '🔒'}}</text>
+            <view class="reward-info">
+              <text class="reward-name">Lv7 {{rewards[7] || '专属年度报告'}}</text>
+              <text class="reward-status">{{treeInfo.level >= 7 ? '已解锁' : '未解锁'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== Tab 2: 成长记录 ===== -->
+    <view wx:elif="{{activeTab === 'history'}}" class="history-section">
+      <view class="history-list">
+        <view class="history-item" wx:for="{{growthHistory}}" wx:key="id">
+          <view class="history-icon-wrap">
+            <text class="history-icon">{{item._icon}}</text>
+          </view>
+          <view class="history-body">
+            <text class="history-title">{{item.description}}</text>
+            <text class="history-time">{{item._timeDisplay}}</text>
+          </view>
+          <text class="history-growth">+{{item.growthValue}}</text>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="history-loading" wx:if="{{historyLoading}}">
+        <text>加载中...</text>
+      </view>
+      <view class="history-no-more" wx:elif="{{!historyHasMore && growthHistory.length > 0}}">
+        <text>— 没有更多了 —</text>
+      </view>
+      <view class="history-empty" wx:elif="{{growthHistory.length === 0}}">
+        <text class="empty-icon">🌱</text>
+        <text class="empty-text">还没有成长记录，开始互动吧</text>
+      </view>
+    </view>
+
+    <!-- ===== Tab 3: 等级一览 ===== -->
+    <view wx:elif="{{activeTab === 'levels'}}" class="levels-section">
+      <view class="section-card">
+        <view class="section-title">📊 等级体系</view>
+        <view class="level-list">
+          <view class="level-item {{treeInfo.level >= item.level ? 'level-reached' : ''}}" wx:for="{{levels}}" wx:key="level">
+            <view class="level-left">
+              <text class="level-icon">{{item.icon}}</text>
+              <view class="level-info">
+                <text class="level-name">Lv{{item.level}} {{item.name}}</text>
+                <text class="level-threshold">需要 {{item.threshold}} 成长值</text>
+              </view>
+            </view>
+            <text class="level-badge" wx:if="{{treeInfo.level >= item.level}}">✓</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

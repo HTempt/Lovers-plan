@@ -1,0 +1,402 @@
+/* ============= 爱情树页面样式 ============= */
+
+.page-wrap {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F0F7EE;
+  overflow: hidden;
+}
+
+/* 加载 */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(180deg, #7BB77A 0%, #B5D8A8 40%, #F0F7EE 70%);
+}
+
+.loading-icon {
+  font-size: 80rpx;
+  animation: treeGrow 1.5s ease-in-out infinite;
+}
+
+@keyframes treeGrow {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.15) translateY(-10rpx); }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 24rpx;
+}
+
+/* 滚动容器 */
+.content-scroll {
+  flex: 1;
+  height: 0;
+  padding-bottom: 40rpx;
+}
+
+/* ===== Tab 栏 ===== */
+.tab-bar {
+  display: flex;
+  background: #FFFFFF;
+  padding: 0 32rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: #999999;
+  font-weight: 500;
+  position: relative;
+}
+
+.tab-active {
+  color: #5B8C5A;
+  font-weight: 700;
+}
+
+.tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 6rpx;
+  background: #5B8C5A;
+  border-radius: 3rpx;
+}
+
+/* ===== 树展示区 ===== */
+.tree-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0 20rpx;
+  background: linear-gradient(180deg, #E8F3E2 0%, #F0F7EE 100%);
+}
+
+.tree-canvas {
+  width: 240rpx;
+  height: 240rpx;
+  background: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 48rpx rgba(91, 140, 90, 0.15);
+  margin-bottom: 20rpx;
+}
+
+.tree-icon-big {
+  font-size: 120rpx;
+}
+
+.tree-level-text {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #3D6B3C;
+}
+
+/* ===== 进度条卡片 ===== */
+.growth-progress-card {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin: 16rpx 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+.growth-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.growth-progress-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.growth-progress-value {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #5B8C5A;
+}
+
+.growth-progress-bar {
+  height: 24rpx;
+  background: #E8F3E2;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+
+.growth-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7BB77A, #4A8B47);
+  border-radius: 12rpx;
+  transition: width 0.5s ease;
+}
+
+.growth-progress-next {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* ===== 通用卡片 ===== */
+.section-card {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin: 16rpx 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 24rpx;
+}
+
+/* ===== 成长值规则 ===== */
+.rule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.rule-icon {
+  font-size: 36rpx;
+  width: 48rpx;
+  text-align: center;
+}
+
+.rule-name {
+  flex: 1;
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.rule-value {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #5B8C5A;
+}
+
+/* ===== 解锁奖励 ===== */
+.reward-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx;
+  border-radius: 24rpx;
+  background: #F9F9F9;
+}
+
+.reward-unlocked {
+  background: #E8F3E2;
+}
+
+.reward-locked {
+  opacity: 0.7;
+}
+
+.reward-icon {
+  font-size: 40rpx;
+  width: 56rpx;
+  text-align: center;
+}
+
+.reward-info {
+  flex: 1;
+}
+
+.reward-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+  display: block;
+}
+
+.reward-status {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.reward-unlocked .reward-status {
+  color: #5B8C5A;
+}
+
+/* ===== 成长记录 ===== */
+.history-section {
+  padding: 16rpx 32rpx;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.history-icon-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  background: #E8F3E2;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.history-icon {
+  font-size: 32rpx;
+}
+
+.history-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+  display: block;
+  margin-bottom: 4rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.history-time {
+  font-size: 22rpx;
+  color: #CCCCCC;
+}
+
+.history-growth {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #5B8C5A;
+  flex-shrink: 0;
+}
+
+.history-loading,
+.history-no-more {
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 24rpx;
+  color: #CCCCCC;
+}
+
+.history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+}
+
+.history-empty .empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+}
+
+.history-empty .empty-text {
+  font-size: 26rpx;
+  color: #CCCCCC;
+}
+
+/* ===== 等级一览 ===== */
+.levels-section {
+  padding: 16rpx 32rpx;
+}
+
+.level-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.level-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 24rpx;
+  border-radius: 24rpx;
+  background: #F9F9F9;
+}
+
+.level-reached {
+  background: #E8F3E2;
+}
+
+.level-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.level-icon {
+  font-size: 40rpx;
+}
+
+.level-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rpx;
+}
+
+.level-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.level-threshold {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.level-badge {
+  font-size: 32rpx;
+  color: #5B8C5A;
+  font-weight: 800;
+}

@@ -12,7 +12,8 @@
     "pages/diary-create/diary-create",
     "pages/anniversary/anniversary",
     "pages/statistics/statistics",
-    "pages/subscribe/subscribe"
+    "pages/subscribe/subscribe",
+    "pages/love-tree/love-tree"
   ],
   "window": {
     "navigationBarTitleText": "双人岛",

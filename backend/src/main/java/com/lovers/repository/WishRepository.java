@@ -10,4 +10,6 @@ import java.util.List;
 public interface WishRepository extends JpaRepository<Wish, Long> {
 
     List<Wish> findByCoupleIdOrderByCreateTimeDesc(Long coupleId);
+
+    long countByCoupleIdAndStatus(Long coupleId, Integer status);
 }

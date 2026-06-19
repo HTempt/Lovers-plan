@@ -1,5 +1,8 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.IBadgeService;
+import com.lovers.service.ILoveTreeService;
+import com.lovers.service.IActivityService;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Couple;
 import com.lovers.model.Task;
@@ -9,6 +12,7 @@ import com.lovers.repository.CoupleRepository;
 import com.lovers.repository.TaskRecordRepository;
 import com.lovers.repository.TaskRepository;
 import com.lovers.repository.UserRepository;
+import com.lovers.service.ITaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class TaskService {
+public class TaskServiceImpl implements ITaskService {
 
     @Autowired
     private TaskRepository taskRepository;
@@ -35,12 +39,15 @@ public class TaskService {
     private CoupleRepository coupleRepository;
 
     @Autowired
-    private BadgeService badgeService;
+    private IBadgeService badgeService;
 
     @Autowired
-    private ActivityService activityService;
+    private ILoveTreeService loveTreeService;
 
-    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
+    @Autowired
+    private IActivityService activityService;
+
+    private static final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
     /**
      * 创建任务
@@ -128,6 +135,15 @@ public class TaskService {
                         task.getId(), "🎯");
             } catch (Exception e) {
                 log.warn("Failed to record task activity", e);
+            }
+
+            // 爱情树成长值 +10
+            try {
+                loveTreeService.addGrowth(task.getCoupleId(), "task",
+                        ILoveTreeService.GROWTH_TASK, task.getId(),
+                        "完成任务：" + task.getTitle());
+            } catch (Exception e) {
+                log.warn("Failed to add love tree growth for task", e);
             }
         }
 

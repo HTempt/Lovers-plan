@@ -1,5 +1,9 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.IUserStatusService;
+import com.lovers.service.IWechatSubscribeService;
+import com.lovers.service.IActivityService;
+import com.lovers.service.ILoveTreeService;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Couple;
 import com.lovers.model.User;
@@ -16,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserStatusService {
-
-    public static final List<String> STATUS_TEMPLATES = List.of("工作中", "学习中", "睡觉中", "运动中", "游戏中", "路上");
-    public static final List<String> MOOD_TAGS = List.of("开心", "平静", "难过", "生气");
+public class UserStatusServiceImpl implements IUserStatusService {
 
     @Autowired
     private UserStatusRepository userStatusRepository;
@@ -31,12 +32,15 @@ public class UserStatusService {
     private CoupleRepository coupleRepository;
 
     @Autowired
-    private WechatSubscribeService wechatSubscribeService;
+    private IWechatSubscribeService wechatSubscribeService;
 
     @Autowired
-    private ActivityService activityService;
+    private IActivityService activityService;
 
-    private static final Logger log = LoggerFactory.getLogger(UserStatusService.class);
+    @Autowired
+    private ILoveTreeService loveTreeService;
+
+    private static final Logger log = LoggerFactory.getLogger(UserStatusServiceImpl.class);
 
     /**
      * 设置状态 - 自动结束之前的活跃状态
@@ -71,6 +75,15 @@ public class UserStatusService {
                     null, "🟢");
         } catch (Exception e) {
             log.warn("Failed to record status activity", e);
+        }
+
+        // 爱情树成长值 +1
+        try {
+            loveTreeService.addGrowth(user.getCoupleId(), "status",
+                    ILoveTreeService.GROWTH_STATUS, newStatus.getId(),
+                    "更新状态：" + statusName);
+        } catch (Exception e) {
+            log.warn("Failed to add love tree growth for status", e);
         }
 
         return newStatus;

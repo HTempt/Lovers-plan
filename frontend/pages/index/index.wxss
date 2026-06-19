@@ -176,6 +176,14 @@
   background: rgba(255, 255, 255, 0.6);
   padding: 8rpx 32rpx;
   border-radius: 30rpx;
+  max-width: 90%;
+  text-align: center;
+  line-height: 1.6;
+  transition: opacity 0.2s;
+}
+
+.hero-quote:active {
+  opacity: 0.7;
 }
 
 /* ===== 状态双人卡 ===== */
@@ -245,6 +253,208 @@
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* ===== 爱情树（含签到状态） ===== */
+.love-tree-section {
+  padding: 0 32rpx 20rpx;
+}
+
+.love-tree-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  background: linear-gradient(135deg, #E8F3E2, #D4E8CC);
+  border-radius: 32rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+.love-tree-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.love-tree-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.love-tree-icon {
+  font-size: 48rpx;
+}
+
+.love-tree-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rpx;
+}
+
+.love-tree-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #3D6B3C;
+}
+
+.love-tree-level-name {
+  font-size: 22rpx;
+  color: #5B8C5A;
+}
+
+.love-tree-sign-status {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.love-tree-sign-text {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #3D6B3C;
+}
+
+.love-tree-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.love-tree-progress-bar {
+  flex: 1;
+  height: 16rpx;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.love-tree-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7BB77A, #4A8B47);
+  border-radius: 8rpx;
+}
+
+.love-tree-progress-text {
+  font-size: 24rpx;
+  color: #5B8C5A;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.love-tree-footer {
+  display: flex;
+  align-items: center;
+}
+
+.love-tree-sign-hint {
+  font-size: 22rpx;
+  color: #5B8C5A;
+  opacity: 0.8;
+}
+
+/* ===== 今日提醒 ===== */
+.reminder-section {
+  padding: 0 32rpx 16rpx;
+}
+
+.reminder-scroll-x {
+  display: flex;
+  gap: 20rpx;
+}
+
+.reminder-card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.reminder-accent {
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accent-anni { background: linear-gradient(135deg, #FFE5EC, #FFD5DC); }
+.accent-task { background: linear-gradient(135deg, #EEF7FF, #D6EEFF); }
+.accent-todo { background: linear-gradient(135deg, #FFF3E8, #FFE8D6); }
+
+.reminder-accent-icon { font-size: 40rpx; }
+
+.reminder-body {
+  padding: 16rpx 20rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.reminder-body-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reminder-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #333333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.reminder-countdown-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.reminder-countdown-num {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #FF6B81;
+  line-height: 1;
+}
+
+.reminder-countdown-unit {
+  font-size: 24rpx;
+  color: #FF6B81;
+  font-weight: 500;
+}
+
+.reminder-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.reminder-progress-bar {
+  height: 10rpx;
+  background: #F0F0F0;
+  border-radius: 5rpx;
+  overflow: hidden;
+}
+
+.reminder-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6EC3FF, #4DA8E8);
+  border-radius: 5rpx;
+}
+
+.reminder-progress-text {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.reminder-desc {
+  font-size: 24rpx;
+  color: #999999;
 }
 
 /* ===== 岛屿动态 ===== */

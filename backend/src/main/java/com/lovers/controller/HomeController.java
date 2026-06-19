@@ -2,7 +2,7 @@ package com.lovers.controller;
 
 import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
-import com.lovers.service.HomeService;
+import com.lovers.service.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class HomeController {
 
     @Autowired
-    private HomeService homeService;
+    private IHomeService homeService;
 
     /**
      * 获取首页数据

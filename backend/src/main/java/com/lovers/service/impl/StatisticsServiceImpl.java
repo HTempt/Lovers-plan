@@ -1,9 +1,10 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Couple;
 import com.lovers.model.User;
 import com.lovers.repository.*;
+import com.lovers.service.IStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class StatisticsService {
+public class StatisticsServiceImpl implements IStatisticsService {
 
     @Autowired
     private UserRepository userRepository;

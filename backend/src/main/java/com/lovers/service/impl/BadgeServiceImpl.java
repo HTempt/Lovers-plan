@@ -1,9 +1,10 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.lovers.model.Badge;
 import com.lovers.model.Task;
 import com.lovers.model.TaskRecord;
 import com.lovers.repository.*;
+import com.lovers.service.IBadgeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class BadgeService {
+public class BadgeServiceImpl implements IBadgeService {
 
-    private static final Logger log = LoggerFactory.getLogger(BadgeService.class);
+    private static final Logger log = LoggerFactory.getLogger(BadgeServiceImpl.class);
 
     @Autowired
     private BadgeRepository badgeRepository;

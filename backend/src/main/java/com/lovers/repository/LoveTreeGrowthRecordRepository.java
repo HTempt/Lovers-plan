@@ -1,0 +1,19 @@
+package com.lovers.repository;
+
+import com.lovers.model.LoveTreeGrowthRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface LoveTreeGrowthRecordRepository extends JpaRepository<LoveTreeGrowthRecord, Long> {
+
+    Page<LoveTreeGrowthRecord> findByCoupleIdOrderByCreateTimeDesc(Long coupleId, Pageable pageable);
+
+    List<LoveTreeGrowthRecord> findByCoupleIdOrderByCreateTimeDesc(Long coupleId);
+
+    long countByCoupleId(Long coupleId);
+}

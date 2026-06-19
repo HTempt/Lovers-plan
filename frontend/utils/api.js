@@ -137,6 +137,16 @@ const api = {
 
   // Activity Feed
   getActivityFeed: (params) => request('GET', '/activity/list', params),
+
+  // Love Tree
+  getLoveTreeInfo: () => request('GET', '/love-tree/info'),
+  getLoveTreeHistory: (params) => request('GET', '/love-tree/history', params),
+  getLoveTreeLevels: () => request('GET', '/love-tree/levels'),
+  getLoveTreeRewards: () => request('GET', '/love-tree/rewards'),
+
+  // Sign In
+  doSignIn: () => request('POST', '/sign-in/do'),
+  getSignInStatus: () => request('GET', '/sign-in/status'),
 };
 
 module.exports = api;

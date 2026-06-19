@@ -3,7 +3,8 @@ package com.lovers.controller;
 import com.lovers.auth.UserContext;
 import com.lovers.common.Result;
 import com.lovers.model.User;
-import com.lovers.service.UserService;
+import com.lovers.service.IFileService;
+import com.lovers.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,10 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
+
+    @Autowired
+    private IFileService fileService;
 
     /**
      * 微信登录
@@ -37,10 +41,18 @@ public class AuthController {
      * GET /api/auth/userinfo
      */
     @GetMapping("/userinfo")
-    public Result<User> getUserInfo() {
+    public Result<Map<String, Object>> getUserInfo() {
         Long userId = UserContext.getUserId();
         User user = userService.getUserInfo(userId);
-        return Result.success(user);
+        String avatarUrl = fileService.getFileUrl(user.getAvatar());
+        return Result.success(Map.of(
+                "id", user.getId(),
+                "nickname", user.getNickname() != null ? user.getNickname() : "",
+                "avatar", avatarUrl != null ? avatarUrl : "",
+                "gender", user.getGender() != null ? user.getGender() : 0,
+                "phone", user.getPhone() != null ? user.getPhone() : "",
+                "coupleId", user.getCoupleId()
+        ));
     }
 
     /**

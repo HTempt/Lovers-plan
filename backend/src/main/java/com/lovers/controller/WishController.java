@@ -5,7 +5,7 @@ import com.lovers.common.Result;
 import com.lovers.model.User;
 import com.lovers.model.Wish;
 import com.lovers.repository.UserRepository;
-import com.lovers.service.WishService;
+import com.lovers.service.IWishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ import java.util.Map;
 public class WishController {
 
     @Autowired
-    private WishService wishService;
+    private IWishService wishService;
 
     @Autowired
     private UserRepository userRepository;

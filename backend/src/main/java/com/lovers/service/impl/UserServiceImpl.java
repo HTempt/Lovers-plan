@@ -1,9 +1,10 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
 import com.lovers.auth.JwtUtil;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.User;
 import com.lovers.repository.UserRepository;
+import com.lovers.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements IUserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;

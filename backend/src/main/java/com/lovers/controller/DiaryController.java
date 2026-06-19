@@ -5,7 +5,7 @@ import com.lovers.common.Result;
 import com.lovers.model.Diary;
 import com.lovers.model.User;
 import com.lovers.repository.UserRepository;
-import com.lovers.service.DiaryService;
+import com.lovers.service.IDiaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 public class DiaryController {
 
     @Autowired
-    private DiaryService diaryService;
+    private IDiaryService diaryService;
 
     @Autowired
     private UserRepository userRepository;

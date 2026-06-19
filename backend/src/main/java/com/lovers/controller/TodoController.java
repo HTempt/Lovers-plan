@@ -5,7 +5,7 @@ import com.lovers.common.Result;
 import com.lovers.model.Todo;
 import com.lovers.model.User;
 import com.lovers.repository.UserRepository;
-import com.lovers.service.TodoService;
+import com.lovers.service.ITodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 public class TodoController {
 
     @Autowired
-    private TodoService todoService;
+    private ITodoService todoService;
 
     @Autowired
     private UserRepository userRepository;

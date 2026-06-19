@@ -1,5 +1,6 @@
-package com.lovers.service;
+package com.lovers.service.impl;
 
+import com.lovers.service.*;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Anniversary;
 import com.lovers.model.Couple;
@@ -8,9 +9,9 @@ import com.lovers.model.Todo;
 import com.lovers.model.User;
 import com.lovers.model.Wish;
 import com.lovers.repository.*;
-import com.lovers.service.DiaryService;
-import com.lovers.service.WishService;
 import com.xhinliang.lunarcalendar.LunarCalendar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class HomeService {
+public class HomeServiceImpl implements IHomeService {
 
     @Autowired
     private UserRepository userRepository;
@@ -41,19 +42,33 @@ public class HomeService {
     private TaskRepository taskRepository;
 
     @Autowired
-    private AnniversaryService anniversaryService;
+    private IAnniversaryService anniversaryService;
 
     @Autowired
-    private DiaryService diaryService;
+    private IDiaryService diaryService;
 
     @Autowired
-    private WishService wishService;
+    private IWishService wishService;
 
     @Autowired
     private AnniversaryRepository anniversaryRepository;
 
     @Autowired
-    private ActivityService activityService;
+    private IActivityService activityService;
+
+    private static final Logger log = LoggerFactory.getLogger(HomeServiceImpl.class);
+
+    @Autowired
+    private ILoveTreeService loveTreeService;
+
+    @Autowired
+    private ISignInService signInService;
+
+    @Autowired
+    private IDailySentenceService dailySentenceService;
+
+    @Autowired
+    private IFileService fileService;
 
     /**
      * 获取首页聚合数据
@@ -97,10 +112,11 @@ public class HomeService {
         data.put("myStatus", userStatusRepository.findByUserIdAndStatus(userId, 1).orElse(null));
 
         // 当前用户信息（头像等）
+        String myAvatarUrl = fileService.getFileUrl(user.getAvatar());
         data.put("myUserInfo", Map.of(
                 "id", user.getId(),
-                "nickname", user.getNickname(),
-                "avatar", user.getAvatar(),
+                "nickname", user.getNickname() != null ? user.getNickname() : "",
+                "avatar", myAvatarUrl != null ? myAvatarUrl : "",
                 "gender", user.getGender() != null ? user.getGender() : 0
         ));
 
@@ -114,10 +130,11 @@ public class HomeService {
             partner = userRepository.findById(couple.getUserA()).orElse(null);
             partnerId = couple.getUserA();
         }
+        String partnerAvatarUrl = partner != null ? fileService.getFileUrl(partner.getAvatar()) : null;
         data.put("partner", partner != null ? Map.of(
                 "id", partner.getId(),
-                "nickname", partner.getNickname(),
-                "avatar", partner.getAvatar(),
+                "nickname", partner.getNickname() != null ? partner.getNickname() : "",
+                "avatar", partnerAvatarUrl != null ? partnerAvatarUrl : "",
                 "gender", partner.getGender() != null ? partner.getGender() : 0
         ) : null);
         data.put("partnerStatus", partnerId != null ? userStatusRepository.findByUserIdAndStatus(partnerId, 1).orElse(null) : null);
@@ -221,6 +238,36 @@ public class HomeService {
             data.put("wishList", wishData);
         } catch (Exception e) {
             data.put("wishList", List.of());
+        }
+
+        // 自动签到（每日首次访问自动签到）
+        try {
+            Map<String, Object> signInStatus = signInService.getSignInStatus(userId);
+            boolean signedInToday = (boolean) signInStatus.getOrDefault("signedInToday", false);
+            if (!signedInToday) {
+                signInService.signIn(userId);
+                // 签到后重新获取状态
+                signInStatus = signInService.getSignInStatus(userId);
+            }
+            data.put("signIn", signInStatus);
+        } catch (Exception e) {
+            log.warn("Failed to auto sign-in", e);
+            data.put("signIn", null);
+        }
+
+        // 爱情树信息（在签到之后，确保成长值已更新）
+        try {
+            data.put("loveTree", loveTreeService.getTreeInfo(couple.getId()));
+        } catch (Exception e) {
+            data.put("loveTree", null);
+        }
+
+        // 每日一言
+        try {
+            data.put("dailySentence", dailySentenceService.generate(couple.getId(), userId));
+        } catch (Exception e) {
+            log.warn("Failed to generate daily sentence", e);
+            data.put("dailySentence", Map.of("text", "开启你们的美好一天吧 💕", "page", ""));
         }
 
         // 岛屿动态（默认加载10条）
