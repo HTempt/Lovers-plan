@@ -1,0 +1,109 @@
+<view class="anniversary-container">
+  <!-- 骨架屏加载 -->
+  <view class="skeleton-list" wx:if="{{loading}}">
+    <view class="skeleton-card" wx:for="{{3}}" wx:key="*this">
+      <view class="skeleton-line w-60"></view>
+      <view class="skeleton-line w-40 h-16"></view>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-state" wx:elif="{{error}}">
+    <text class="error-icon">😅</text>
+    <text class="error-text">加载失败，请重试</text>
+    <button class="error-retry" bindtap="loadList">重新加载</button>
+  </view>
+
+  <!-- 纪念日列表 -->
+  <view class="anniversary-list" wx:elif="{{anniversaryList.length > 0}}">
+    <view class="anniversary-card" wx:for="{{anniversaryList}}" wx:key="id"
+          bindtap="showEditModal" data-id="{{item.id}}" data-title="{{item.title}}"
+          data-date="{{item.anniversaryDate}}" data-remind="{{item.remindDays}}" data-type="{{item.type}}" data-icon="{{item.icon}}">
+      <view class="card-left">
+        <view class="card-icon-circle {{item.type === 1 ? 'icon-anni' : 'icon-custom'}}">
+          <text class="card-icon-text">{{item.icon || getAnniversaryIcon(item.title)}}</text>
+        </view>
+      </view>
+      <view class="card-right">
+        <view class="card-row-top">
+          <text class="card-title">{{item.title}}</text>
+          <text class="card-date">{{item.anniversaryDate}}{{item.lunarDate ? '（' + item.lunarDate + '）' : ''}}</text>
+        </view>
+        <view class="card-divider"></view>
+        <view class="card-row-bottom">
+          <view class="card-countdown">
+            <text class="card-countdown-num">{{item.daysLeft}}</text>
+            <text class="card-countdown-unit">天</text>
+          </view>
+          <view class="card-total">
+            <text class="card-total-icon">👣</text>
+            <text class="card-total-label">共同度过</text>
+            <text class="card-total-num">{{item.totalDays}}</text>
+            <text class="card-total-unit">天</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部氛围文案 -->
+  <view class="bottom-blessing" wx:if="{{anniversaryList.length > 0}}">
+    <text class="blessing-text">每一个日子都值得被铭记 ✨</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">💝</text>
+    <text class="empty-title">还没有纪念日</text>
+    <text class="empty-desc">记录属于你们的重要日子吧</text>
+  </view>
+
+  <!-- 浮动创建按钮 -->
+  <view class="float-btn" bindtap="showCreateModal">
+    <text class="float-btn-icon">+</text>
+  </view>
+
+  <!-- 创建/编辑弹窗 -->
+  <view class="modal-overlay" wx:if="{{showModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{isEditing ? '编辑纪念日' : '添加纪念日'}}</text>
+        <text class="modal-close" bindtap="hideModal">✕</text>
+      </view>
+      <view class="form-group">
+        <text class="form-label">名称</text>
+        <picker mode="selector" range="{{namePresets}}" value="{{nameIndex}}" bindchange="onNameChange" wx:if="{{!showCustomName}}">
+          <view class="form-input picker-input">
+            <text wx:if="{{formTitle}}">{{formTitle}}</text>
+            <text wx:else class="picker-placeholder">请选择纪念日类型</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+        <input class="form-input name-custom-input" wx:if="{{showCustomName}}" placeholder="输入自定义名称" value="{{formTitle}}" bindinput="onTitleInput" adjust-position="{{false}}" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">图标</text>
+        <view class="emoji-picker">
+          <view class="emoji-item {{formIcon === item ? 'active' : ''}}" wx:for="{{emojiList}}" wx:key="*this" bindtap="onIconChange" data-icon="{{item}}">{{item}}</view>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">日期</text>
+        <input class="form-input" placeholder="YYYY-MM-DD" value="{{formDate}}" bindinput="onDateInput" adjust-position="{{false}}" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">提前提醒</text>
+        <view class="radio-group">
+          <view class="radio-item {{formRemindDays === 0 ? 'active' : ''}}" bindtap="onRemindChange" data-value="0">不提醒</view>
+          <view class="radio-item {{formRemindDays === 1 ? 'active' : ''}}" bindtap="onRemindChange" data-value="1">1天</view>
+          <view class="radio-item {{formRemindDays === 3 ? 'active' : ''}}" bindtap="onRemindChange" data-value="3">3天</view>
+          <view class="radio-item {{formRemindDays === 7 ? 'active' : ''}}" bindtap="onRemindChange" data-value="7">7天</view>
+        </view>
+      </view>
+      <button class="btn-submit" bindtap="handleSave">{{isEditing ? '保存' : '创建'}}</button>
+      <view class="modal-delete-wrap" wx:if="{{isEditing}}">
+        <text class="modal-delete-text" bindtap="handleDeleteModal">删除此纪念日</text>
+      </view>
+    </view>
+  </view>
+</view>

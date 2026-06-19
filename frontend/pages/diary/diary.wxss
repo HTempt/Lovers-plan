@@ -1,0 +1,187 @@
+.diary-container {
+  min-height: 100vh;
+  background: var(--bg-color);
+}
+
+/* View Switcher */
+.view-switcher {
+  display: flex;
+  background: white;
+  margin: 20rpx 30rpx;
+  padding: 8rpx;
+  gap: 12rpx;
+  border-radius: 48rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.switch-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  border-radius: 40rpx;
+}
+
+.switch-item.active {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 500;
+}
+
+/* Timeline */
+.timeline-list {
+  padding: 30rpx;
+  position: relative;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+.timeline-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: var(--primary-color);
+  flex-shrink: 0;
+  margin-top: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 9rpx;
+  top: 36rpx;
+  bottom: -30rpx;
+  width: 2rpx;
+  background: var(--border-color);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-card {
+  flex: 1;
+  background: white;
+  border-radius: 48rpx;
+  padding: 28rpx;
+  box-shadow: 0 8rpx 48rpx rgba(0, 0, 0, 0.06);
+}
+
+.timeline-date {
+  font-size: 22rpx;
+  color: var(--text-light);
+  margin-bottom: 8rpx;
+}
+
+.timeline-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.timeline-content {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 8rpx;
+  line-height: 1.5;
+}
+
+.timeline-location {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.timeline-media {
+  display: flex;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.media-thumb {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 24rpx;
+}
+
+.timeline-actions {
+  margin-top: 12rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-delete {
+  font-size: 24rpx;
+  color: var(--danger-color);
+}
+
+.load-more {
+  text-align: center;
+  padding: 20rpx;
+  color: var(--text-light);
+  font-size: 26rpx;
+}
+
+/* Album */
+.album-month {
+  padding: 30rpx;
+}
+
+.month-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8rpx;
+}
+
+.album-image {
+  width: 100%;
+  height: 220rpx;
+  border-radius: 24rpx;
+}
+
+/* Map */
+.location-list {
+  padding: 30rpx;
+}
+
+.location-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: white;
+  padding: 28rpx 24rpx;
+  border-radius: 48rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 8rpx 48rpx rgba(0, 0, 0, 0.06);
+}
+
+.location-icon {
+  font-size: 36rpx;
+}
+
+.location-name {
+  font-size: 30rpx;
+  color: var(--text-primary);
+}
+
+/* Float Button - uses global styles from app.wxss */

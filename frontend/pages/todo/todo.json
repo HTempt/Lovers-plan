@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "共享待办",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#FFF5F5",
+  "usingComponents": {}
+}

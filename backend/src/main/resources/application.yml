@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: lovers-plan
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/lovers_plan?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 100MB
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 3000ms
+
+# JWT Configuration
+jwt:
+  secret: LoversPlanSecretKey2024VeryLongSecretKeyForHS256Algorithm
+  expiration: 259200000  # 3 days in milliseconds
+
+# WeChat Mini Program Configuration
+wechat:
+  app-id: wx78fdea8eec81fd7a
+  app-secret: c3587c044df82e91519ee7df5ba9202c
+  login-url: https://api.weixin.qq.com/sns/jscode2session
+  template:
+    anniversary: your_anniversary_template_id
+    todo: your_todo_template_id
+    task: your_task_template_id
+    wish: your_wish_template_id
+    status: your_status_template_id
+
+# MinIO Configuration
+minio:
+  endpoint: http://localhost:9000
+  access-key: admin
+  secret-key: admin1234
+  bucket-name: lovers-plan
+
+# Invite code Redis config
+invite:
+  code-length: 6
+  expire-hours: 24
+
+logging:
+  level:
+    com.lovers: DEBUG

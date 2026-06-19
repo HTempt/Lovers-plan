@@ -1,0 +1,38 @@
+<view class="page-wrap">
+  <!-- 提示说明 -->
+  <view class="intro-section">
+    <text class="intro-title">📢 消息订阅</text>
+    <text class="intro-desc">开启订阅后，当以下事件发生时将通过微信服务消息通知你。每条模板每天最多向用户下发1条订阅消息。</text>
+  </view>
+
+  <!-- 订阅列表 -->
+  <view class="subscribe-list">
+    <view class="subscribe-item" wx:for="{{templates}}" wx:key="id">
+      <view class="subscribe-left">
+        <text class="subscribe-icon">{{item.icon}}</text>
+        <view class="subscribe-info">
+          <text class="subscribe-name">{{item.name}}</text>
+          <text class="subscribe-desc">{{item.desc}}</text>
+          <text class="subscribe-tips" wx:if="{{subscribed[item.id]}}">✅ 已订阅</text>
+          <text class="subscribe-tips subscribe-tips-off" wx:else>未订阅</text>
+        </view>
+      </view>
+      <view class="subscribe-right">
+        <button class="btn-subscribe {{subscribed[item.id] ? 'btn-subscribed' : ''}}"
+                bindtap="requestSubscribe" data-id="{{item.id}}"
+                data-template-id="{{item.templateId}}"
+                disabled="{{subscribed[item.id]}}">
+          {{subscribed[item.id] ? '已订阅' : '去订阅'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="footer-tips">
+    <text class="footer-tips-title">💡 温馨提示</text>
+    <text class="footer-tips-text">1. 订阅需要用户主动点击"允许"才能生效</text>
+    <text class="footer-tips-text">2. 每人每天每模板最多接收1条消息</text>
+    <text class="footer-tips-text">3. 可在微信「发现-小程序-右上角…-订阅消息」中管理</text>
+  </view>
+</view>

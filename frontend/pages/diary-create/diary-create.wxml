@@ -1,0 +1,38 @@
+<view class="create-container">
+  <!-- 标题 -->
+  <view class="form-group">
+    <input class="title-input" placeholder="标题" value="{{title}}" bindinput="onTitleInput" />
+  </view>
+
+  <!-- 内容 -->
+  <view class="form-group">
+    <textarea class="content-input" placeholder="记录此刻的心情..." value="{{content}}" bindinput="onContentInput" maxlength="5000" auto-height />
+  </view>
+
+  <!-- 媒体选择 -->
+  <view class="form-group">
+    <view class="media-grid">
+      <view class="media-item" wx:for="{{mediaList}}" wx:key="index">
+        <image class="media-preview" src="{{item.tempPath}}" mode="aspectFill" />
+        <text class="media-remove" bindtap="removeMedia" data-index="{{index}}">✕</text>
+      </view>
+      <view class="media-add" wx:if="{{mediaList.length < 9}}" bindtap="chooseImage">
+        <text class="add-icon">+</text>
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 地点 -->
+  <view class="form-group location-row">
+    <input class="location-input" placeholder="添加地点" value="{{location}}" bindinput="onLocationInput" />
+    <text class="location-detect" bindtap="getLocation">定位</text>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section">
+    <button class="btn-submit" bindtap="handleSubmit" loading="{{submitting}}" disabled="{{submitting}}">
+      发布日记
+    </button>
+  </view>
+</view>

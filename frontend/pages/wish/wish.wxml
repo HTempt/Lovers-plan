@@ -1,0 +1,87 @@
+<view class="wish-container">
+  <!-- 骨架屏加载 -->
+  <view class="skeleton-list" wx:if="{{loading}}">
+    <view class="skeleton-card" wx:for="{{3}}" wx:key="*this">
+      <view class="skeleton-line w-80"></view>
+      <view class="skeleton-line w-60 h-16"></view>
+      <view class="skeleton-line w-40 h-16"></view>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-state" wx:elif="{{error}}">
+    <text class="error-icon">😅</text>
+    <text class="error-text">加载失败，请重试</text>
+    <button class="error-retry" bindtap="loadWishes">重新加载</button>
+  </view>
+
+  <!-- 愿望列表 -->
+  <view class="wish-list" wx:elif="{{wishList.length > 0}}">
+    <view class="wish-card {{item.status === 2 ? 'achieved' : ''}}" wx:for="{{wishList}}" wx:key="id">
+      <view class="wish-header">
+        <text class="wish-category-icon">{{getCategoryInfo(item.category).icon}}</text>
+        <view class="wish-info">
+          <text class="wish-title">{{item.title}}</text>
+          <text class="wish-category">{{getCategoryInfo(item.category).label}}</text>
+        </view>
+        <text class="wish-status" wx:if="{{item.status === 2}}">✅ 已达成</text>
+      </view>
+
+      <view class="wish-progress" wx:if="{{parseFloat(item.targetAmount) > 0}}">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{getProgressPercent(item.currentAmount, item.targetAmount)}}%"></view>
+        </view>
+        <text class="progress-text">{{formatAmount(item.currentAmount)}} / {{formatAmount(item.targetAmount)}}</text>
+      </view>
+
+      <view class="wish-meta" wx:if="{{item.targetDate}}">
+        <text class="wish-date">目标日期: {{item.targetDate}}</text>
+      </view>
+
+      <view class="wish-actions" wx:if="{{item.status === 1}}">
+        <button class="btn-progress" wx:if="{{parseFloat(item.targetAmount) > 0}}" bindtap="handleProgress" data-id="{{item.id}}">更新进度</button>
+        <button class="btn-achieve" bindtap="handleAchieve" data-id="{{item.id}}">梦想成真</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">✨</text>
+    <text class="empty-title">还没有许下愿望</text>
+    <text class="empty-desc">和TA一起许下美好愿望吧</text>
+  </view>
+
+  <view class="float-btn" bindtap="showCreateModal">
+    <text class="float-btn-icon">+</text>
+  </view>
+
+  <!-- 创建弹窗 -->
+  <view class="modal-overlay" wx:if="{{showCreateModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">新建愿望</text>
+        <text class="modal-close" bindtap="hideModal">✕</text>
+      </view>
+      <view class="form-group">
+        <text class="form-label">愿望名称</text>
+        <input class="form-input" placeholder="一起去旅行" value="{{formTitle}}" bindinput="onTitleInput" adjust-position="{{false}}" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">分类</text>
+        <view class="radio-group">
+          <view class="radio-item {{formCategory === item.value ? 'active' : ''}}"
+                wx:for="{{categories}}" wx:key="value"
+                bindtap="onCategoryChange" data-value="{{item.value}}">
+            {{item.icon}} {{item.label}}
+          </view>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">目标日期（选填）</text>
+        <input class="form-input" placeholder="YYYY-MM-DD" value="{{formTargetDate}}" bindinput="onDateInput" adjust-position="{{false}}" />
+      </view>
+      <button class="btn-submit" bindtap="handleCreate">创建</button>
+    </view>
+  </view>
+</view>

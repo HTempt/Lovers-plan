@@ -1,0 +1,29 @@
+<view class="login-container">
+  <view class="login-header">
+    <view class="logo-area">
+      <text class="logo-heart">💕</text>
+      <text class="logo-title">双人岛</text>
+      <text class="logo-subtitle">属于我们的秘密花园</text>
+    </view>
+  </view>
+
+  <view class="login-features">
+    <view class="feature-item">
+      <text class="feature-icon">📝</text>
+      <text class="feature-text">记录恋爱点滴</text>
+    </view>
+    <view class="feature-item">
+      <text class="feature-icon">🎯</text>
+      <text class="feature-text">规划共同目标</text>
+    </view>
+    <view class="feature-item">
+      <text class="feature-icon">💕</text>
+      <text class="feature-text">共享每日状态</text>
+    </view>
+  </view>
+
+  <view class="login-footer">
+    <button class="btn-wechat" open-type="getUserInfo" bindgetuserinfo="handleLogin">❤️ 开始我们的故事</button>
+    <text class="login-agreement">登录即表示同意《用户协议》和《隐私政策》</text>
+  </view>
+</view>

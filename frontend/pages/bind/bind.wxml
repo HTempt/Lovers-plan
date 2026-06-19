@@ -1,0 +1,92 @@
+<view class="bind-container">
+  <!-- 未选择模式 -->
+  <block wx:if="{{!mode}}">
+    <view class="bind-header">
+      <text class="bind-heart">💕</text>
+      <text class="bind-title">绑定你的另一半</text>
+      <text class="bind-desc">选择一种方式开始你们的双人空间</text>
+    </view>
+
+    <view class="bind-options">
+      <view class="bind-card" bindtap="chooseMode" data-mode="create">
+        <view class="card-icon-wrap create-icon">
+          <text class="card-icon">🔗</text>
+        </view>
+        <view class="card-info">
+          <text class="card-title">创建邀请</text>
+          <text class="card-desc">生成邀请码，发送给另一半</text>
+        </view>
+        <text class="card-arrow">›</text>
+      </view>
+
+      <view class="bind-card" bindtap="chooseMode" data-mode="join">
+        <view class="card-icon-wrap join-icon">
+          <text class="card-icon">✉️</text>
+        </view>
+        <view class="card-info">
+          <text class="card-title">接受邀请</text>
+          <text class="card-desc">输入另一半的邀请码</text>
+        </view>
+        <text class="card-arrow">›</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 创建邀请模式 -->
+  <block wx:elif="{{mode === 'create'}}">
+    <view class="bind-content">
+      <view class="bind-back" bindtap="goBack">
+        <text class="back-arrow">‹</text>
+        <text>返回</text>
+      </view>
+
+      <view class="invite-section">
+        <text class="invite-title">你的邀请码</text>
+        <view class="invite-code {{inviteCode ? 'active' : ''}}">
+          <text wx:if="{{inviteCode}}" class="code-text">{{inviteCode}}</text>
+          <text wx:else class="code-placeholder">点击生成</text>
+        </view>
+
+        <button class="btn-generate" wx:if="{{!inviteCode}}" bindtap="generateCode" loading="{{generating}}">
+          生成邀请码
+        </button>
+
+        <block wx:if="{{inviteCode}}">
+          <view class="invite-tips">
+            <text class="tips-item">⏰ 有效期24小时</text>
+            <text class="tips-item">🔒 仅限一人绑定</text>
+          </view>
+          <view class="invite-actions">
+            <button class="btn-copy" bindtap="copyCode">📋 复制邀请码</button>
+            <button class="btn-share" bindtap="shareCode">💬 发送给微信好友</button>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+
+  <!-- 接受邀请模式 -->
+  <block wx:elif="{{mode === 'join'}}">
+    <view class="bind-content">
+      <view class="bind-back" bindtap="goBack">
+        <text class="back-arrow">‹</text>
+        <text>返回</text>
+      </view>
+
+      <view class="join-section">
+        <text class="join-title">输入邀请码</text>
+        <text class="join-desc">请输入另一半给你的6位邀请码</text>
+
+        <view class="code-input-group">
+          <input class="code-input" type="text" maxlength="6" placeholder="000000"
+                 value="{{inputCode}}" bindinput="onCodeInput" focus="{{true}}"
+                 confirm-type="done" bindconfirm="handleBind" />
+        </view>
+
+        <button class="btn-bind" bindtap="handleBind" loading="{{binding}}" disabled="{{inputCode.length < 6}}">
+          确认绑定
+        </button>
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,153 @@
+.status-container {
+  min-height: 100vh;
+  background: var(--bg-color);
+  padding: 20rpx 0;
+}
+
+.section {
+  padding: 20rpx 30rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+/* Current Status */
+.current-status {
+  background: white;
+  border-radius: 48rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 8rpx 48rpx rgba(0, 0, 0, 0.06);
+}
+
+.current-status.empty {
+  flex-direction: column;
+  border: 2rpx dashed var(--border-color);
+  gap: 8rpx;
+}
+
+.current-status-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.current-status.empty .current-status-text {
+  color: var(--text-light);
+}
+
+.current-status-icon {
+  font-size: 48rpx;
+}
+
+.current-status-hint {
+  font-size: 22rpx;
+  color: var(--text-light);
+  display: block;
+  margin-top: 4rpx;
+}
+
+.current-status-mood {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  background: #FFE5EC;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* Status Grid */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.status-item {
+  background: white;
+  border-radius: 48rpx;
+  padding: 28rpx 20rpx;
+  text-align: center;
+  border: 2rpx solid var(--border-color);
+  transition: all 0.2s;
+}
+
+.status-item.active {
+  border-color: var(--primary-color);
+  background: #FFF0F3;
+}
+
+.status-item-text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.status-item.active .status-item-text {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Mood Grid */
+.mood-grid {
+  display: flex;
+  gap: 20rpx;
+  flex-wrap: wrap;
+}
+
+.mood-item {
+  background: white;
+  border-radius: 30rpx;
+  padding: 16rpx 36rpx;
+  border: 2rpx solid var(--border-color);
+}
+
+.mood-item.active {
+  border-color: var(--warning-color);
+  background: #FFF8E6;
+}
+
+.mood-item-text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.mood-item.active .mood-item-text {
+  color: var(--warning-color);
+  font-weight: 600;
+}
+
+/* Actions */
+.action-section {
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.btn-save {
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 44rpx;
+  text-align: center;
+}
+
+.btn-clear {
+  height: 80rpx;
+  line-height: 80rpx;
+  background: white;
+  color: var(--text-secondary);
+  font-size: 28rpx;
+  border-radius: 40rpx;
+  border: 2rpx solid var(--border-color);
+  text-align: center;
+}

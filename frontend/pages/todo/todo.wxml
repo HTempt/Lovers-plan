@@ -1,0 +1,98 @@
+<view class="todo-container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-item {{filter === 'all' ? 'active' : ''}}" bindtap="filterChange" data-filter="all">全部</view>
+    <view class="filter-item {{filter === 'pending' ? 'active' : ''}}" bindtap="filterChange" data-filter="pending">待完成</view>
+    <view class="filter-item {{filter === 'completed' ? 'active' : ''}}" bindtap="filterChange" data-filter="completed">已完成</view>
+  </view>
+
+  <!-- 骨架屏加载 -->
+  <view class="skeleton-list" wx:if="{{loading}}">
+    <view class="skeleton-card" wx:for="{{3}}" wx:key="*this">
+      <view class="skeleton-line w-80"></view>
+      <view class="skeleton-line w-40 h-16"></view>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-state" wx:elif="{{error}}">
+    <text class="error-icon">😅</text>
+    <text class="error-text">加载失败，请重试</text>
+    <button class="error-retry" bindtap="loadTodoList">重新加载</button>
+  </view>
+
+  <!-- 待办列表 -->
+  <view class="todo-list" wx:elif="{{getFilteredList().length > 0}}">
+    <view class="todo-item {{item.status === 1 ? 'completed' : ''}}"
+          wx:for="{{getFilteredList()}}" wx:key="id">
+      <view class="todo-check" bindtap="toggleComplete" data-id="{{item.id}}">
+        <text class="check-box {{item.status === 1 ? 'checked' : ''}}">
+          {{item.status === 1 ? '✓' : '○'}}
+        </text>
+      </view>
+      <view class="todo-content">
+        <text class="todo-title">{{item.title}}</text>
+        <view class="todo-meta">
+          <text class="todo-priority {{getPriorityClass(item.priority)}}">{{getPriorityText(item.priority)}}</text>
+          <text class="todo-deadline" wx:if="{{item.deadline}}">截止 {{item.deadline}}</text>
+        </view>
+      </view>
+      <view class="todo-delete" bindtap="handleDelete" data-id="{{item.id}}">
+        <text class="delete-icon">✕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">📋</text>
+    <text class="empty-title">暂无待办事项</text>
+    <text class="empty-desc">和TA一起规划需要完成的事情吧</text>
+  </view>
+
+  <!-- 浮动添加按钮 -->
+  <view class="float-btn" bindtap="showAddModal">
+    <text class="float-btn-icon">+</text>
+  </view>
+
+  <!-- 创建待办弹窗 -->
+  <view class="modal-overlay" wx:if="{{showModal}}" catchtouchmove="{{true}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">新建待办</text>
+        <text class="modal-close" bindtap="hideModal">✕</text>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">标题</text>
+        <input class="form-input" placeholder="待办内容" value="{{formTitle}}" bindinput="onTitleInput" adjust-position="{{false}}" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">优先级</text>
+        <view class="radio-group">
+          <view class="radio-item {{formPriority === 'high' ? 'active' : ''}}" bindtap="onPriorityChange" data-value="high">高</view>
+          <view class="radio-item {{formPriority === 'mid' ? 'active' : ''}}" bindtap="onPriorityChange" data-value="mid">中</view>
+          <view class="radio-item {{formPriority === 'low' ? 'active' : ''}}" bindtap="onPriorityChange" data-value="low">低</view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">截止时间</text>
+        <input class="form-input" placeholder="YYYY-MM-DD HH:mm" value="{{formDeadline}}" bindinput="onDeadlineInput" adjust-position="{{false}}" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">重复</text>
+        <view class="radio-group">
+          <view class="radio-item {{formRepeatType === '' ? 'active' : ''}}" bindtap="onRepeatChange" data-value="">不重复</view>
+          <view class="radio-item {{formRepeatType === 'daily' ? 'active' : ''}}" bindtap="onRepeatChange" data-value="daily">每天</view>
+          <view class="radio-item {{formRepeatType === 'weekly' ? 'active' : ''}}" bindtap="onRepeatChange" data-value="weekly">每周</view>
+          <view class="radio-item {{formRepeatType === 'monthly' ? 'active' : ''}}" bindtap="onRepeatChange" data-value="monthly">每月</view>
+        </view>
+      </view>
+
+      <button class="btn-submit" bindtap="handleCreate">创建</button>
+    </view>
+  </view>
+</view>

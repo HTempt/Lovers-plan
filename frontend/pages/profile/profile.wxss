@@ -1,0 +1,189 @@
+.profile-container {
+  min-height: 100vh;
+  background: var(--bg-color);
+}
+
+/* Profile Header */
+.profile-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  padding: 60rpx 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255,255,255,0.5);
+}
+
+.avatar-section {
+  position: relative;
+}
+
+.avatar-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40rpx;
+  height: 40rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid rgba(255,255,255,0.8);
+}
+
+.avatar-overlay-text {
+  font-size: 24rpx;
+  color: #FF6B81;
+  font-weight: 600;
+}
+
+.user-section {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: white;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.edit-nickname {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+.user-meta {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 12rpx;
+}
+
+.user-meta-item {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.15);
+  padding: 6rpx 18rpx;
+  border-radius: 20rpx;
+}
+
+/* Couple Section */
+.couple-section {
+  padding: 0 30rpx;
+  margin-top: -30rpx;
+}
+
+.couple-card {
+  background: white;
+  border-radius: 48rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-shadow: 0 8rpx 48rpx rgba(0, 0, 0, 0.06);
+}
+
+.couple-label {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.couple-user {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.couple-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+}
+
+.couple-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.couple-date {
+  font-size: 24rpx;
+  color: var(--text-light);
+}
+
+/* Menu */
+.menu-section {
+  padding: 30rpx;
+}
+
+.menu-item {
+  background: white;
+  border-radius: 48rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 2rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.menu-item:first-child {
+  border-radius: 48rpx 48rpx 0 0;
+}
+
+.menu-item:last-child {
+  border-radius: 0 0 48rpx 48rpx;
+  margin-bottom: 0;
+}
+
+.menu-icon {
+  font-size: 36rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: var(--text-primary);
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  color: var(--text-light);
+}
+
+/* Actions */
+.action-section {
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.btn-unbind {
+  height: 80rpx;
+  line-height: 80rpx;
+  background: white;
+  color: var(--danger-color);
+  font-size: 28rpx;
+  border-radius: 50rpx;
+  border: 2rpx solid var(--danger-color);
+  text-align: center;
+}
+
+.btn-logout {
+  height: 80rpx;
+  line-height: 80rpx;
+  background: white;
+  color: var(--text-secondary);
+  font-size: 28rpx;
+  border-radius: 50rpx;
+  border: 2rpx solid var(--border-color);
+  text-align: center;
+}

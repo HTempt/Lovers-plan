@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "愿望清单",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#FFF5F5",
+  "usingComponents": {}
+}

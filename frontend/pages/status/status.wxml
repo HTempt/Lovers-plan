@@ -1,0 +1,45 @@
+<view class="status-container">
+  <!-- 当前状态 -->
+  <view class="section">
+    <text class="section-title">当前状态</text>
+    <view class="current-status" wx:if="{{currentStatus}}">
+      <text class="current-status-text">{{currentStatus.statusName}}</text>
+      <text class="current-status-mood" wx:if="{{currentStatus.mood}}">{{currentStatus.mood}}</text>
+    </view>
+    <view class="current-status empty" wx:else>
+      <text class="current-status-icon">💤</text>
+      <text class="current-status-text">未设置状态</text>
+      <text class="current-status-hint">选择一个状态告诉大家你在做什么</text>
+    </view>
+  </view>
+
+  <!-- 状态模板 -->
+  <view class="section">
+    <text class="section-title">选择状态</text>
+    <view class="status-grid">
+      <view class="status-item {{item === selectedStatus ? 'active' : ''}}"
+            wx:for="{{statusTemplates}}" wx:key="item"
+            bindtap="selectStatus" data-status="{{item}}">
+        <text class="status-item-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 心情标签 -->
+  <view class="section">
+    <text class="section-title">心情标签（可选）</text>
+    <view class="mood-grid">
+      <view class="mood-item {{item === selectedMood ? 'active' : ''}}"
+            wx:for="{{moodTags}}" wx:key="item"
+            bindtap="selectMood" data-mood="{{item}}">
+        <text class="mood-item-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <button class="btn-save" bindtap="handleSave">保存状态</button>
+    <button class="btn-clear" bindtap="handleClear">清除状态</button>
+  </view>
+</view>

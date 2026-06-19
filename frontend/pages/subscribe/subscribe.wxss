@@ -1,0 +1,136 @@
+.page-wrap {
+  min-height: 100vh;
+  background: var(--bg-color);
+  padding: 30rpx;
+}
+
+/* Intro */
+.intro-section {
+  background: linear-gradient(135deg, #FFF0F3, #FFE4E8);
+  border-radius: 40rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+}
+
+.intro-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #FF6B81;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.intro-desc {
+  font-size: 26rpx;
+  color: #999;
+  line-height: 1.6;
+}
+
+/* Subscribe List */
+.subscribe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.subscribe-item {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.subscribe-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  flex: 1;
+}
+
+.subscribe-icon {
+  font-size: 48rpx;
+  width: 60rpx;
+  text-align: center;
+  margin-top: 4rpx;
+}
+
+.subscribe-info {
+  flex: 1;
+}
+
+.subscribe-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.subscribe-desc {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 8rpx;
+  line-height: 1.4;
+}
+
+.subscribe-tips {
+  font-size: 22rpx;
+  color: #4CAF50;
+  display: block;
+}
+
+.subscribe-tips-off {
+  color: #bbb;
+}
+
+.subscribe-right {
+  flex-shrink: 0;
+  margin-left: 20rpx;
+}
+
+.btn-subscribe {
+  height: 64rpx;
+  line-height: 64rpx;
+  padding: 0 28rpx;
+  font-size: 26rpx;
+  background: #FF6B81;
+  color: white;
+  border-radius: 40rpx;
+  border: none;
+}
+
+.btn-subscribe::after {
+  border: none;
+}
+
+.btn-subscribed {
+  background: #E0E0E0;
+  color: #999;
+}
+
+/* Footer Tips */
+.footer-tips {
+  margin-top: 40rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 32rpx;
+}
+
+.footer-tips-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.footer-tips-text {
+  font-size: 24rpx;
+  color: #bbb;
+  display: block;
+  line-height: 1.8;
+}

@@ -1,0 +1,119 @@
+<view class="stats-container">
+  <!-- 骨架屏加载 -->
+  <view class="skeleton-list" wx:if="{{loading}}">
+    <view class="stats-hero-skeleton">
+      <view class="skeleton-card" style="text-align:center;padding:60rpx;">
+        <view class="skeleton-line w-40" style="margin:0 auto;"></view>
+        <view class="skeleton-line w-60" style="margin:20rpx auto;"></view>
+      </view>
+    </view>
+    <view class="skeleton-card">
+      <view class="skeleton-line w-40"></view>
+      <view class="skeleton-line w-80 h-16"></view>
+      <view class="skeleton-line w-60 h-16"></view>
+    </view>
+    <view class="skeleton-card">
+      <view class="skeleton-line w-40"></view>
+      <view class="skeleton-line w-80 h-16"></view>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-state" wx:elif="{{error}}">
+    <text class="error-icon">😅</text>
+    <text class="error-text">加载失败，请重试</text>
+    <button class="error-retry" bindtap="loadStatistics">重新加载</button>
+  </view>
+
+  <!-- 未绑定情侣 -->
+  <view class="empty-state" wx:elif="{{!hasCouple}}">
+    <text class="empty-icon">💔</text>
+    <text class="empty-title">请先绑定情侣</text>
+    <text class="empty-desc">绑定情侣后才能查看恋爱报告哦</text>
+  </view>
+
+  <scroll-view class="content-scroll" scroll-y wx:else>
+    <!-- 恋爱天数 -->
+    <view class="hero-section">
+      <view class="hero-card">
+        <text class="hero-label">在一起</text>
+        <text class="hero-number">{{stats.loveDays || 0}}</text>
+        <text class="hero-unit">天</text>
+      </view>
+    </view>
+
+    <!-- 日记相关 -->
+    <view class="stats-section">
+      <text class="section-title">回忆记录</text>
+      <view class="stats-grid">
+        <view class="stat-card">
+          <text class="stat-number">{{stats.diaryCount || 0}}</text>
+          <text class="stat-label">日记篇数</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.photoCount || 0}}</text>
+          <text class="stat-label">照片数量</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.videoCount || 0}}</text>
+          <text class="stat-label">视频数量</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.locationCount || 0}}</text>
+          <text class="stat-label">到过的地方</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 待办统计 -->
+    <view class="stats-section">
+      <text class="section-title">待办事项</text>
+      <view class="stats-grid">
+        <view class="stat-card">
+          <text class="stat-number">{{stats.totalTodos || 0}}</text>
+          <text class="stat-label">总待办</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.completedTodos || 0}}</text>
+          <text class="stat-label">已完成</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 任务统计 -->
+    <view class="stats-section">
+      <text class="section-title">情侣任务</text>
+      <view class="stats-grid">
+        <view class="stat-card">
+          <text class="stat-number">{{stats.totalTasks || 0}}</text>
+          <text class="stat-label">总任务</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.activeTasks || 0}}</text>
+          <text class="stat-label">进行中</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.completedTasks || 0}}</text>
+          <text class="stat-label">已完成</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 愿望统计 -->
+    <view class="stats-section">
+      <text class="section-title">愿望清单</text>
+      <view class="stats-grid">
+        <view class="stat-card">
+          <text class="stat-number">{{stats.totalWishes || 0}}</text>
+          <text class="stat-label">总愿望</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-number">{{stats.achievedWishes || 0}}</text>
+          <text class="stat-label">已实现</text>
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 40rpx;"></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,170 @@
+.wish-container {
+  min-height: 100vh;
+  background: var(--bg-color);
+  padding: 20rpx 30rpx;
+}
+
+.wish-card {
+  background: white;
+  border-radius: 48rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 48rpx rgba(0, 0, 0, 0.06);
+}
+
+.wish-card.achieved {
+  opacity: 0.7;
+  background: #F9FFF9;
+}
+
+.wish-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.wish-category-icon { font-size: 40rpx; }
+
+.wish-info { flex: 1; }
+
+.wish-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+}
+
+.wish-category {
+  font-size: 24rpx;
+  color: var(--text-light);
+}
+
+.wish-status { font-size: 24rpx; }
+
+.wish-progress {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 16rpx;
+  background: #FFE5EC;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B81, #FF8FA3);
+  border-radius: 8rpx;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.wish-meta { margin-bottom: 16rpx; }
+
+.wish-date { font-size: 24rpx; color: var(--text-light); }
+
+.wish-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.btn-progress, .btn-achieve {
+  flex: 1;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  text-align: center;
+}
+
+.btn-progress {
+  background: white;
+  color: var(--primary-color);
+  border: 2rpx solid var(--primary-color);
+}
+
+.btn-achieve {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+}
+
+
+/* Modal Styles (same as task modal) */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 48rpx 48rpx 0 0;
+  padding: 40rpx 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.modal-title { font-size: 34rpx; font-weight: 700; }
+.modal-close { font-size: 36rpx; color: var(--text-light); }
+
+.form-group { margin-bottom: 30rpx; }
+.form-label { font-size: 28rpx; color: var(--text-secondary); display: block; margin-bottom: 12rpx; }
+
+.form-input {
+  background: #F8F8F8;
+  border: 2rpx solid var(--border-color);
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  font-size: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 88rpx;
+}
+
+.radio-group { display: flex; gap: 16rpx; flex-wrap: wrap; }
+
+.radio-item {
+  padding: 12rpx 28rpx;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  background: #F8F8F8;
+  color: var(--text-secondary);
+  border: 2rpx solid var(--border-color);
+}
+
+.radio-item.active {
+  background: #FFF0F3;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-submit {
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 50rpx;
+  margin-top: 20rpx;
+}

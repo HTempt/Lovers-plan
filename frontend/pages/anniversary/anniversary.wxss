@@ -1,0 +1,299 @@
+.anniversary-container {
+  min-height: 100vh;
+  background: var(--bg-color);
+  padding: 20rpx 30rpx;
+}
+
+/* ===== 卡片：左右结构 ===== */
+.anniversary-card {
+  background: #FFFFFF;
+  border-radius: 36rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-shadow: 0 4rpx 24rpx rgba(255, 182, 193, 0.2);
+}
+
+/* 左侧图标 */
+.card-left { flex-shrink: 0; }
+
+.card-icon-circle {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-anni { background: linear-gradient(135deg, #FFE5EC, #FFD5DC); }
+.icon-custom { background: linear-gradient(135deg, #FFF0F3, #FFE0E6); }
+
+.card-icon-text { font-size: 48rpx; }
+
+/* 右侧内容 */
+.card-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+/* 第一行：标题 + 日期 */
+.card-row-top {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #333333;
+}
+
+.card-date {
+  font-size: 22rpx;
+  color: #BBBBBB;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 分隔线 */
+.card-divider {
+  height: 2rpx;
+  background: linear-gradient(90deg, #FFE5EC, transparent);
+}
+
+/* 第二行：倒计时 + 已走过 */
+.card-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.card-countdown-num {
+  font-size: 52rpx;
+  font-weight: 800;
+  color: #FF6B81;
+  line-height: 1;
+}
+
+.card-countdown-unit {
+  font-size: 26rpx;
+  color: #FF6B81;
+  font-weight: 500;
+}
+
+.card-total {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.card-total-icon { font-size: 24rpx; }
+
+.card-total-label {
+  font-size: 22rpx;
+  color: #BBBBBB;
+}
+
+.card-total-num {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #FF9F43;
+}
+
+.card-total-unit {
+  font-size: 22rpx;
+  color: #FF9F43;
+}
+
+/* ===== 底部氛围文案 ===== */
+.bottom-blessing {
+  text-align: center;
+  padding: 30rpx 0 160rpx;
+}
+
+.blessing-text {
+  font-size: 26rpx;
+  color: #DDDDDD;
+  letter-spacing: 4rpx;
+}
+
+/* ===== 浮动创建按钮 ===== */
+.float-btn {
+  position: fixed;
+  right: 40rpx;
+  bottom: 140rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  font-weight: 300;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 129, 0.35);
+  z-index: 50;
+}
+
+.float-btn:active {
+  opacity: 0.85;
+  transform: scale(0.95);
+}
+
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 48rpx 48rpx 0 0;
+  padding: 40rpx 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.modal-title { font-size: 34rpx; font-weight: 700; }
+.modal-close { font-size: 36rpx; color: var(--text-light); }
+
+.form-group { margin-bottom: 30rpx; }
+.form-label { font-size: 28rpx; color: var(--text-secondary); display: block; margin-bottom: 12rpx; }
+
+.form-input {
+  background: #F8F8F8;
+  border: 2rpx solid var(--border-color);
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  font-size: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 88rpx;
+}
+
+.radio-group { display: flex; gap: 12rpx; flex-wrap: wrap; }
+
+.name-radio-group { gap: 16rpx; }
+
+.radio-item {
+  padding: 12rpx 28rpx;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  background: #F8F8F8;
+  color: var(--text-secondary);
+  border: 2rpx solid var(--border-color);
+}
+
+.radio-item.active {
+  background: #FFF0F3;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.name-custom-input {
+  margin-top: 16rpx;
+}
+
+.picker-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.picker-placeholder {
+  color: var(--text-light);
+}
+
+.picker-arrow {
+  font-size: 32rpx;
+  color: #CCCCCC;
+}
+
+.btn-submit {
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  font-size: 32rpx;
+  font-weight: 500;
+  border-radius: 50rpx;
+  margin-top: 20rpx;
+}
+
+.modal-delete-wrap {
+  text-align: center;
+  margin-top: 30rpx;
+  padding-top: 20rpx;
+  border-top: 2rpx solid var(--border-color);
+}
+
+.modal-delete-text {
+  font-size: 28rpx;
+  color: #FF4D4F;
+}
+
+.emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.emoji-item {
+  font-size: 36rpx;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F8F8F8;
+  border-radius: 16rpx;
+  border: 2rpx solid var(--border-color);
+}
+
+.emoji-item.active {
+  background: #FFF0F3;
+  border-color: var(--primary-color);
+}
+
+/* ===== 骨架屏 ===== */
+.skeleton-list { padding: 20rpx 30rpx; }
+.skeleton-card { background: white; border-radius: 40rpx; padding: 32rpx; margin-bottom: 28rpx; box-shadow: 0 4rpx 32rpx rgba(255,182,193,0.2); }
+.skeleton-line { height: 28rpx; background: linear-gradient(90deg,#F0F0F0 25%,#E8E8E8 50%,#F0F0F0 75%); background-size: 200% 100%; border-radius: 8rpx; animation: skeleton-shimmer 1.5s infinite; margin-bottom: 16rpx; }
+.skeleton-line:last-child { margin-bottom: 0; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-40 { width: 40%; }
+@keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.error-state, .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 200rpx 0; }
+.error-state .error-icon, .empty-state .empty-icon { font-size: 80rpx; margin-bottom: 20rpx; display: block; }
+.error-state .error-text, .empty-state .empty-title { color: var(--text-secondary); font-size: 28rpx; display: block; text-align: center; }
+.error-state .error-retry { padding: 16rpx 48rpx; font-size: 26rpx; color: var(--primary-color); border: 2rpx solid var(--primary-color); border-radius: 50rpx; background: transparent; }
+.empty-state .empty-desc { color: var(--text-light); font-size: 24rpx; margin-top: 12rpx; display: block; text-align: center; }

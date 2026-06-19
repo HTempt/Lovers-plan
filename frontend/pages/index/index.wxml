@@ -1,0 +1,124 @@
+<view class="page-wrap">
+  <!-- 自定义导航栏 -->
+  <view class="custom-nav">
+    <view class="nav-status-bar" style="height: {{statusBarHeight}}px;"></view>
+    <view class="nav-content">
+      <view class="nav-left">
+        <view class="nav-date-wrap">
+          <text class="nav-date">{{currentDate}}</text>
+          <text class="nav-lunar" wx:if="{{lunarDate}}">{{lunarDate}}</text>
+        </view>
+      </view>
+      <view class="nav-right">
+        <text class="nav-setting" bindtap="goToProfile">···</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-heart">❤️</view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-wrap" wx:elif="{{error}}">
+    <text class="error-icon">🥺</text>
+    <text class="error-text">加载失败，下拉刷新试试</text>
+  </view>
+
+  <!-- 首页内容主体 -->
+  <scroll-view class="content-scroll" scroll-y enhanced
+    enable-back-to-top refresher-enabled
+    bindrefresherrefresh="onRefresh"
+    bindscrolltolower="loadMoreFeed" wx:elif="{{hasCouple}}">
+
+    <!-- ===== Hero 区域：恋爱天数 ===== -->
+    <view class="hero-section">
+      <view class="hero-bg">
+        <view class="hero-content">
+          <text class="hero-label" wx:if="{{isMarried}}">我们结婚啦</text>
+          <text class="hero-label" wx:else>我们恋爱啦</text>
+          <view class="hero-day-wrap">
+            <text class="hero-day-number" wx:if="{{isMarried}}">{{marriedDays}}</text>
+            <text class="hero-day-number" wx:else>{{loveDays}}</text>
+            <text class="hero-day-unit">天</text>
+          </view>
+          <text class="hero-quote">"今天也在认真爱你"</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 双人状态卡片 ===== -->
+    <view class="status-dual-card">
+      <view class="status-person" bindtap="setMyStatus">
+        <image class="status-avatar" src="{{myAvatar || '/images/icon/user-girl.png'}}" />
+        <view class="status-info">
+          <text class="status-name">我</text>
+          <view class="status-tag {{myStatus ? 'status-tag-active' : ''}}">
+            <text>{{myStatus || '点击设置'}}</text>
+          </view>
+          <text class="status-duration" wx:if="{{myStatusDuration}}">{{myStatusDuration}}</text>
+        </view>
+      </view>
+      <view class="status-heart-connector">
+        <text class="status-heart-icon">💗</text>
+      </view>
+      <view class="status-person status-person-right">
+        <image class="status-avatar" src="{{partnerAvatar || '/images/icon/user-girl.png'}}" />
+        <view class="status-info">
+          <text class="status-name">{{partnerName}}</text>
+          <view class="status-tag {{partnerStatus ? 'status-tag-active' : ''}}">
+            <text>{{partnerStatus || '暂无状态'}}</text>
+          </view>
+          <text class="status-duration" wx:if="{{partnerStatusDuration}}">{{partnerStatusDuration}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 岛屿动态 ===== -->
+    <view class="feed-section">
+      <view class="feed-header">
+        <text class="feed-title">🌊 岛屿动态</text>
+      </view>
+
+      <view class="feed-list">
+        <view class="feed-item" wx:for="{{activityFeed}}" wx:key="id"
+              bindtap="onFeedItemTap" data-item="{{item}}">
+          <view class="feed-icon-wrap">
+            <text class="feed-icon">{{item.icon || '📌'}}</text>
+          </view>
+          <view class="feed-body">
+            <text class="feed-title-text">{{item.title}}</text>
+            <text class="feed-desc" wx:if="{{item.description}}">{{item.description}}</text>
+            <text class="feed-time">{{item._timeDisplay}}</text>
+          </view>
+          <text class="feed-arrow">›</text>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="feed-loading" wx:if="{{feedLoading}}">
+        <text class="feed-loading-text">加载中...</text>
+      </view>
+      <view class="feed-no-more" wx:elif="{{!feedHasMore && activityFeed.length > 0}}">
+        <text class="feed-no-more-text">— 没有更多了 —</text>
+      </view>
+      <view class="feed-empty" wx:elif="{{activityFeed.length === 0 && !loading}}">
+        <text class="feed-empty-icon">🏝️</text>
+        <text class="feed-empty-text">还没有动态，开始你们的第一个记录吧</text>
+      </view>
+    </view>
+
+    <!-- 底部安全空间 -->
+    <view style="height: 40rpx;"></view>
+  </scroll-view>
+
+  <!-- 未绑定状态 -->
+  <view class="empty-state" wx:elif="{{!hasCouple && !loading}}">
+    <text class="empty-icon">💔</text>
+    <text class="empty-title">还没有绑定另一半</text>
+    <text class="empty-desc">邀请你的TA一起来双人岛吧</text>
+    <button class="btn-primary" bindtap="goToBind">去绑定</button>
+  </view>
+</view>

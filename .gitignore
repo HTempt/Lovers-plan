@@ -1,0 +1,49 @@
+.claude/
+.idea/
+.reasonix/
+reasonix.toml
+
+# 用户特定设置 (不应共享)
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# 敏感或频繁变动的文件
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# 构建工具 (Gradle/Maven) 自动生成的文件
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# 基于文件的项目格式 (旧版)
+*.iws
+
+# 模块文件 (可能会被自动重新创建)
+*.iml
+*.ipr
+
+# 输出目录
+out/
+
+# ----- Java / Maven / Gradle -----
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+*.class
+*.jar
+*.war
+*.ear
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
