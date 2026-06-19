@@ -9,6 +9,7 @@ import com.lovers.service.IDiaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +40,15 @@ public class DiaryController {
         String title = (String) request.get("title");
         String content = (String) request.get("content");
         String location = (String) request.get("location");
+        String province = (String) request.get("province");
+        String city = (String) request.get("city");
+        BigDecimal latitude = request.get("latitude") != null ? new BigDecimal(request.get("latitude").toString()) : null;
+        BigDecimal longitude = request.get("longitude") != null ? new BigDecimal(request.get("longitude").toString()) : null;
         @SuppressWarnings("unchecked")
         List<Map<String, String>> mediaList = (List<Map<String, String>>) request.get("mediaList");
 
-        Diary diary = diaryService.create(userId, user.getCoupleId(), title, content, location, mediaList);
+        Diary diary = diaryService.create(userId, user.getCoupleId(), title, content,
+                location, province, city, latitude, longitude, mediaList);
         return Result.success(diary);
     }
 

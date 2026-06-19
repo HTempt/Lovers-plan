@@ -4,10 +4,12 @@ import com.lovers.service.IDiaryService;
 import com.lovers.service.IFileService;
 import com.lovers.service.IActivityService;
 import com.lovers.service.ILoveTreeService;
+import com.lovers.service.IFootprintService;
 import com.lovers.common.exception.BusinessException;
 import com.lovers.model.Diary;
 import com.lovers.model.DiaryMedia;
 import com.lovers.model.User;
+import com.lovers.repository.ActivityRepository;
 import com.lovers.repository.DiaryMediaRepository;
 import com.lovers.repository.DiaryRepository;
 import com.lovers.repository.UserRepository;
@@ -20,6 +22,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,12 +50,20 @@ public class DiaryServiceImpl implements IDiaryService {
     @Autowired
     private ILoveTreeService loveTreeService;
 
+    @Autowired
+    private IFootprintService footprintService;
+
+    @Autowired
+    private ActivityRepository activityRepository;
+
     /**
      * 创建日记
      */
     @Transactional
     public Diary create(Long userId, Long coupleId, String title, String content,
-                        String location, List<Map<String, String>> mediaList) {
+                        String location, String province, String city,
+                        BigDecimal latitude, BigDecimal longitude,
+                        List<Map<String, String>> mediaList) {
         if (title == null || title.isEmpty()) {
             throw new BusinessException("日记标题不能为空");
         }
@@ -63,6 +74,10 @@ public class DiaryServiceImpl implements IDiaryService {
         diary.setTitle(title);
         diary.setContent(content);
         diary.setLocation(location);
+        diary.setProvince(province);
+        diary.setCity(city);
+        diary.setLatitude(latitude);
+        diary.setLongitude(longitude);
         diary.setStatus(1);
         diary = diaryRepository.save(diary);
 
@@ -91,6 +106,15 @@ public class DiaryServiceImpl implements IDiaryService {
                     diary.getId(), "写日记：" + title);
         } catch (Exception e) {
             log.warn("Failed to add love tree growth for diary", e);
+        }
+
+        // 创建足迹
+        if (city != null && !city.isEmpty() && latitude != null && longitude != null) {
+            try {
+                footprintService.create(coupleId, diary.getId(), province, city, location, latitude, longitude);
+            } catch (Exception e) {
+                log.warn("Failed to create footprint", e);
+            }
         }
 
         return diary;
@@ -186,6 +210,13 @@ public class DiaryServiceImpl implements IDiaryService {
         diary.setStatus(0);
         diary.setDeleteTime(LocalDateTime.now());
         diaryRepository.save(diary);
+
+        // 删除关联的岛屿动态
+        try {
+            activityRepository.deleteByRefIdAndType(diaryId, "diary");
+        } catch (Exception e) {
+            log.warn("Failed to delete diary activity", e);
+        }
     }
 
     /**

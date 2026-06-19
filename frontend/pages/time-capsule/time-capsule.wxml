@@ -1,0 +1,113 @@
+<view class="capsule-container">
+  <!-- 顶部标题 -->
+  <view class="capsule-header">
+    <text class="capsule-title">💌 时光胶囊</text>
+    <text class="capsule-subtitle">封存此刻，寄往未来</text>
+  </view>
+
+  <!-- 状态筛选标签 -->
+  <view class="capsule-tabs">
+    <view class="tab-item {{activeTab === -1 ? 'active' : ''}}" bindtap="switchTab" data-tab="-1">全部</view>
+    <view class="tab-item {{activeTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-tab="0">
+      待写入
+      <text class="tab-badge" wx:if="{{draftCount > 0}}">{{draftCount}}</text>
+    </view>
+    <view class="tab-item {{activeTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-tab="1">已封存</view>
+    <view class="tab-item {{activeTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-tab="2">
+      可开启
+      <text class="tab-badge" wx:if="{{openableCount > 0}}">{{openableCount}}</text>
+    </view>
+    <view class="tab-item {{activeTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-tab="3">已开启</view>
+  </view>
+
+  <!-- 骨架屏 -->
+  <view class="skeleton-list" wx:if="{{loading}}">
+    <view class="skeleton-card" wx:for="{{3}}" wx:key="*this">
+      <view class="skeleton-line w-80"></view>
+      <view class="skeleton-line w-60 h-16"></view>
+      <view class="skeleton-line w-40 h-16"></view>
+    </view>
+  </view>
+
+  <!-- 错误状态 -->
+  <view class="error-state" wx:elif="{{error}}">
+    <text class="error-icon">😅</text>
+    <text class="error-text">加载失败，请重试</text>
+    <button class="error-retry" bindtap="loadCapsules">重新加载</button>
+  </view>
+
+  <!-- 胶囊列表 -->
+  <view class="capsule-list" wx:elif="{{capsuleList.length > 0}}">
+    <view class="capsule-card {{item.status === 3 ? 'opened' : ''}} {{item.status === 2 ? 'openable' : ''}} {{item.status === 0 ? 'draft' : ''}}"
+          wx:for="{{capsuleList}}" wx:key="id"
+          bindtap="handleCapsuleTap" data-id="{{item.id}}" data-status="{{item.status}}"
+          bindlongpress="handleLongPress" data-id="{{item.id}}" data-status="{{item.status}}">
+      <!-- 装饰信封角 -->
+      <view class="envelope-corner">
+        <text class="envelope-icon">
+          {{item.status === 3 ? '💌' : item.status === 2 ? '📬' : '✉️'}}
+        </text>
+      </view>
+
+      <view class="capsule-body">
+        <view class="capsule-type-row">
+          <text class="capsule-type-icon">{{getTypeIcon(item.type)}}</text>
+          <text class="capsule-type-label">{{item.typeLabel}}</text>
+          <text class="capsule-status status-{{item.status}}">· {{item.statusLabel}}</text>
+          <text class="capsule-draft-hint" wx:if="{{item.status === 0 && item.userId !== currentUserId}}">⏳ 等待你写入</text>
+        </view>
+
+        <text class="capsule-card-title">{{item.title}}</text>
+
+        <view class="capsule-meta">
+          <text class="meta-item">📅 {{formatDate(item.createTime)}}</text>
+          <text class="meta-item" wx:if="{{item.status < 3}}">🔒 {{item.sealDays || '--'}}天后开启</text>
+          <text class="meta-item" wx:elif="{{item.status === 3}}">🔓 已开启</text>
+        </view>
+      </view>
+
+      <!-- 可开启标记 -->
+      <view class="open-badge" wx:if="{{item.status === 2}}">
+        <text class="open-badge-text">点击开启</text>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+      <text class="load-more-text">加载更多</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">💌</text>
+    <text class="empty-title">还没有时光胶囊</text>
+    <text class="empty-desc">封存此刻的爱意，寄往未来的某个时刻</text>
+  </view>
+
+  <!-- 悬浮按钮 -->
+  <view class="float-btn" bindtap="goCreate">
+    <text class="float-btn-icon">✏️</text>
+  </view>
+
+  <!-- 开启弹窗 -->
+  <view class="modal-overlay" wx:if="{{showOpenModal}}">
+    <view class="modal-content open-modal">
+      <view class="envelope-animation">
+        <text class="envelope-big">📬</text>
+        <text class="envelope-hint">时光胶囊已成熟</text>
+        <text class="envelope-sub-hint">点击下方按钮开启</text>
+      </view>
+      <view class="capsule-preview" wx:if="{{openingCapsule}}">
+        <text class="preview-type">{{getTypeIcon(openingCapsule.type)}} {{openingCapsule.typeLabel}}</text>
+        <text class="preview-title">{{openingCapsule.title}}</text>
+        <text class="preview-date">📅 {{formatDate(openingCapsule.createTime)}}</text>
+        <text class="preview-duration">封存时长：{{openingCapsule.sealDays || '--'}} 天</text>
+      </view>
+      <view class="modal-actions">
+        <button class="btn-cancel" bindtap="hideOpenModal">再等等</button>
+        <button class="btn-submit" bindtap="confirmOpen">💌 开启胶囊</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -56,6 +56,9 @@ public class HomeServiceImpl implements IHomeService {
     @Autowired
     private IActivityService activityService;
 
+    @Autowired
+    private IMemoryService memoryService;
+
     private static final Logger log = LoggerFactory.getLogger(HomeServiceImpl.class);
 
     @Autowired
@@ -69,6 +72,9 @@ public class HomeServiceImpl implements IHomeService {
 
     @Autowired
     private IFileService fileService;
+
+    @Autowired
+    private TimeCapsuleRepository timeCapsuleRepository;
 
     /**
      * 获取首页聚合数据
@@ -275,6 +281,25 @@ public class HomeServiceImpl implements IHomeService {
             // 首次加载时，如果还没有动态则从历史数据回填
             activityService.backfillIfEmpty(couple.getId());
             data.put("activityFeed", activityService.getActivityFeed(couple.getId(), 0, 10));
+
+            // 📷 那天的我们（回忆重现）
+            try {
+                data.put("memories", memoryService.getMemories(couple.getId()));
+            } catch (Exception e) {
+                log.warn("Failed to load memories", e);
+                data.put("memories", List.of());
+            }
+
+            // 💌 时光胶囊统计
+            try {
+                Map<String, Object> capsuleInfo = new HashMap<>();
+                long openableCount = timeCapsuleRepository.countByCoupleIdAndStatus(couple.getId(), 2);
+                capsuleInfo.put("openableCount", openableCount);
+                data.put("capsule", capsuleInfo);
+            } catch (Exception e) {
+                log.warn("Failed to load capsule stats", e);
+                data.put("capsule", null);
+            }
         } catch (Exception e) {
             data.put("activityFeed", Map.of("items", List.of(), "page", 0, "hasMore", false, "total", 0));
         }

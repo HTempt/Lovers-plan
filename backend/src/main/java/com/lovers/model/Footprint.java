@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "diary")
-public class Diary {
+@Table(name = "footprint")
+public class Footprint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,17 +17,8 @@ public class Diary {
     @Column(name = "couple_id", nullable = false)
     private Long coupleId;
 
-    @Column(name = "creator_id", nullable = false)
-    private Long creatorId;
-
-    @Column(nullable = false, length = 200)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    @Column(length = 200)
-    private String location;
+    @Column(name = "diary_id", nullable = false)
+    private Long diaryId;
 
     @Column(length = 50)
     private String province;
@@ -35,24 +26,22 @@ public class Diary {
     @Column(length = 50)
     private String city;
 
+    @Column(name = "location_name", length = 200)
+    private String locationName;
+
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
 
     @Column(precision = 10, scale = 7)
     private BigDecimal longitude;
 
-    @Column(columnDefinition = "TINYINT")
-    private Integer status;
-
     @Column(name = "create_time", updatable = false)
     private LocalDateTime createTime;
 
-    @Column(name = "delete_time")
-    private LocalDateTime deleteTime;
-
     @PrePersist
     protected void onCreate() {
-        createTime = LocalDateTime.now();
-        if (status == null) status = 1;
+        if (createTime == null) {
+            createTime = LocalDateTime.now();
+        }
     }
 }

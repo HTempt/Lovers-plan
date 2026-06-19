@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     Page<Activity> findByCoupleIdOrderByCreateTimeDesc(Long coupleId, Pageable pageable);
+
+    void deleteByRefIdAndType(Long refId, String type);
 }

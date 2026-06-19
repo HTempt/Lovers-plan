@@ -27,4 +27,27 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<String> findDistinctLocationsByCoupleId(@Param("coupleId") Long coupleId, @Param("status") Integer status);
 
     List<Diary> findByStatusAndDeleteTimeBefore(Integer status, LocalDateTime before);
+
+    /**
+     * 查询历史同月同日的日记（用于回忆重现）
+     */
+    @Query(value = "SELECT * FROM diary WHERE couple_id = :coupleId AND status = 1 " +
+           "AND MONTH(create_time) = :month AND DAY(create_time) = :day " +
+           "ORDER BY create_time DESC", nativeQuery = true)
+    List<Diary> findMemoriesByMonthDay(@Param("coupleId") Long coupleId,
+                                       @Param("month") int month,
+                                       @Param("day") int day);
+
+    /**
+     * 查询历史±3天范围的日记（当月无回忆时兜底）
+     */
+    @Query(value = "SELECT * FROM diary WHERE couple_id = :coupleId AND status = 1 " +
+           "AND MONTH(create_time) = :month AND DAY(create_time) BETWEEN :startDay AND :endDay " +
+           "ORDER BY ABS(DAY(create_time) - :targetDay) ASC, create_time DESC",
+           nativeQuery = true)
+    List<Diary> findMemoriesByMonthDayRange(@Param("coupleId") Long coupleId,
+                                            @Param("month") int month,
+                                            @Param("startDay") int startDay,
+                                            @Param("endDay") int endDay,
+                                            @Param("targetDay") int targetDay);
 }

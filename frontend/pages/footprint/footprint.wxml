@@ -1,0 +1,61 @@
+<view class="page-wrap">
+  <!-- 加载状态 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-icon">📍</text>
+    <text class="loading-text">加载足迹中...</text>
+  </view>
+
+  <view class="content-scroll" wx:else scroll-y>
+    <!-- ===== 顶部统计 ===== -->
+    <view class="stats-section">
+      <view class="stat-card">
+        <text class="stat-number">{{stats.totalCities || 0}}</text>
+        <text class="stat-label">城市</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{stats.totalPlaces || 0}}</text>
+        <text class="stat-label">地点</text>
+      </view>
+    </view>
+
+    <!-- ===== 地图 ===== -->
+    <view class="map-section">
+      <map
+        class="map"
+        latitude="{{latitude}}"
+        longitude="{{longitude}}"
+        scale="{{scale}}"
+        markers="{{markers}}"
+        bindmarkertap="onMarkerTap"
+        show-location
+        wx:if="{{hasData}}"
+      />
+      <view class="map-empty" wx:else>
+        <text class="map-empty-icon">🗺️</text>
+        <text class="map-empty-text">还没有足迹</text>
+        <text class="map-empty-desc">写日记时选择地点，自动记录足迹</text>
+      </view>
+    </view>
+
+    <!-- ===== 城市排行榜 ===== -->
+    <view class="ranking-section" wx:if="{{cityRanking && cityRanking.length > 0}}">
+      <view class="ranking-header">
+        <text class="ranking-title">🏆 城市排行榜</text>
+      </view>
+      <view class="ranking-list">
+        <view class="ranking-item" wx:for="{{cityRanking}}" wx:key="city">
+          <view class="ranking-left">
+            <text class="ranking-index {{index === 0 ? 'rank-gold' : index === 1 ? 'rank-silver' : index === 2 ? 'rank-bronze' : ''}}">{{index + 1}}</text>
+            <text class="ranking-city">{{item.city}}</text>
+          </view>
+          <view class="ranking-right">
+            <text class="ranking-count">{{item.count}}次</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部空间 -->
+    <view style="height: 40rpx;"></view>
+  </view>
+</view>

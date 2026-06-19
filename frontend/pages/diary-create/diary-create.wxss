@@ -105,6 +105,13 @@
   flex-shrink: 0;
 }
 
+.location-city {
+  font-size: 26rpx;
+  color: #5B8C5A;
+  padding: 16rpx;
+  flex-shrink: 0;
+}
+
 /* Submit */
 .submit-section {
   padding-top: 40rpx;

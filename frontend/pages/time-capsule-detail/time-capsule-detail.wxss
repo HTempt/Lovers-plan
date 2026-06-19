@@ -1,0 +1,247 @@
+.detail-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF5F7 0%, var(--bg-color) 40%);
+  padding: 0 30rpx 60rpx;
+}
+
+.loading {
+  text-align: center;
+  padding: 100rpx 0;
+  color: var(--text-light);
+  font-size: 28rpx;
+}
+
+/* Envelope Header */
+.envelope-header {
+  text-align: center;
+  padding: 40rpx 0 32rpx;
+}
+
+.envelope-top {
+  width: 160rpx;
+  height: 160rpx;
+  margin: 0 auto 24rpx;
+  background: linear-gradient(135deg, #FF6B81, #FF8FA3);
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 48rpx rgba(255, 107, 129, 0.3);
+}
+
+.envelope-top.opened {
+  background: linear-gradient(135deg, #2ED573, #7BED9F);
+}
+
+.envelope-stamp {
+  font-size: 72rpx;
+}
+
+.envelope-type {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.envelope-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+}
+
+/* Info Section */
+.info-section {
+  background: white;
+  border-radius: 28rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Content */
+.content-section {
+  background: white;
+  border-radius: 28rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.section-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.content-text {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+/* Sealed hint */
+.sealed-hint {
+  background: linear-gradient(135deg, #FFF0F3, #FFF5F7);
+  border-radius: 28rpx;
+  padding: 60rpx 40rpx;
+  margin-bottom: 24rpx;
+  text-align: center;
+  border: 2rpx dashed #FFD5DD;
+}
+
+.sealed-icon {
+  font-size: 64rpx;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.sealed-text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Media */
+.media-section {
+  background: white;
+  border-radius: 28rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.media-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.media-item {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.media-image {
+  width: 100%;
+  height: 100%;
+}
+
+.media-audio, .media-video {
+  width: 200rpx;
+  height: 200rpx;
+  background: #FFF0F3;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio-icon, .video-icon {
+  font-size: 48rpx;
+}
+
+.audio-label, .video-label {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-top: 8rpx;
+}
+
+/* Partner section */
+.partner-section {
+  background: linear-gradient(135deg, #FFF0F3, #FFF5F7);
+  border-radius: 28rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.partner-divider {
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.divider-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.partner-content {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.partner-image {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+  margin-top: 16rpx;
+}
+
+/* Status badge */
+.status-badge {
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 24rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.status-badge.status-1 {
+  background: #E8F0FE;
+  color: #5B8DEF;
+}
+
+.status-badge.status-2 {
+  background: #FFF8E1;
+  color: #FFA502;
+}
+
+.status-badge.status-3 {
+  background: #E8F8E8;
+  color: #2ED573;
+}
+
+/* Delete section */
+.delete-section {
+  margin-top: 32rpx;
+  padding-bottom: 40rpx;
+}
+
+.btn-delete {
+  height: 80rpx;
+  line-height: 80rpx;
+  background: white;
+  color: #FF4757;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+  border: 2rpx solid #FFD5D5;
+}
+
+.btn-delete:active {
+  background: #FFF0F0;
+}

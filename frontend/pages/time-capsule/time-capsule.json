@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "时光胶囊",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#FFF5F7",
+  "usingComponents": {}
+}

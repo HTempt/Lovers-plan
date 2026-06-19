@@ -31,4 +31,24 @@ public interface AnniversaryRepository extends JpaRepository<Anniversary, Long> 
     boolean existsByCoupleIdAndTitleAndStatus(Long coupleId, String title, Integer status);
 
     boolean existsByCoupleIdAndTitleAndStatusAndIdNot(Long coupleId, String title, Integer status, Long id);
+
+    /**
+     * 查询历史同月同日的纪念日（用于回忆重现）
+     */
+    @Query(value = "SELECT * FROM anniversary WHERE couple_id = :coupleId AND status = 1 " +
+           "AND MONTH(anniversary_date) = :month AND DAY(anniversary_date) = :day " +
+           "ORDER BY anniversary_date DESC", nativeQuery = true)
+    List<Anniversary> findByMonthDay(@Param("coupleId") Long coupleId,
+                                     @Param("month") int month,
+                                     @Param("day") int day);
+
+    @Query(value = "SELECT * FROM anniversary WHERE couple_id = :coupleId AND status = 1 " +
+           "AND MONTH(anniversary_date) = :month AND DAY(anniversary_date) BETWEEN :startDay AND :endDay " +
+           "ORDER BY ABS(DAY(anniversary_date) - :targetDay) ASC, anniversary_date DESC",
+           nativeQuery = true)
+    List<Anniversary> findByMonthDayRange(@Param("coupleId") Long coupleId,
+                                          @Param("month") int month,
+                                          @Param("startDay") int startDay,
+                                          @Param("endDay") int endDay,
+                                          @Param("targetDay") int targetDay);
 }

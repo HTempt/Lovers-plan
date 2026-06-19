@@ -1,11 +1,14 @@
 package com.lovers.service;
 
 import com.lovers.model.Diary;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 public interface IDiaryService {
-    Diary create(Long userId, Long coupleId, String title, String content, String location, List<Map<String, String>> mediaList);
+    Diary create(Long userId, Long coupleId, String title, String content, String location,
+                 String province, String city, BigDecimal latitude, BigDecimal longitude,
+                 List<Map<String, String>> mediaList);
     Map<String, Object> getTimeline(Long coupleId, int page, int size);
     Map<String, List<Map<String, Object>>> getAlbum(Long coupleId);
     List<Map<String, Object>> getMapLocations(Long coupleId);

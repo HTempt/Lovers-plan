@@ -13,7 +13,12 @@
     "pages/anniversary/anniversary",
     "pages/statistics/statistics",
     "pages/subscribe/subscribe",
-    "pages/love-tree/love-tree"
+    "pages/love-tree/love-tree",
+    "pages/footprint/footprint",
+    "pages/time-capsule/time-capsule",
+    "pages/time-capsule-create/time-capsule-create",
+    "pages/time-capsule-detail/time-capsule-detail",
+    "pages/time-capsule-write/time-capsule-write"
   ],
   "window": {
     "navigationBarTitleText": "双人岛",

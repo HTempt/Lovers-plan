@@ -89,7 +89,8 @@ Page({
     const navPages = {
       anniversary: '/pages/anniversary/anniversary',
       todo: '/pages/todo/todo',
-      statistics: '/pages/statistics/statistics'
+      statistics: '/pages/statistics/statistics',
+      footprint: '/pages/footprint/footprint'
     };
     const tabUrl = tabPages[page];
     if (tabUrl) wx.switchTab({ url: tabUrl });

@@ -1,0 +1,40 @@
+<view class="write-container">
+  <view class="write-header">
+    <text class="write-title">💌 伴侣正在等待你</text>
+    <text class="write-subtitle" wx:if="{{capsule}}">{{getTypeIcon(capsule.type)}} {{capsule.typeLabel}} · {{capsule.title}}</text>
+  </view>
+
+  <view class="form-group">
+    <textarea class="content-input" placeholder="写下你想对未来的TA说的话..." value="{{content}}" bindinput="onContentInput" maxlength="5000" auto-height />
+  </view>
+
+  <!-- 媒体选择 -->
+  <view class="media-section">
+    <view class="media-tools">
+      <view class="media-btn" bindtap="chooseImage">
+        <text class="media-btn-icon">🖼️</text>
+        <text class="media-btn-label">图片</text>
+      </view>
+      <view class="media-btn" bindtap="chooseVoice">
+        <text class="media-btn-icon">🎤</text>
+        <text class="media-btn-label">语音</text>
+      </view>
+      <view class="media-btn" bindtap="chooseVideo">
+        <text class="media-btn-icon">🎬</text>
+        <text class="media-btn-label">视频</text>
+      </view>
+    </view>
+    <view class="media-grid" wx:if="{{mediaList.length > 0}}">
+      <view class="media-item" wx:for="{{mediaList}}" wx:for-index="idx" wx:key="index">
+        <image class="media-preview" wx:if="{{item.mediaType === 'image'}}" src="{{item.tempPath}}" mode="aspectFill" />
+        <text class="media-type-icon" wx:elif="{{item.mediaType === 'audio'}}">🎤</text>
+        <text class="media-type-icon" wx:elif="{{item.mediaType === 'video'}}">🎬</text>
+        <text class="media-remove" bindtap="removeMedia" data-index="{{idx}}">✕</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn-submit" bindtap="handleSubmit" loading="{{submitting}}" disabled="{{submitting}}">
+    💌 写入并封存
+  </button>
+</view>

@@ -11,6 +11,8 @@ public interface ILoveTreeService {
     int GROWTH_WISH = 30;
     int GROWTH_SIGN_IN = 2;
     int GROWTH_STATUS = 1;
+    int GROWTH_CAPSULE_CREATE = 10;
+    int GROWTH_CAPSULE_OPEN = 20;
 
     LoveTree getOrCreateTree(Long coupleId);
     Map<String, Object> getTreeInfo(Long coupleId);

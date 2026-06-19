@@ -147,6 +147,22 @@ const api = {
   // Sign In
   doSignIn: () => request('POST', '/sign-in/do'),
   getSignInStatus: () => request('GET', '/sign-in/status'),
+
+  // Footprint
+  getFootprints: () => request('GET', '/footprint/list'),
+  getFootprintStats: () => request('GET', '/footprint/stats'),
+  getCityRanking: () => request('GET', '/footprint/city-ranking'),
+
+  // Time Capsule
+  createCapsule: (data) => request('POST', '/capsule/create', data),
+  writePartnerCapsule: (data) => request('POST', '/capsule/write-partner', data),
+  getCapsuleList: (params) => request('GET', '/capsule/list', params),
+  getCapsuleDetail: (id) => request('GET', '/capsule/detail/' + id),
+  openCapsule: (id) => request('POST', '/capsule/open/' + id),
+  deleteCapsule: (id) => request('POST', '/capsule/delete/' + id),
+  getCapsuleTypes: () => request('GET', '/capsule/types'),
+  getOpenOptions: () => request('GET', '/capsule/open-options'),
+  getCapsuleStats: () => request('GET', '/capsule/stats'),
 };
 
 module.exports = api;

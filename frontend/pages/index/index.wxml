@@ -64,7 +64,7 @@
         </view>
       </view>
       <view class="status-heart-connector">
-        <text class="status-heart-icon">💗</text>
+        <text class="status-heart-icon heartbeat-anim">💗</text>
       </view>
       <view class="status-person status-person-right">
         <image class="status-avatar" src="{{partnerAvatar || '/images/icon/user-girl.png'}}" binderror="onPartnerAvatarError" />
@@ -78,54 +78,101 @@
       </view>
     </view>
 
-    <!-- ===== 爱情树（含签到状态） ===== -->
-    <view class="love-tree-section" wx:if="{{loveTree}}">
-      <view class="love-tree-card" bindtap="goToLoveTree">
-        <view class="love-tree-top">
-          <view class="love-tree-left">
-            <text class="love-tree-icon">{{loveTree.levelIcon || '🌱'}}</text>
-            <view class="love-tree-info">
-              <text class="love-tree-name">🌱 爱情树 Lv{{loveTree.level}}</text>
-              <text class="love-tree-level-name">{{loveTree.levelName}}</text>
+    <!-- ===== 双列卡片行：那天的我们 + 爱情树 ===== -->
+    <!-- 仅当至少一个模块有内容时展示 -->
+    <view class="dual-card-row" wx:if="{{(memories && memories.length > 0) || loveTree}}">
+      <!-- 左侧：📷 那天的我们 -->
+      <view class="dual-card dual-card-left" wx:if="{{memories && memories.length > 0}}">
+        <view class="dual-card-header">
+          <text class="dual-card-title">📷 那天的我们</text>
+        </view>
+        <view class="memory-compact-list">
+          <view class="memory-compact-item {{item.type === 'diary' ? 'memory-diary-bg' : ''}} {{item.type === 'anniversary' ? 'memory-anni-bg' : ''}} {{item.type === 'wish' ? 'memory-wish-bg' : ''}} {{item.type === 'task' ? 'memory-task-bg' : ''}}"
+                wx:for="{{memories}}" wx:key="index" wx:for-item="mem"
+                bindtap="onMemoryTap" data-type="{{mem.type}}" data-refid="{{mem.refId}}">
+            <view class="memory-compact-img" wx:if="{{mem.image}}">
+              <image class="memory-compact-thumb" src="{{mem.image}}" mode="aspectFill" />
+            </view>
+            <view class="memory-compact-img memory-compact-img-placeholder" wx:else>
+              <text>{{mem.type === 'anniversary' ? '❤️' : mem.type === 'wish' ? '✨' : mem.type === 'task' ? '🎯' : '📝'}}</text>
+            </view>
+            <view class="memory-compact-info">
+              <text class="memory-compact-offset">{{mem.offsetLabel}}</text>
+              <text class="memory-compact-title">{{mem.title}}</text>
+              <text class="memory-compact-date">{{mem.sourceDate}}</text>
             </view>
           </view>
-          <view class="love-tree-sign-status" wx:if="{{signedInToday}}">
-            <text class="love-tree-sign-text">✅ 已签到</text>
-          </view>
         </view>
-        <view class="love-tree-progress-row">
-          <view class="love-tree-progress-bar">
-            <view class="love-tree-progress-fill" style="width: {{loveTree.progress}}%;"></view>
-          </view>
-          <text class="love-tree-progress-text">{{loveTree.growthValue}} / {{loveTree.nextThreshold}}</text>
+      </view>
+
+      <!-- 右侧：🌱 爱情树 -->
+      <view class="dual-card dual-card-right" wx:if="{{loveTree}}">
+        <view class="dual-card-header">
+          <text class="dual-card-title">🌱 爱情树</text>
         </view>
-        <view class="love-tree-footer">
-          <text class="love-tree-sign-hint" wx:if="{{signedInToday}}">今日签到 +2 成长值 · 连续 {{signInStreak}} 天</text>
-          <text class="love-tree-sign-hint" wx:else>每日访问自动签到 🌱</text>
+        <view class="love-tree-compact" bindtap="goToLoveTree">
+          <view class="love-tree-compact-top">
+            <text class="love-tree-compact-icon">{{loveTree.levelIcon || '🌱'}}</text>
+            <view class="love-tree-compact-info">
+              <text class="love-tree-compact-level">Lv{{loveTree.level}}</text>
+              <text class="love-tree-compact-name">{{loveTree.levelName}}</text>
+            </view>
+            <view class="love-tree-compact-sign" wx:if="{{signedInToday}}">
+              <text class="love-tree-compact-sign-text">已签到 ✓</text>
+            </view>
+          </view>
+          <view class="love-tree-compact-progress">
+            <view class="love-tree-compact-bar">
+              <view class="love-tree-compact-fill" style="width: {{loveTree.progress}}%;"></view>
+            </view>
+            <text class="love-tree-compact-text">{{loveTree.growthValue}} / {{loveTree.nextThreshold}}</text>
+          </view>
+          <text class="love-tree-compact-hint" wx:if="{{signedInToday}}">今日签到 +2 · 连续 {{signInStreak}} 天</text>
+          <text class="love-tree-compact-hint" wx:else>每日访问自动签到 🌱</text>
         </view>
       </view>
     </view>
 
-    <!-- ===== 今日提醒 ===== -->
+    <!-- ===== 时光胶囊入口 ===== -->
+    <view class="capsule-row" wx:if="{{capsule}}" bindtap="goToCapsule">
+      <view class="capsule-row-icon">💌</view>
+      <view class="capsule-row-body">
+        <text class="capsule-row-title">时光胶囊</text>
+        <text class="capsule-row-desc">封存此刻的爱意，寄往未来</text>
+      </view>
+      <view class="capsule-row-right">
+        <text class="capsule-row-badge" wx:if="{{capsule.openableCount > 0}}">{{capsule.openableCount}} 封可开启</text>
+        <text class="capsule-row-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- ===== 今日提醒（双列卡片） ===== -->
     <view class="reminder-section" wx:if="{{reminders && reminders.length > 0}}">
-      <view class="reminder-scroll-x">
-        <view class="reminder-card {{item.type === 'anniversary' ? 'reminder-anni' : ''}} {{item.type === 'task' ? 'reminder-task' : ''}} {{item.type === 'todo' ? 'reminder-todo' : ''}}"
+      <view class="section-header">
+        <text class="section-title">💌 今日提醒</text>
+      </view>
+      <view class="reminder-grid">
+        <view class="reminder-card {{item.type === 'anniversary' ? 'reminder-anni' : ''}} {{item.type === 'task' ? 'reminder-task' : ''}} {{item.type === 'wish' ? 'reminder-wish' : ''}}"
               wx:for="{{reminders}}" wx:key="index"
               bindtap="onReminderTap" data-page="{{item.page}}" data-id="{{item.id}}">
-          <view class="reminder-accent {{item.type === 'anniversary' ? 'accent-anni' : ''}} {{item.type === 'task' ? 'accent-task' : ''}} {{item.type === 'todo' ? 'accent-todo' : ''}}">
-            <text class="reminder-accent-icon">{{item.icon}}</text>
-          </view>
           <view class="reminder-body">
-            <view class="reminder-body-top">
+            <view class="reminder-header">
+              <text class="reminder-icon">{{item.icon}}</text>
               <text class="reminder-title">{{item.title}}</text>
             </view>
             <view wx:if="{{item.type === 'anniversary'}}" class="reminder-countdown-wrap">
               <text class="reminder-countdown-num">{{item.daysLeft}}</text>
-              <text class="reminder-countdown-unit">天</text>
+              <text class="reminder-countdown-unit">天后</text>
             </view>
             <view wx:elif="{{item.type === 'task' && item.progressValue >= 0}}" class="reminder-progress-wrap">
               <view class="reminder-progress-bar">
                 <view class="reminder-progress-fill" style="width: {{item.progressValue}}%;"></view>
+              </view>
+              <text class="reminder-progress-text">{{item.desc}}</text>
+            </view>
+            <view wx:elif="{{item.type === 'wish' && item.progressValue >= 0}}" class="reminder-progress-wrap">
+              <view class="reminder-progress-bar">
+                <view class="reminder-progress-fill reminder-wish-fill" style="width: {{item.progressValue}}%;"></view>
               </view>
               <text class="reminder-progress-text">{{item.desc}}</text>
             </view>
@@ -135,14 +182,14 @@
       </view>
     </view>
 
-    <!-- ===== 岛屿动态 ===== -->
-    <view class="feed-section">
-      <view class="feed-header">
-        <text class="feed-title">🌊 岛屿动态</text>
+    <!-- ===== 岛屿动态（最多3条 + 查看更多） ===== -->
+    <view class="feed-section" wx:if="{{!feedLoading}}">
+      <view class="section-header">
+        <text class="section-title">🌊 岛屿动态</text>
       </view>
 
       <view class="feed-list">
-        <view class="feed-item" wx:for="{{activityFeed}}" wx:key="id"
+        <view class="feed-item" wx:for="{{displayFeed}}" wx:key="id"
               bindtap="onFeedItemTap" data-item="{{item}}">
           <view class="feed-icon-wrap">
             <text class="feed-icon">{{item.icon || '📌'}}</text>
@@ -156,21 +203,15 @@
         </view>
       </view>
 
-      <!-- 加载更多 -->
-      <view class="feed-loading" wx:if="{{feedLoading}}">
-        <text class="feed-loading-text">加载中...</text>
+      <view class="feed-more" bindtap="goToFeedPage" wx:if="{{feedHasMore}}">
+        <text class="feed-more-text">查看更多 ›</text>
       </view>
-      <view class="feed-no-more" wx:elif="{{!feedHasMore && activityFeed.length > 0}}">
-        <text class="feed-no-more-text">— 没有更多了 —</text>
-      </view>
-      <view class="feed-empty" wx:elif="{{activityFeed.length === 0 && !loading}}">
+
+      <view class="feed-empty" wx:elif="{{(!activityFeed || activityFeed.length === 0) && !loading}}">
         <text class="feed-empty-icon">🏝️</text>
         <text class="feed-empty-text">还没有动态，开始你们的第一个记录吧</text>
       </view>
     </view>
-
-    <!-- 底部安全空间 -->
-    <view style="height: 40rpx;"></view>
   </scroll-view>
 
   <!-- 未绑定状态 -->

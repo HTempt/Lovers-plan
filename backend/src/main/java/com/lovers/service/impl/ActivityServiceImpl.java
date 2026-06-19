@@ -8,6 +8,7 @@ import com.lovers.repository.ActivityRepository;
 import com.lovers.repository.DiaryRepository;
 import com.lovers.repository.TaskRepository;
 import com.lovers.repository.WishRepository;
+import com.lovers.repository.TimeCapsuleRepository;
 import com.lovers.service.IActivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ActivityServiceImpl implements IActivityService {
@@ -38,19 +38,52 @@ public class ActivityServiceImpl implements IActivityService {
     @Autowired
     private WishRepository wishRepository;
 
+    @Autowired
+    private TimeCapsuleRepository timeCapsuleRepository;
+
     /**
      * 获取情侣动态列表（分页，按时间倒序）
+     * 自动过滤已软删除的资源对应的动态（如已删除的日记）
      */
     public Map<String, Object> getActivityFeed(Long coupleId, int page, int size) {
         Page<Activity> activityPage = activityRepository
                 .findByCoupleIdOrderByCreateTimeDesc(coupleId, PageRequest.of(page, size));
 
+        // 过滤已软删除的动态
+        List<Activity> filtered = activityPage.getContent().stream()
+                .filter(this::isSourceActive)
+                .collect(Collectors.toList());
+
         Map<String, Object> result = new HashMap<>();
-        result.put("items", activityPage.getContent());
+        result.put("items", filtered);
         result.put("page", page);
         result.put("hasMore", activityPage.hasNext());
         result.put("total", activityPage.getTotalElements());
         return result;
+    }
+
+    /**
+     * 检查动态对应的源数据是否仍有效
+     */
+    private boolean isSourceActive(Activity activity) {
+        if (activity.getRefId() == null) return true;
+        try {
+            switch (activity.getType()) {
+                case "diary":
+                    return diaryRepository.findById(activity.getRefId())
+                            .map(d -> d.getStatus() == 1)
+                            .orElse(false);
+                case "capsule":
+                    return timeCapsuleRepository.findById(activity.getRefId())
+                            .map(c -> c.getStatus() == 1 || c.getStatus() == 2 || c.getStatus() == 3)
+                            .orElse(false);
+                default:
+                    return true;
+            }
+        } catch (Exception e) {
+            log.warn("Failed to check source active for activity id={}", activity.getId());
+            return true; // 查询出错时不过滤
+        }
     }
 
     /**

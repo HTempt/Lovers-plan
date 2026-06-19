@@ -32,6 +32,7 @@ Page({
 
     // 岛屿动态
     activityFeed: [],
+    displayFeed: [],
     feedPage: 0,
     feedHasMore: true,
     feedLoading: false,
@@ -48,6 +49,12 @@ Page({
 
     // 每日一言
     dailySentence: { text: '', page: '' },
+
+    // 那天的我们（回忆重现）
+    memories: [],
+
+    // 时光胶囊
+    capsule: null,
 
     // 当前活跃tab
     activeTab: 'index'
@@ -142,6 +149,15 @@ Page({
         activityFeed: feedItems,
         feedPage: feed.page || 0,
         feedHasMore: feed.hasMore || false,
+
+        // 首页只展示前3条动态
+        displayFeed: (feedItems || []).slice(0, 3),
+
+        memories: data.memories || [],
+
+        // 时光胶囊
+        capsule: data.capsule || null,
+
         loading: false
       });
     } catch (err) {
@@ -232,28 +248,41 @@ Page({
         });
       });
     }
-    // 3. 未完成待办
-    if (data.todoList && data.todoList.length > 0) {
-      data.todoList.slice(0, 1).forEach(t => {
-        if (reminders.length >= 3) return;
+    // 3. 进行中愿望
+    if (data.wishList && data.wishList.length > 0) {
+      const activeWish = data.wishList.find(w => w.status === 1) || data.wishList[0];
+      if (reminders.length < 3 && activeWish) {
         reminders.push({
-          type: 'todo',
-          icon: '📝',
-          title: t.title,
-          desc: t.deadline ? `截止 ${t.deadline}` : '待完成',
-          page: 'todo',
-          id: t.id
+          type: 'wish',
+          icon: '✨',
+          title: activeWish.title,
+          desc: activeWish.progress ? `${activeWish.progress}%` : '进行中',
+          progressValue: activeWish.progress || 0,
+          page: 'wish',
+          id: activeWish.id
         });
+      }
+    }
+    // 4. 可开启胶囊
+    if (data.capsule && data.capsule.openableCount > 0 && reminders.length < 3) {
+      reminders.push({
+        type: 'capsule',
+        icon: '💌',
+        title: '时光胶囊',
+        desc: `${data.capsule.openableCount} 封胶囊可开启`,
+        page: 'capsule',
+        id: null
       });
     }
-    return reminders;
+    // 最多取3条提醒
+    return reminders.slice(0, 3);
   },
 
   // 提醒点击跳转
   onReminderTap(e) {
     const page = e.currentTarget.dataset.page;
-    const tabPages = { task: '/pages/task/task' };
-    const navPages = { anniversary: '/pages/anniversary/anniversary', todo: '/pages/todo/todo' };
+    const tabPages = { task: '/pages/task/task', wish: '/pages/wish/wish' };
+    const navPages = { anniversary: '/pages/anniversary/anniversary', capsule: '/pages/time-capsule/time-capsule' };
     const tabUrl = tabPages[page];
     const navUrl = navPages[page];
     if (tabUrl) wx.switchTab({ url: tabUrl });
@@ -280,6 +309,9 @@ Page({
       case 'anniversary':
         wx.navigateTo({ url: '/pages/anniversary/anniversary' });
         break;
+      case 'capsule':
+        wx.navigateTo({ url: '/pages/time-capsule/time-capsule' });
+        break;
       default:
         break;
     }
@@ -297,6 +329,11 @@ Page({
   // 去爱情树页面
   goToLoveTree() {
     wx.navigateTo({ url: '/pages/love-tree/love-tree' });
+  },
+
+  // 去时光胶囊
+  goToCapsule() {
+    wx.navigateTo({ url: '/pages/time-capsule/time-capsule' });
   },
 
   // 设置我的状态
@@ -332,6 +369,28 @@ Page({
         wx.switchTab({ url });
       }
     }
+  },
+
+  // 点击回忆卡片：跳转对应详情页
+  onMemoryTap(e) {
+    const type = e.currentTarget.dataset.type;
+    const refId = e.currentTarget.dataset.refid;
+    if (!type || !refId) return;
+
+    if (type === 'diary') {
+      wx.navigateTo({ url: `/pages/diary-detail/diary-detail?id=${refId}` });
+    } else if (type === 'anniversary') {
+      wx.switchTab({ url: '/pages/anniversary/anniversary' });
+    } else if (type === 'wish') {
+      wx.switchTab({ url: '/pages/wish/wish' });
+    } else if (type === 'task') {
+      wx.switchTab({ url: '/pages/task/task' });
+    }
+  },
+
+  // 查看更多动态
+  goToFeedPage() {
+    wx.switchTab({ url: '/pages/diary/diary' });
   },
 
   onShareAppMessage() {

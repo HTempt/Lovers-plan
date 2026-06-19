@@ -1,0 +1,83 @@
+<view class="detail-container">
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+
+  <view class="detail-content" wx:elif="{{capsule}}">
+    <!-- 信封装饰头部 -->
+    <view class="envelope-header">
+      <view class="envelope-top {{capsule.status === 3 ? 'opened' : ''}}">
+        <text class="envelope-stamp">
+          {{capsule.status === 3 ? '💌' : capsule.status === 2 ? '📬' : '✉️'}}
+        </text>
+      </view>
+      <text class="envelope-type">{{capsule.typeLabel}}</text>
+      <text class="envelope-title">{{capsule.title}}</text>
+    </view>
+
+    <!-- 时间信息 -->
+    <view class="info-section">
+      <view class="info-row">
+        <text class="info-label">📅 创建日期</text>
+        <text class="info-value">{{formatDate(capsule.createTime)}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">🔒 封存时长</text>
+        <text class="info-value">{{capsule.sealDays || '--'}} 天</text>
+      </view>
+      <view class="info-row" wx:if="{{capsule.openedAt}}">
+        <text class="info-label">🔓 开启时间</text>
+        <text class="info-value">{{formatDate(capsule.openedAt)}}</text>
+      </view>
+    </view>
+
+    <!-- 内容（已封存时显示提示） -->
+    <view class="sealed-hint" wx:if="{{capsule.hint && !capsule.content}}">
+      <text class="sealed-icon">🔒</text>
+      <text class="sealed-text">{{capsule.hint}}</text>
+    </view>
+
+    <view class="content-section" wx:elif="{{capsule.content}}">
+      <text class="section-label">📝 写给未来的话</text>
+      <view class="content-text">{{capsule.content}}</view>
+    </view>
+
+    <!-- 媒体（仅已开启可见） -->
+    <view class="media-section" wx:if="{{mediaList.length > 0}}">
+      <text class="section-label">📎 附件</text>
+      <view class="media-grid">
+        <view class="media-item" wx:for="{{mediaList}}" wx:key="id">
+          <image class="media-image" wx:if="{{item.mediaType === 'image'}}" src="{{item.fileUrl}}" mode="aspectFill" bindtap="previewImage" data-url="{{item.fileUrl}}" />
+          <view class="media-audio" wx:elif="{{item.mediaType === 'audio'}}" bindtap="playAudio" data-url="{{item.fileUrl}}">
+            <text class="audio-icon">🎤</text>
+            <text class="audio-label">点击播放语音</text>
+          </view>
+          <view class="media-video" wx:elif="{{item.mediaType === 'video'}}" bindtap="playVideo" data-url="{{item.fileUrl}}">
+            <text class="video-icon">🎬</text>
+            <text class="video-label">点击播放视频</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 对方内容（双人模式） -->
+    <view class="partner-section" wx:if="{{capsule.partner}}">
+      <view class="partner-divider">
+        <text class="divider-text">💑 来自TA的话</text>
+      </view>
+      <view class="partner-content">{{capsule.partner.content}}</view>
+      <view class="partner-media" wx:if="{{capsule.partner.mediaList && capsule.partner.mediaList.length > 0}}">
+        <image class="partner-image" wx:for="{{capsule.partner.mediaList}}" wx:key="id"
+               wx:if="{{item.mediaType === 'image'}}" src="{{item.fileUrl}}" mode="aspectFill" />
+      </view>
+    </view>
+
+    <!-- 状态标签 -->
+    <view class="status-badge status-{{capsule.status}}">
+      <text>{{capsule.statusLabel}}</text>
+    </view>
+
+    <!-- 删除按钮（草稿/已封存可删） -->
+    <view class="delete-section" wx:if="{{capsule.status === 0 || capsule.status === 1}}">
+      <button class="btn-delete" bindtap="handleDelete">🗑️ 删除胶囊</button>
+    </view>
+  </view>
+</view>
