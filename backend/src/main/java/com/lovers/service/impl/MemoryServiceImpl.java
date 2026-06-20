@@ -41,17 +41,8 @@ public class MemoryServiceImpl implements IMemoryService {
         int month = today.getMonthValue();
         int day = today.getDayOfMonth();
 
-        // 第一步：精确匹配当月当日
+        // 精确匹配当月当日（历史上的今天）
         List<MemoryCandidate> candidates = queryByMonthDay(coupleId, month, day);
-
-        // 第二步：无结果则 ±3 天范围查询
-        if (candidates.isEmpty()) {
-            YearMonth ym = YearMonth.of(month, day);
-            int daysInMonth = ym.lengthOfMonth();
-            int startDay = Math.max(1, day - 3);
-            int endDay = Math.min(daysInMonth, day + 3);
-            candidates = queryByMonthDayRange(coupleId, month, startDay, endDay, day);
-        }
 
         // 按优先级排序，取前3条
         candidates.sort(Comparator.comparingInt(MemoryCandidate::getPriority));

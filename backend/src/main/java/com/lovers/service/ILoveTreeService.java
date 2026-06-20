@@ -13,6 +13,8 @@ public interface ILoveTreeService {
     int GROWTH_STATUS = 1;
     int GROWTH_CAPSULE_CREATE = 10;
     int GROWTH_CAPSULE_OPEN = 20;
+    int GROWTH_QUIZ_COMPLETE = 2;
+    int GROWTH_QUIZ_MATCH = 5;
 
     LoveTree getOrCreateTree(Long coupleId);
     Map<String, Object> getTreeInfo(Long coupleId);

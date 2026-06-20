@@ -77,6 +77,8 @@ public class ActivityServiceImpl implements IActivityService {
                     return timeCapsuleRepository.findById(activity.getRefId())
                             .map(c -> c.getStatus() == 1 || c.getStatus() == 2 || c.getStatus() == 3)
                             .orElse(false);
+                case "quiz":
+                    return true; // 问答记录不删除
                 default:
                     return true;
             }

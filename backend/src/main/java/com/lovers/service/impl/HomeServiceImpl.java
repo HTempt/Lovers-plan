@@ -1,13 +1,8 @@
 package com.lovers.service.impl;
 
+import com.lovers.model.*;
 import com.lovers.service.*;
 import com.lovers.common.exception.BusinessException;
-import com.lovers.model.Anniversary;
-import com.lovers.model.Couple;
-import com.lovers.model.Task;
-import com.lovers.model.Todo;
-import com.lovers.model.User;
-import com.lovers.model.Wish;
 import com.lovers.repository.*;
 import com.xhinliang.lunarcalendar.LunarCalendar;
 import org.slf4j.Logger;
@@ -17,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,6 +72,15 @@ public class HomeServiceImpl implements IHomeService {
 
     @Autowired
     private TimeCapsuleRepository timeCapsuleRepository;
+
+    @Autowired
+    private IFootprintService footprintService;
+
+    @Autowired
+    private DailyQuestionRepository dailyQuestionRepository;
+
+    @Autowired
+    private DailyAnswerRepository dailyAnswerRepository;
 
     /**
      * 获取首页聚合数据
@@ -290,15 +296,64 @@ public class HomeServiceImpl implements IHomeService {
                 data.put("memories", List.of());
             }
 
-            // 💌 时光胶囊统计
+            // 💌 时光胶囊统计（归入今日提醒）
             try {
                 Map<String, Object> capsuleInfo = new HashMap<>();
+                LocalDateTime now = LocalDateTime.now();
+                // 可开启的（已到期）
                 long openableCount = timeCapsuleRepository.countByCoupleIdAndStatus(couple.getId(), 2);
                 capsuleInfo.put("openableCount", openableCount);
+                // 即将开启（5天内）
+                long aboutToOpenCount = timeCapsuleRepository.countAboutToOpen(couple.getId(), now, now.plusDays(5));
+                capsuleInfo.put("aboutToOpenCount", aboutToOpenCount);
+                // 最近创建（24小时内）
+                long newCapsuleCount = timeCapsuleRepository.countRecentlyCreated(couple.getId(), now.minusHours(24));
+                capsuleInfo.put("newCapsuleCount", newCapsuleCount);
+                // 待写入的胶囊（伴侣创建的草稿，当前用户未写）
+                long pendingWriteCount = timeCapsuleRepository.countPendingForUser(couple.getId(), userId);
+                capsuleInfo.put("pendingWriteCount", pendingWriteCount);
+                // 最近一个即将开启的时间
+                Optional<LocalDateTime> nextOpen = timeCapsuleRepository.findNextOpenAt(couple.getId(), now);
+                if (nextOpen.isPresent()) {
+                    long daysUntilOpen = ChronoUnit.DAYS.between(now.toLocalDate(), nextOpen.get().toLocalDate());
+                    capsuleInfo.put("nextOpenDays", Math.max(0, daysUntilOpen));
+                }
                 data.put("capsule", capsuleInfo);
             } catch (Exception e) {
                 log.warn("Failed to load capsule stats", e);
                 data.put("capsule", null);
+            }
+
+            // 🗺️ 足迹城市（最近3个）
+            try {
+                List<String> cities = footprintService.getDistinctCities(couple.getId());
+                data.put("albumCities", cities.size() > 3 ? cities.subList(0, 3) : cities);
+                data.put("albumCityCount", footprintService.getDistinctCityCount(couple.getId()));
+            } catch (Exception e) {
+                log.warn("Failed to load album cities", e);
+                data.put("albumCities", List.of());
+                data.put("albumCityCount", 0);
+            }
+
+            // ❤️ 每日问答状态
+            try {
+                Map<String, Object> quizInfo = new HashMap<>();
+                Optional<DailyQuestion> dqOpt = dailyQuestionRepository
+                        .findByCoupleIdAndQuestionDate(couple.getId(), LocalDate.now());
+                if (dqOpt.isPresent()) {
+                    DailyQuestion dq = dqOpt.get();
+                    long answerCount = dailyAnswerRepository.countByDailyQuestionId(dq.getId());
+                    quizInfo.put("dailyQuestionId", dq.getId());
+                    quizInfo.put("answerCount", answerCount);
+                    // 简单判断对方是否答了
+                    quizInfo.put("partnerAnswered", answerCount >= (userId.equals(dq.getCoupleId()) ? 1 : 0));
+                } else {
+                    quizInfo.put("hasQuestion", false);
+                }
+                data.put("quiz", quizInfo);
+            } catch (Exception e) {
+                log.warn("Failed to load quiz status", e);
+                data.put("quiz", null);
             }
         } catch (Exception e) {
             data.put("activityFeed", Map.of("items", List.of(), "page", 0, "hasMore", false, "total", 0));
