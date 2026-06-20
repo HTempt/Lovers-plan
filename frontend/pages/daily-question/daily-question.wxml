@@ -1,0 +1,86 @@
+<view class="quiz-container">
+  <!-- 加载 -->
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+
+  <!-- 今日问题 -->
+  <view class="quiz-content" wx:elif="{{question}}">
+    <view class="quiz-header">
+      <text class="quiz-title">❤️ 今日问答</text>
+      <text class="quiz-type">{{typeLabel}}</text>
+    </view>
+
+    <!-- 问题卡片 -->
+    <view class="question-card">
+      <text class="question-text">{{question.questionText}}</text>
+    </view>
+
+    <!-- 选项 -->
+    <view class="options-list" wx:if="{{!submitted}}">
+      <view class="option-item {{selectedAnswer === 'A' ? 'selected' : ''}}"
+            wx:if="{{question.optionA}}" bindtap="selectAnswer" data-answer="A">
+        <text class="option-key">A</text>
+        <text class="option-text">{{question.optionA}}</text>
+      </view>
+      <view class="option-item {{selectedAnswer === 'B' ? 'selected' : ''}}"
+            wx:if="{{question.optionB}}" bindtap="selectAnswer" data-answer="B">
+        <text class="option-key">B</text>
+        <text class="option-text">{{question.optionB}}</text>
+      </view>
+      <view class="option-item {{selectedAnswer === 'C' ? 'selected' : ''}}"
+            wx:if="{{question.optionC}}" bindtap="selectAnswer" data-answer="C">
+        <text class="option-key">C</text>
+        <text class="option-text">{{question.optionC}}</text>
+      </view>
+      <view class="option-item {{selectedAnswer === 'D' ? 'selected' : ''}}"
+            wx:if="{{question.optionD}}" bindtap="selectAnswer" data-answer="D">
+        <text class="option-key">D</text>
+        <text class="option-text">{{question.optionD}}</text>
+      </view>
+    </view>
+
+    <!-- 等待对方 -->
+    <view class="waiting-section" wx:elif="{{submitted && !result}}">
+      <text class="waiting-icon">⏳</text>
+      <text class="waiting-text">已提交，等待TA作答...</text>
+    </view>
+
+    <!-- 结果 -->
+    <view class="result-section" wx:elif="{{result}}">
+      <view class="result-header {{result.matched ? 'matched' : 'unmatched'}}">
+        <text class="result-icon">{{result.matched ? '💞' : '💔'}}</text>
+        <text class="result-score">{{result.score}}</text>
+        <text class="result-label">{{result.matched ? '默契一致' : '有点差异'}}</text>
+      </view>
+      <view class="result-detail">
+        <text class="result-question">{{result.questionText}}</text>
+        <view class="result-answers">
+          <view class="result-answer-item">
+            <text class="result-answer-label">你的答案</text>
+            <text class="result-answer-value selected">{{result.myAnswer}} · {{getOptionText(result.myAnswer)}}</text>
+          </view>
+          <view class="result-answer-item">
+            <text class="result-answer-label">TA的答案</text>
+            <text class="result-answer-value {{result.myAnswer === result.partnerAnswer ? 'matched' : 'unmatched'}}">{{result.partnerAnswer}} · {{getOptionText(result.partnerAnswer)}}</text>
+          </view>
+        </view>
+        <!-- 成长值提示 -->
+        <view class="result-growth">
+          🌱 爱情树成长值 +{{result.growthTotal}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="btn-submit" wx:if="{{!submitted && selectedAnswer}}" bindtap="handleSubmit" loading="{{submitting}}">
+      💞 提交答案
+    </button>
+  </view>
+
+  <!-- 错误 -->
+  <view class="error-section" wx:elif="{{error}}">
+    <text class="error-icon">📭</text>
+    <text class="error-text">{{error}}</text>
+    <text class="error-detail" wx:if="{{errorDetail}}">{{errorDetail}}</text>
+    <button class="btn-retry" bindtap="loadToday">重新加载</button>
+  </view>
+</view>

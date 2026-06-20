@@ -1,34 +1,54 @@
+page {
+  background: #FFF7F9;
+  min-height: 100vh;
+}
+
 .profile-container {
   min-height: 100vh;
-  background: var(--bg-color);
 }
 
-/* Profile Header */
-.profile-header {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  padding: 60rpx 40rpx;
+.loading-wrap {
   display: flex;
   align-items: center;
-  gap: 30rpx;
+  justify-content: center;
+  min-height: 60vh;
 }
 
-.avatar {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 50%;
-  border: 4rpx solid rgba(255,255,255,0.5);
+.loading-text { font-size: 28rpx; color: #AAA; }
+
+/* ==========================================================
+   顶部：用户信息 + 伴侣卡片
+   ========================================================== */
+.top-section {
+  background: linear-gradient(135deg, #F56C8D, #F88AA5);
+  padding: 36rpx 28rpx 20rpx;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
 }
 
 .avatar-section {
   position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255,255,255,0.5);
 }
 
 .avatar-overlay {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 40rpx;
-  height: 40rpx;
+  width: 36rpx;
+  height: 36rpx;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 50%;
   display: flex;
@@ -38,152 +58,259 @@
 }
 
 .avatar-overlay-text {
-  font-size: 24rpx;
+  font-size: 20rpx;
   color: #FF6B81;
   font-weight: 600;
 }
 
-.user-section {
+.user-info {
   flex: 1;
+  min-width: 0;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
 }
 
 .nickname {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: white;
-  display: block;
-  margin-bottom: 8rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  display: inline;
 }
 
 .edit-nickname {
-  font-size: 26rpx;
-  color: rgba(255,255,255,0.8);
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.7);
 }
 
 .user-meta {
   display: flex;
-  gap: 20rpx;
-  margin-top: 12rpx;
+  gap: 12rpx;
+  margin-top: 8rpx;
 }
 
 .user-meta-item {
-  font-size: 22rpx;
-  color: rgba(255,255,255,0.7);
+  font-size: 20rpx;
+  color: rgba(255,255,255,0.8);
   background: rgba(255,255,255,0.15);
-  padding: 6rpx 18rpx;
-  border-radius: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
 }
 
-/* Couple Section */
-.couple-section {
-  padding: 0 30rpx;
-  margin-top: -30rpx;
-}
-
-.couple-card {
-  background: white;
-  border-radius: 48rpx;
-  padding: 30rpx;
+/* 伴侣卡片 */
+.partner-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 18rpx 20rpx;
   display: flex;
   align-items: center;
-  gap: 20rpx;
-  box-shadow: 0 8rpx 48rpx rgba(0, 0, 0, 0.06);
+  gap: 16rpx;
+  margin-top: -4rpx;
+  box-shadow: 0 4rpx 16rpx rgba(245,108,141,0.15);
+  border: 2rpx solid rgba(245,108,141,0.10);
 }
 
-.couple-label {
-  font-size: 24rpx;
-  color: var(--text-secondary);
-  margin-bottom: 8rpx;
+.partner-card:active {
+  background: #FFF7F9;
 }
 
-.couple-user {
+.partner-avatar-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  border: 3rpx solid #F56C8D;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.partner-avatar {
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.partner-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.partner-label {
+  font-size: 20rpx;
+  color: #F56C8D;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2rpx;
+}
+
+.partner-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #3D3D3D;
+  display: block;
+}
+
+.partner-arrow {
+  font-size: 28rpx;
+  color: #DDD;
+  flex-shrink: 0;
+}
+
+/* ==========================================================
+   💕 恋爱数据 - 4列
+   ========================================================== */
+.stats-section {
+  padding: 20rpx 28rpx 0;
+}
+
+.section-header {
+  margin-bottom: 12rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #555;
+}
+
+.stats-grid {
+  display: flex;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.stats-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  position: relative;
+}
+
+.stats-item:active {
+  background: #FFF7F9;
+}
+
+.stats-item:first-child {
+  border-radius: 24rpx 0 0 24rpx;
+}
+
+.stats-item:last-child {
+  border-radius: 0 24rpx 24rpx 0;
+}
+
+.stats-item + .stats-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20rpx;
+  bottom: 20rpx;
+  width: 2rpx;
+  background: #F5F5F5;
+}
+
+.stats-value {
+  font-size: 36rpx;
+  font-weight: 800;
+  display: block;
+  line-height: 1.1;
+}
+
+.stats-value.pink { color: #F56C8D; }
+
+.stats-label {
+  font-size: 20rpx;
+  color: #AAA;
+  display: block;
+  margin-top: 6rpx;
+}
+
+/* ==========================================================
+   功能入口 2x4 宫格
+   ========================================================== */
+.grid-section {
+  padding: 16rpx 28rpx 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12rpx;
 }
 
-.couple-avatar {
-  width: 60rpx;
-  height: 60rpx;
-  border-radius: 50%;
-}
-
-.couple-name {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.couple-date {
-  font-size: 24rpx;
-  color: var(--text-light);
-}
-
-/* Menu */
-.menu-section {
-  padding: 30rpx;
-}
-
-.menu-item {
-  background: white;
-  border-radius: 48rpx;
-  padding: 28rpx 24rpx;
-  margin-bottom: 2rpx;
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-}
-
-.menu-item:first-child {
-  border-radius: 48rpx 48rpx 0 0;
-}
-
-.menu-item:last-child {
-  border-radius: 0 0 48rpx 48rpx;
-  margin-bottom: 0;
-}
-
-.menu-icon {
-  font-size: 36rpx;
-}
-
-.menu-text {
-  flex: 1;
-  font-size: 30rpx;
-  color: var(--text-primary);
-}
-
-.menu-arrow {
-  font-size: 32rpx;
-  color: var(--text-light);
-}
-
-/* Actions */
-.action-section {
-  padding: 40rpx 30rpx;
+.grid-item {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 16rpx 0;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  min-height: 146rpx;
+}
+
+.grid-item:active {
+  background: #FFF7F9;
+  transform: scale(0.97);
+}
+
+.grid-icon {
+  font-size: 34rpx;
+}
+
+.grid-label {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #555;
+}
+
+.grid-desc {
+  font-size: 18rpx;
+  color: #CCC;
+  display: block;
+}
+
+/* ==========================================================
+   操作按钮
+   ========================================================== */
+.action-section {
+  padding: 28rpx 28rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
 }
 
 .btn-unbind {
-  height: 80rpx;
-  line-height: 80rpx;
-  background: white;
-  color: var(--danger-color);
-  font-size: 28rpx;
-  border-radius: 50rpx;
-  border: 2rpx solid var(--danger-color);
+  height: 72rpx;
+  line-height: 72rpx;
+  background: #FFFFFF;
+  color: #FF4D4F;
+  font-size: 26rpx;
+  border-radius: 36rpx;
+  border: 2rpx solid #FFD0D0;
   text-align: center;
 }
 
+.btn-unbind::after { border: none; }
+
 .btn-logout {
-  height: 80rpx;
-  line-height: 80rpx;
-  background: white;
-  color: var(--text-secondary);
-  font-size: 28rpx;
-  border-radius: 50rpx;
-  border: 2rpx solid var(--border-color);
+  height: 72rpx;
+  line-height: 72rpx;
+  background: #FFFFFF;
+  color: #AAA;
+  font-size: 26rpx;
+  border-radius: 36rpx;
+  border: 2rpx solid #F0F0F0;
   text-align: center;
 }
+
+.btn-logout::after { border: none; }

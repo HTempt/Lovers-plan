@@ -50,11 +50,11 @@ Page({
     // 每日一言
     dailySentence: { text: '', page: '' },
 
-    // 那天的我们（回忆重现）
+    // 🕰 时光机（那天回忆）
     memories: [],
 
-    // 时光胶囊
-    capsule: null,
+    // 双列卡片 — 左侧动态卡
+    leftCard: { type: 'milestone', icon: '❤️', title: '恋爱里程碑', subtitle: '加载中...', daysLeft: 0 },
 
     // 当前活跃tab
     activeTab: 'index'
@@ -155,8 +155,8 @@ Page({
 
         memories: data.memories || [],
 
-        // 时光胶囊
-        capsule: data.capsule || null,
+        // 双列卡片 — 左侧动态卡
+        leftCard: this.computeLeftCard(data),
 
         loading: false
       });
@@ -215,6 +215,69 @@ Page({
     }
   },
 
+  // 计算双列卡片左侧内容（优先级：时光机 > 足迹 > 愿望 > 里程碑）
+  computeLeftCard(data) {
+    // 1. 时光机 — 有历史同月同日回忆
+    if (data.memories && data.memories.length > 0) {
+      const m = data.memories[0];
+      return {
+        type: 'memory',
+        icon: '🕰',
+        title: '时光机',
+        subtitle: m.offsetLabel || '一年前的今天',
+        // 记忆数据
+        memory: m
+      };
+    }
+    // 2. 情侣足迹 — 有足迹数据
+    const cityCount = data.albumCityCount || 0;
+    if (cityCount > 0) {
+      const cities = data.albumCities || [];
+      return {
+        type: 'footprint',
+        icon: '🌏',
+        title: '情侣足迹',
+        subtitle: `已一起到达 ${cityCount} 座城市`,
+        cities: cities
+      };
+    }
+    // 3. 愿望进度 — 存在愿望
+    const wishes = data.wishList || [];
+    if (wishes.length > 0) {
+      const activeWish = wishes.find(w => w.status === 1) || wishes[0];
+      return {
+        type: 'wish',
+        icon: '🎯',
+        title: '愿望进度',
+        subtitle: activeWish.title,
+        progress: activeWish.progress || 0,
+        wishId: activeWish.id
+      };
+    }
+    // 4. 恋爱里程碑（兜底）
+    const milestone = this.computeMilestone(data);
+    return {
+      type: 'milestone',
+      icon: '❤️',
+      title: '恋爱里程碑',
+      subtitle: milestone.label,
+      daysLeft: milestone.daysLeft
+    };
+  },
+
+  // 计算恋爱里程碑
+  computeMilestone(data) {
+    const loveDays = data.loveDays || 0;
+    const milestones = [100, 200, 300, 365, 500, 730, 1000, 1500, 2000];
+    let next = milestones.find(m => m > loveDays);
+    if (!next) next = Math.ceil(loveDays / 365) * 365 + 365;
+    const daysLeft = next - loveDays;
+    const label = data.isMarried
+      ? `距离结婚${next}天纪念`
+      : `距离${next}天纪念`;
+    return { label, daysLeft };
+  },
+
   // 构建提醒列表
   buildReminders(data) {
     const reminders = [];
@@ -230,28 +293,76 @@ Page({
         id: data.upcomingAnniversary.id
       });
     }
-    // 2. 进行中任务
-    if (data.taskList && data.taskList.length > 0) {
-      data.taskList.slice(0, 1).forEach(t => {
-        if (reminders.length >= 3) return;
-        const target = t.targetCount || 1;
-        const current = t.currentCount || 0;
-        const progress = Math.min(100, Math.round(current / target * 100));
-        reminders.push({
-          type: 'task',
-          icon: '🎯',
-          title: t.title,
-          desc: `还差 ${target - current} 次完成`,
-          progressValue: progress,
-          page: 'task',
-          id: t.id
-        });
+    // 2. ❤️ 今日问答（每日必显）
+    const quiz = data.quiz;
+    {
+      let desc = '今日问题待作答';
+      if (quiz && quiz.answerCount >= 2) {
+        desc = '✅ 双方已作答';
+      } else if (quiz && quiz.answerCount === 1) {
+        desc = '⏳ 等待TA作答';
+      }
+      reminders.push({
+        type: 'quiz',
+        icon: '❤️',
+        title: '今日问答',
+        desc: desc,
+        page: 'quiz',
+        id: null
       });
     }
-    // 3. 进行中愿望
-    if (data.wishList && data.wishList.length > 0) {
-      const activeWish = data.wishList.find(w => w.status === 1) || data.wishList[0];
-      if (reminders.length < 3 && activeWish) {
+
+    // 判断时光胶囊是否有特殊状态（可开启 / 即将开启 / 新创建）
+    // 判断时光胶囊是否展示
+    const cap = data.capsule;
+    let showCapsule = false;
+    let capsuleReminder = null;
+    if (cap) {
+      // 条件1：有待我写入的内容
+      if (cap.pendingWriteCount > 0) {
+        showCapsule = true;
+        capsuleReminder = {
+          type: 'capsule',
+          icon: '💌',
+          title: '时光胶囊',
+          desc: '有待你写入的内容',
+          page: 'capsule',
+          id: null
+        };
+      }
+      // 条件2：即将开启（5天内）
+      else if (cap.aboutToOpenCount > 0 && cap.nextOpenDays != null && cap.nextOpenDays <= 5) {
+        showCapsule = true;
+        capsuleReminder = {
+          type: 'capsule',
+          icon: '💌',
+          title: '时光胶囊',
+          desc: `还有${cap.nextOpenDays}天开启`,
+          page: 'capsule',
+          id: null
+        };
+      }
+      // 条件3：有可开启的
+      else if (cap.openableCount > 0) {
+        showCapsule = true;
+        capsuleReminder = {
+          type: 'capsule',
+          icon: '📬',
+          title: '时光胶囊已成熟',
+          desc: '点击开启',
+          page: 'capsule',
+          id: null
+        };
+      }
+    }
+
+    // 3. 第3个位置：有胶囊特殊状态 → 胶囊卡片；否则 → 愿望卡片
+    if (showCapsule) {
+      reminders.push(capsuleReminder);
+    } else {
+      // 默认展示愿望卡片
+      if (data.wishList && data.wishList.length > 0) {
+        const activeWish = data.wishList.find(w => w.status === 1) || data.wishList[0];
         reminders.push({
           type: 'wish',
           icon: '✨',
@@ -263,18 +374,6 @@ Page({
         });
       }
     }
-    // 4. 可开启胶囊
-    if (data.capsule && data.capsule.openableCount > 0 && reminders.length < 3) {
-      reminders.push({
-        type: 'capsule',
-        icon: '💌',
-        title: '时光胶囊',
-        desc: `${data.capsule.openableCount} 封胶囊可开启`,
-        page: 'capsule',
-        id: null
-      });
-    }
-    // 最多取3条提醒
     return reminders.slice(0, 3);
   },
 
@@ -282,11 +381,31 @@ Page({
   onReminderTap(e) {
     const page = e.currentTarget.dataset.page;
     const tabPages = { task: '/pages/task/task', wish: '/pages/wish/wish' };
-    const navPages = { anniversary: '/pages/anniversary/anniversary', capsule: '/pages/time-capsule/time-capsule' };
+    const navPages = { anniversary: '/pages/anniversary/anniversary', capsule: '/pages/time-capsule/time-capsule', quiz: '/pages/daily-question/daily-question' };
     const tabUrl = tabPages[page];
     const navUrl = navPages[page];
     if (tabUrl) wx.switchTab({ url: tabUrl });
     else if (navUrl) wx.navigateTo({ url: navUrl });
+  },
+
+  // 左侧动态卡点击跳转
+  onLeftCardTap() {
+    const card = this.data.leftCard;
+    if (!card) return;
+    switch (card.type) {
+      case 'memory':
+        this.onMemoryTap({ currentTarget: { dataset: card.memory } });
+        break;
+      case 'footprint':
+        wx.navigateTo({ url: '/pages/footprint/footprint' });
+        break;
+      case 'wish':
+        wx.switchTab({ url: '/pages/wish/wish' });
+        break;
+      case 'milestone':
+        wx.navigateTo({ url: '/pages/anniversary/anniversary' });
+        break;
+    }
   },
 
   // 动态点击跳转
@@ -331,11 +450,6 @@ Page({
     wx.navigateTo({ url: '/pages/love-tree/love-tree' });
   },
 
-  // 去时光胶囊
-  goToCapsule() {
-    wx.navigateTo({ url: '/pages/time-capsule/time-capsule' });
-  },
-
   // 设置我的状态
   setMyStatus() {
     wx.navigateTo({ url: '/pages/status/status' });
@@ -374,11 +488,10 @@ Page({
   // 点击回忆卡片：跳转对应详情页
   onMemoryTap(e) {
     const type = e.currentTarget.dataset.type;
-    const refId = e.currentTarget.dataset.refid;
-    if (!type || !refId) return;
+    if (!type) return;
 
     if (type === 'diary') {
-      wx.navigateTo({ url: `/pages/diary-detail/diary-detail?id=${refId}` });
+      wx.switchTab({ url: '/pages/diary/diary' });
     } else if (type === 'anniversary') {
       wx.switchTab({ url: '/pages/anniversary/anniversary' });
     } else if (type === 'wish') {

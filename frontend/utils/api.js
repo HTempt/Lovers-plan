@@ -163,6 +163,17 @@ const api = {
   getCapsuleTypes: () => request('GET', '/capsule/types'),
   getOpenOptions: () => request('GET', '/capsule/open-options'),
   getCapsuleStats: () => request('GET', '/capsule/stats'),
+
+  // Daily Quiz
+  getTodayQuestion: () => request('GET', '/quiz/today'),
+  submitAnswer: (data) => request('POST', '/quiz/answer', data),
+  getQuizResult: () => request('GET', '/quiz/result'),
+
+  // Achievement
+  getAchievementOverview: () => request('GET', '/achievement/overview'),
+  getAchievementList: (category) => request('GET', '/achievement/list', category ? { category } : {}),
+  getRecentAchievements: (limit) => request('GET', '/achievement/recent', { limit: limit || 5 }),
+  checkAchievement: (data) => request('POST', '/achievement/check', data),
 };
 
 module.exports = api;

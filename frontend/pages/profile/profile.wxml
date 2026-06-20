@@ -1,80 +1,83 @@
 <view class="profile-container">
-  <!-- 用户信息 -->
-  <view class="profile-header">
-    <view class="avatar-section" bindtap="changeAvatar">
-      <image class="avatar" src="{{userInfo.avatar || '/images/icon/user-girl.png'}}" />
-      <view class="avatar-overlay">
-        <text class="avatar-overlay-text">换</text>
-      </view>
-    </view>
-    <view class="user-section">
-      <text class="nickname">{{userInfo.nickname || '未设置昵称'}}</text>
-      <text class="edit-nickname" bindtap="editNickname">修改昵称 ›</text>
-      <view class="user-meta">
-        <text class="user-meta-item" bindtap="editGender">{{genderText}}</text>
-        <text class="user-meta-item" bindtap="editPhone">{{userInfo.phone || '绑定手机号'}}</text>
-      </view>
-    </view>
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
   </view>
 
-  <!-- 情侣信息 -->
-  <view class="couple-section" wx:if="{{coupleInfo}}">
-    <view class="couple-card">
-      <text class="couple-label">我的另一半</text>
-      <view class="couple-user">
-        <image class="couple-avatar" src="{{coupleInfo.partnerAvatar || '/images/icon/user-girl.png'}}" />
-        <text class="couple-name">{{coupleInfo.partnerNickname || '未知'}}</text>
+  <view class="profile-content" wx:else>
+    <!-- ===== 用户信息 + 伴侣卡片 ===== -->
+    <view class="top-section">
+      <view class="user-row">
+        <view class="avatar-section" bindtap="changeAvatar">
+          <image class="avatar" src="{{userInfo.avatar || '/images/icon/user-girl.png'}}" />
+          <view class="avatar-overlay">
+            <text class="avatar-overlay-text">换</text>
+          </view>
+        </view>
+        <view class="user-info">
+          <view class="user-name-row">
+            <text class="nickname">{{userInfo.nickname || '未设置昵称'}}</text>
+            <text class="edit-nickname" bindtap="editNickname">修改 ›</text>
+          </view>
+          <view class="user-meta">
+            <text class="user-meta-item" bindtap="editGender">{{genderText}}</text>
+            <text class="user-meta-item" bindtap="editPhone">{{userInfo.phone || '绑定手机号'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 伴侣卡片 -->
+      <view class="partner-card" wx:if="{{coupleInfo}}" bindtap="showPartnerInfo">
+        <view class="partner-avatar-wrap">
+          <image class="partner-avatar" src="{{coupleInfo.partnerAvatar || '/images/icon/user-girl.png'}}" />
+        </view>
+        <view class="partner-info">
+          <text class="partner-label">💕 我的另一半</text>
+          <text class="partner-name">{{coupleInfo.partnerNickname || '未知'}}</text>
+        </view>
+        <text class="partner-arrow">›</text>
       </view>
     </view>
-  </view>
 
-  <!-- 菜单列表 -->
-  <view class="menu-section">
-    <view class="menu-item" bindtap="goToPage" data-page="statistics">
-      <text class="menu-icon">📊</text>
-      <text class="menu-text">恋爱报告</text>
-      <text class="menu-arrow">›</text>
+    <!-- ===== 💕 恋爱数据 ===== -->
+    <view class="stats-section" wx:if="{{stats}}">
+      <view class="section-header">
+        <text class="section-title">💕 恋爱数据</text>
+      </view>
+      <view class="stats-grid">
+        <view class="stats-item" bindtap="goToPage" data-page="anniversary">
+          <text class="stats-value pink">{{stats.loveDays || 0}}</text>
+          <text class="stats-label">恋爱天数</text>
+        </view>
+        <view class="stats-item" bindtap="goToPage" data-page="anniversary">
+          <text class="stats-value pink">{{stats.anniversaryCount || 0}}</text>
+          <text class="stats-label">纪念日</text>
+        </view>
+        <view class="stats-item" bindtap="goToPage" data-page="diary">
+          <text class="stats-value pink">{{stats.diaryCount || 0}}</text>
+          <text class="stats-label">日记</text>
+        </view>
+        <view class="stats-item" bindtap="goToPage" data-page="footprint">
+          <text class="stats-value pink">{{stats.locationCount || 0}}</text>
+          <text class="stats-label">共同城市</text>
+        </view>
+      </view>
     </view>
-    <view class="menu-item" bindtap="goToPage" data-page="anniversary">
-      <text class="menu-icon">💝</text>
-      <text class="menu-text">纪念日</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToPage" data-page="wish">
-      <text class="menu-icon">✨</text>
-      <text class="menu-text">愿望清单</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToPage" data-page="diary">
-      <text class="menu-icon">📖</text>
-      <text class="menu-text">恋爱日记</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToPage" data-page="todo">
-      <text class="menu-icon">✅</text>
-      <text class="menu-text">共享待办</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToPage" data-page="task">
-      <text class="menu-icon">🎯</text>
-      <text class="menu-text">情侣任务</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToPage" data-page="footprint">
-      <text class="menu-icon">📍</text>
-      <text class="menu-text">我们的足迹</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="handleSubscribe">
-      <text class="menu-icon">🔔</text>
-      <text class="menu-text">消息订阅</text>
-      <text class="menu-arrow">›</text>
-    </view>
-  </view>
 
-  <!-- 操作按钮 -->
-  <view class="action-section">
-    <button class="btn-unbind" bindtap="handleUnbind">解除情侣绑定</button>
-    <button class="btn-logout" bindtap="handleLogout">退出登录</button>
+    <view class="grid-section">
+      <view class="grid">
+        <view class="grid-item" wx:for="{{gridItems}}" wx:key="key"
+              bindtap="goToPage" data-page="{{item.key}}">
+          <text class="grid-icon">{{item.icon}}</text>
+          <text class="grid-label">{{item.name}}</text>
+          <text class="grid-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 操作按钮 ===== -->
+    <view class="action-section">
+      <button class="btn-unbind" bindtap="handleUnbind">解除情侣绑定</button>
+      <button class="btn-logout" bindtap="handleLogout">退出登录</button>
+    </view>
   </view>
 </view>

@@ -18,7 +18,9 @@
     "pages/time-capsule/time-capsule",
     "pages/time-capsule-create/time-capsule-create",
     "pages/time-capsule-detail/time-capsule-detail",
-    "pages/time-capsule-write/time-capsule-write"
+    "pages/time-capsule-write/time-capsule-write",
+    "pages/daily-question/daily-question",
+    "pages/achievement/achievement"
   ],
   "window": {
     "navigationBarTitleText": "双人岛",

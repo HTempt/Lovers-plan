@@ -5,8 +5,19 @@ Page({
   data: {
     userInfo: null,
     coupleInfo: null,
+    stats: null,
     loading: true,
-    genderText: '设置性别'
+    genderText: '设置性别',
+    gridItems: [
+      { key: 'anniversary', icon: '❤️', name: '纪念日', desc: '重要日子' },
+      { key: 'statistics', icon: '📊', name: '恋爱报告', desc: '数据分析' },
+      { key: 'achievement', icon: '🏆', name: '情侣成就', desc: '收集奖励' },
+      { key: 'footprint', icon: '🌍', name: '我们的足迹', desc: '一起走过' },
+      { key: 'time-capsule', icon: '💌', name: '时光胶囊', desc: '寄往未来' },
+      { key: 'subscribe', icon: '🔔', name: '消息订阅', desc: '推送通知' },
+      { key: 'setting', icon: '⚙️', name: '设置', desc: '偏好管理' },
+      { key: 'feedback', icon: '💬', name: '意见反馈', desc: '告诉我们' }
+    ]
   },
 
   onShow() {
@@ -25,16 +36,26 @@ Page({
       const userInfo = await api.getUserInfo();
       this.setData({ userInfo });
       app.setUserInfo(userInfo);
-      // 计算性别显示文字
       const genderMap = { 0: '设置性别', 1: '♂ 男', 2: '♀ 女' };
       wx.setNavigationBarTitle({ title: '' });
       this.setData({ genderText: genderMap[userInfo.gender] || '设置性别' });
     } catch (err) {}
 
-    try {
-      const coupleInfo = await api.getCoupleInfo();
-      this.setData({ coupleInfo });
-    } catch (err) {}
+    const coupleId = this.data.userInfo?.coupleId;
+    if (coupleId) {
+      try {
+        const [coupleInfo, stats] = await Promise.all([
+          api.getCoupleInfo(),
+          api.getStatistics()
+        ]);
+        this.setData({ coupleInfo, stats });
+      } catch (err) {
+        try {
+          const coupleInfo = await api.getCoupleInfo();
+          this.setData({ coupleInfo });
+        } catch (e) {}
+      }
+    }
     this.setData({ loading: false });
   },
 
@@ -65,7 +86,7 @@ Page({
         if (res.tempFilePaths.length === 0) return;
         wx.showLoading({ title: '上传中...' });
         try {
-          const fileData = await api.uploadFile(res.tempFilePaths[0], 'avatar');
+          const fileData = await api.uploadFile(res.tempFilePaths[0], 'image');
           const fileUrl = typeof fileData === 'string' ? fileData : fileData.url;
           await api.updateUserInfo({ avatar: fileUrl });
           wx.hideLoading();
@@ -81,23 +102,56 @@ Page({
 
   goToPage(e) {
     const page = e.currentTarget.dataset.page;
-    const tabPages = {
-      diary: '/pages/diary/diary',
-      task: '/pages/task/task',
-      wish: '/pages/wish/wish'
-    };
     const navPages = {
       anniversary: '/pages/anniversary/anniversary',
-      todo: '/pages/todo/todo',
       statistics: '/pages/statistics/statistics',
-      footprint: '/pages/footprint/footprint'
+      footprint: '/pages/footprint/footprint',
+      achievement: '/pages/achievement/achievement',
+      'love-tree': '/pages/love-tree/love-tree',
+      'time-capsule': '/pages/time-capsule/time-capsule'
     };
-    const tabUrl = tabPages[page];
-    if (tabUrl) wx.switchTab({ url: tabUrl });
-    else {
-      const navUrl = navPages[page];
-      if (navUrl) wx.navigateTo({ url: navUrl });
+    const tabPages = {
+      diary: '/pages/diary/diary'
+    };
+    // 特殊页面处理
+    if (page === 'partner') {
+      this.showPartnerInfo();
+      return;
     }
+    if (page === 'subscribe') {
+      wx.navigateTo({ url: '/pages/subscribe/subscribe' });
+      return;
+    }
+    if (page === 'setting') {
+      wx.showToast({ title: '功能开发中', icon: 'none' });
+      return;
+    }
+    if (page === 'feedback') {
+      wx.showToast({ title: '功能开发中', icon: 'none' });
+      return;
+    }
+    const tabUrl = tabPages[page];
+    if (tabUrl) {
+      wx.switchTab({ url: tabUrl });
+      return;
+    }
+    const navUrl = navPages[page];
+    if (navUrl) wx.navigateTo({ url: navUrl });
+  },
+
+  // 显示伴侣信息
+  showPartnerInfo() {
+    const coupleInfo = this.data.coupleInfo;
+    if (!coupleInfo) {
+      wx.showToast({ title: '暂未绑定伴侣', icon: 'none' });
+      return;
+    }
+    wx.showModal({
+      title: coupleInfo.partnerNickname || '我的另一半',
+      content: coupleInfo.partnerDesc || '暂无介绍',
+      showCancel: false,
+      confirmText: '知道了'
+    });
   },
 
   // 编辑性别
@@ -136,11 +190,6 @@ Page({
         }
       }
     });
-  },
-
-  // 消息订阅
-  handleSubscribe() {
-    wx.navigateTo({ url: '/pages/subscribe/subscribe' });
   },
 
   handleUnbind() {

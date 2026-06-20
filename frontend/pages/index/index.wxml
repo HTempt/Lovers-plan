@@ -78,39 +78,65 @@
       </view>
     </view>
 
-    <!-- ===== 双列卡片行：那天的我们 + 爱情树 ===== -->
-    <!-- 仅当至少一个模块有内容时展示 -->
-    <view class="dual-card-row" wx:if="{{(memories && memories.length > 0) || loveTree}}">
-      <!-- 左侧：📷 那天的我们 -->
-      <view class="dual-card dual-card-left" wx:if="{{memories && memories.length > 0}}">
+    <!-- ===== 双列卡片行：时光机 + 爱情树 ===== -->
+    <view class="dual-card-row">
+      <!-- 左侧：动态卡（时光机/足迹/愿望/里程碑） -->
+      <view class="dual-card" bindtap="onLeftCardTap">
         <view class="dual-card-header">
-          <text class="dual-card-title">📷 那天的我们</text>
+          <text class="dual-card-title">{{leftCard.icon}} {{leftCard.title}}</text>
+          <text class="dual-card-subtitle">{{leftCard.subtitle}}</text>
         </view>
-        <view class="memory-compact-list">
-          <view class="memory-compact-item {{item.type === 'diary' ? 'memory-diary-bg' : ''}} {{item.type === 'anniversary' ? 'memory-anni-bg' : ''}} {{item.type === 'wish' ? 'memory-wish-bg' : ''}} {{item.type === 'task' ? 'memory-task-bg' : ''}}"
-                wx:for="{{memories}}" wx:key="index" wx:for-item="mem"
-                bindtap="onMemoryTap" data-type="{{mem.type}}" data-refid="{{mem.refId}}">
-            <view class="memory-compact-img" wx:if="{{mem.image}}">
-              <image class="memory-compact-thumb" src="{{mem.image}}" mode="aspectFill" />
-            </view>
-            <view class="memory-compact-img memory-compact-img-placeholder" wx:else>
-              <text>{{mem.type === 'anniversary' ? '❤️' : mem.type === 'wish' ? '✨' : mem.type === 'task' ? '🎯' : '📝'}}</text>
-            </view>
-            <view class="memory-compact-info">
-              <text class="memory-compact-offset">{{mem.offsetLabel}}</text>
-              <text class="memory-compact-title">{{mem.title}}</text>
-              <text class="memory-compact-date">{{mem.sourceDate}}</text>
-            </view>
+
+        <!-- 1. 🕰 时光机 -->
+        <view class="time-machine-compact" wx:if="{{leftCard.type === 'memory'}}">
+          <view class="tm-image-wrap" wx:if="{{leftCard.memory.image}}">
+            <image class="tm-thumb" src="{{leftCard.memory.image}}" mode="aspectFill" />
           </view>
+          <view class="tm-text-wrap" wx:else>
+            <text class="tm-emoj">{{leftCard.memory.type === 'anniversary' ? '❤️' : leftCard.memory.type === 'wish' ? '✨' : leftCard.memory.type === 'task' ? '🎯' : '📝'}}</text>
+          </view>
+          <view class="tm-info">
+            <text class="tm-title">{{leftCard.memory.title}}</text>
+            <text class="tm-date">{{leftCard.memory.sourceDate}}</text>
+          </view>
+          <view class="tm-arrow">›</view>
+        </view>
+
+        <!-- 2. 🌏 情侣足迹 -->
+        <view class="lc-footprint" wx:elif="{{leftCard.type === 'footprint'}}">
+          <view class="lc-footprint-tags">
+            <text class="lc-city-tag" wx:for="{{leftCard.cities}}" wx:for-item="city" wx:key="index">{{city}}</text>
+          </view>
+          <view class="tm-arrow">›</view>
+        </view>
+
+        <!-- 3. 🎯 愿望进度 -->
+        <view class="lc-wish" wx:elif="{{leftCard.type === 'wish'}}">
+          <view class="lc-wish-bar">
+            <view class="lc-wish-fill" style="width: {{leftCard.progress}}%;"></view>
+          </view>
+          <view class="lc-wish-bottom">
+            <text class="lc-wish-text">完成 {{leftCard.progress}}%</text>
+            <view class="tm-arrow">›</view>
+          </view>
+        </view>
+
+        <!-- 4. ❤️ 恋爱里程碑（兜底） -->
+        <view class="lc-milestone" wx:elif="{{leftCard.type === 'milestone'}}">
+          <view class="lc-milestone-count-wrap">
+            <text class="lc-milestone-num">{{leftCard.daysLeft}}</text>
+            <text class="lc-milestone-unit">天后</text>
+          </view>
+          <view class="tm-arrow">›</view>
         </view>
       </view>
 
       <!-- 右侧：🌱 爱情树 -->
-      <view class="dual-card dual-card-right" wx:if="{{loveTree}}">
+      <view class="dual-card dual-card-right">
         <view class="dual-card-header">
           <text class="dual-card-title">🌱 爱情树</text>
         </view>
-        <view class="love-tree-compact" bindtap="goToLoveTree">
+        <view class="love-tree-compact" wx:if="{{loveTree}}" bindtap="goToLoveTree">
           <view class="love-tree-compact-top">
             <text class="love-tree-compact-icon">{{loveTree.levelIcon || '🌱'}}</text>
             <view class="love-tree-compact-info">
@@ -133,26 +159,13 @@
       </view>
     </view>
 
-    <!-- ===== 时光胶囊入口 ===== -->
-    <view class="capsule-row" wx:if="{{capsule}}" bindtap="goToCapsule">
-      <view class="capsule-row-icon">💌</view>
-      <view class="capsule-row-body">
-        <text class="capsule-row-title">时光胶囊</text>
-        <text class="capsule-row-desc">封存此刻的爱意，寄往未来</text>
-      </view>
-      <view class="capsule-row-right">
-        <text class="capsule-row-badge" wx:if="{{capsule.openableCount > 0}}">{{capsule.openableCount}} 封可开启</text>
-        <text class="capsule-row-arrow">›</text>
-      </view>
-    </view>
-
     <!-- ===== 今日提醒（双列卡片） ===== -->
     <view class="reminder-section" wx:if="{{reminders && reminders.length > 0}}">
       <view class="section-header">
         <text class="section-title">💌 今日提醒</text>
       </view>
       <view class="reminder-grid">
-        <view class="reminder-card {{item.type === 'anniversary' ? 'reminder-anni' : ''}} {{item.type === 'task' ? 'reminder-task' : ''}} {{item.type === 'wish' ? 'reminder-wish' : ''}}"
+        <view class="reminder-card {{item.type === 'anniversary' ? 'reminder-anni' : ''}} {{item.type === 'task' ? 'reminder-task' : ''}} {{item.type === 'wish' ? 'reminder-wish' : ''}} {{item.type === 'capsule' ? 'reminder-capsule' : ''}}"
               wx:for="{{reminders}}" wx:key="index"
               bindtap="onReminderTap" data-page="{{item.page}}" data-id="{{item.id}}">
           <view class="reminder-body">

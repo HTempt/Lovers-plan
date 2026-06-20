@@ -61,11 +61,10 @@ Page({
       // 保存token
       app.setToken(result.token);
 
-      // 更新用户信息（含头像和性别）
-      await api.updateUserInfo({ nickname, avatar, gender }).catch(() => {});
-
       // 获取用户信息
       if (result.isNewUser) {
+        // 首次登录：同步微信头像到服务端
+        await api.updateUserInfo({ nickname, avatar, gender }).catch(() => {});
         const defaultAvatar = gender === 1 ? '/images/icon/user-boy.png' : '/images/icon/user-girl.png';
         app.setUserInfo({
           nickname,

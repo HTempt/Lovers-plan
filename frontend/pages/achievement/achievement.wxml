@@ -1,0 +1,166 @@
+<view class="page-wrap">
+  <!-- 加载状态 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">🏆 加载成就中...</text>
+  </view>
+
+  <view class="content" wx:else>
+    <!-- ===== 顶部等级概览（白色卡片） ===== -->
+    <view class="level-section">
+      <view class="level-card">
+        <view class="level-header">
+          <view class="level-badge">
+            <text class="level-badge-text">Lv{{overview.level}}</text>
+          </view>
+          <text class="level-title">{{overview.title}}</text>
+        </view>
+
+        <view class="level-stats-row">
+          <view class="level-stat-item">
+            <view class="level-stat-value-row">
+              <text class="level-stat-value pink">{{overview.unlocked}}</text>
+              <text class="level-stat-slash">/{{overview.total}}</text>
+            </view>
+            <text class="level-stat-label">已解锁</text>
+          </view>
+          <view class="level-stat-divider"></view>
+          <view class="level-stat-item">
+            <text class="level-stat-value pink">{{overview.percent}}%</text>
+            <text class="level-stat-label">完成度</text>
+          </view>
+          <view class="level-stat-divider"></view>
+          <view class="level-stat-item">
+            <view class="level-stat-value-row">
+              <text class="level-stat-value orange">{{overview.growthValue}}</text>
+              <text class="level-stat-slash">/{{overview.growthTarget}}</text>
+            </view>
+            <text class="level-stat-label">成长值</text>
+          </view>
+        </view>
+
+        <view class="level-progress-bar">
+          <view class="level-progress-fill" style="width: {{overview.percent}}%;"></view>
+        </view>
+
+        <view class="level-next" wx:if="{{overview.nextTitle}}">
+          <text class="level-next-label">下一等级：</text>
+          <text class="level-next-title">{{overview.nextTitle}}</text>
+          <text class="level-next-need">还需{{overview.needForNext}}个成就</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 下一目标 ===== -->
+    <view class="target-section" wx:if="{{overview.nextTarget}}">
+      <view class="target-header">
+        <text class="target-header-icon">🎯</text>
+        <text class="target-header-text">下一目标</text>
+      </view>
+      <view class="target-card">
+        <view class="target-left">
+          <text class="target-icon">{{overview.nextTarget.icon}}</text>
+          <view class="target-info">
+            <text class="target-name">{{overview.nextTarget.hidden && !overview.nextTarget.unlocked ? '神秘成就' : overview.nextTarget.name}}</text>
+            <text class="target-desc">{{overview.nextTarget.hidden && !overview.nextTarget.unlocked ? '等待发现' : overview.nextTarget.description}}</text>
+          </view>
+        </view>
+        <view class="target-progress-section">
+          <view class="target-progress-text">
+            <text>当前：{{overview.nextTarget.progress}}/{{overview.nextTarget.target}}</text>
+          </view>
+          <view class="target-progress-bar">
+            <view class="target-progress-fill" style="width: {{overview.nextTarget.progress / overview.nextTarget.target * 100}}%;"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 分类Tab（横向滚动胶囊） ===== -->
+    <view class="tab-section">
+      <scroll-view class="tab-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+        <view class="tab-capsule {{item.active ? 'tab-capsule-active' : ''}}"
+              wx:for="{{categories}}" wx:key="key"
+              bindtap="switchCategory" data-key="{{item.key}}">
+          <text>{{item.name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- ===== 成就卡片列表 ===== -->
+    <view class="list-section">
+      <view class="ach-card-wrapper"
+            wx:for="{{filteredAchievements}}" wx:key="id"
+            data-index="{{index}}"
+            bindtap="showAchievementDetail">
+        <!-- 隐藏未解锁成就 -->
+        <view class="ach-card ach-card-hidden" wx:if="{{item.hidden && !item.unlocked}}">
+          <view class="ach-card-inner">
+            <view class="ach-icon-wrap">
+              <text class="ach-icon">❓</text>
+            </view>
+            <view class="ach-info">
+              <text class="ach-name ach-name-hidden">神秘成就</text>
+              <text class="ach-desc ach-desc-hidden">等待发现</text>
+            </view>
+            <view class="ach-status-tag ach-status-locked">
+              <text class="ach-status-text">🔒</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 可见成就 -->
+        <view class="ach-card {{item.unlocked ? 'ach-card-unlocked' : 'ach-card-locked'}} {{item.unlocked ? 'unlock-animate' : ''}}"
+              wx:else>
+          <view class="ach-card-inner">
+            <view class="ach-icon-wrap {{item.unlocked ? 'icon-unlocked' : ''}}">
+              <text class="ach-icon">{{item.icon}}</text>
+            </view>
+            <view class="ach-info">
+              <view class="ach-name-row">
+                <text class="ach-name">{{item.name}}</text>
+                <text class="ach-rarity-badge rarity-{{item.rarity}}">
+                  <text wx:if="{{item.rarity == 1}}">普通</text>
+                  <text wx:elif="{{item.rarity == 2}}">稀有</text>
+                  <text wx:elif="{{item.rarity == 3}}">史诗</text>
+                  <text wx:elif="{{item.rarity == 4}}">传说</text>
+                </text>
+              </view>
+              <text class="ach-desc">{{item.description}}</text>
+              <!-- 进度条 -->
+              <view class="ach-progress-section" wx:if="{{!item.unlocked && item.progress !== undefined && item.target !== undefined && item.target > 0}}">
+                <view class="ach-progress-bar">
+                  <view class="ach-progress-fill" style="width: {{item.progress / item.target * 100}}%;"></view>
+                </view>
+                <text class="ach-progress-text">{{item.progress}}/{{item.target}}</text>
+              </view>
+              <view class="ach-progress-section ach-progress-done" wx:elif="{{item.unlocked && item.progress !== undefined && item.target !== undefined && item.target > 0}}">
+                <view class="ach-progress-bar">
+                  <view class="ach-progress-fill ach-progress-fill-done" style="width: 100%;"></view>
+                </view>
+                <text class="ach-progress-text ach-progress-text-done">已完成</text>
+              </view>
+            </view>
+            <view class="ach-status-tag {{item.unlocked ? 'ach-status-unlocked' : 'ach-status-locked'}}">
+              <text wx:if="{{item.unlocked}}" class="ach-status-icon">✅</text>
+              <text wx:else class="ach-status-icon">🔒</text>
+            </view>
+          </view>
+          <view class="ach-reward" wx:if="{{item.growthReward > 0}}">
+            <text class="ach-reward-text">+{{item.growthReward}} 成长</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态（分类下无成就时） -->
+      <view class="empty-section" wx:if="{{filteredAchievements.length === 0}}">
+        <view class="empty-content">
+          <text class="empty-icon">🏆</text>
+          <text class="empty-title">你的成就之旅刚刚开始</text>
+          <text class="empty-desc">完成第一个情侣任务<text class="empty-heart"> ❤️</text></text>
+          <text class="empty-sub">即可解锁首个成就</text>
+          <button class="empty-btn" bindtap="goToTask">去完成任务</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

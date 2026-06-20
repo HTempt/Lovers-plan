@@ -1,0 +1,603 @@
+page {
+  background: #FFF7F9;
+  min-height: 100vh;
+}
+
+.page-wrap { min-height: 100vh; }
+
+.loading-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.loading-text { font-size: 28rpx; color: #AAA; }
+
+/* ==========================================================
+   顶部等级概览（白色卡片）
+   ========================================================== */
+.level-section {
+  padding: 0 24rpx 20rpx;
+}
+
+.level-card {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 32rpx 28rpx 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+}
+
+.level-header {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 24rpx;
+}
+
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FF6B8B;
+  border-radius: 20rpx;
+  padding: 6rpx 18rpx;
+}
+
+.level-badge-text {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 2rpx;
+}
+
+.level-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #FF6B8B;
+}
+
+/* ---- 统计行 ---- */
+.level-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 24rpx;
+}
+
+.level-stat-item {
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.level-stat-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2rpx;
+}
+
+.level-stat-value {
+  font-size: 40rpx;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.level-stat-value.pink {
+  color: #FF6B8B;
+}
+
+.level-stat-value.orange {
+  color: #FFB347;
+}
+
+.level-stat-label {
+  font-size: 22rpx;
+  color: #999;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.level-stat-slash {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #CCC;
+}
+
+.level-stat-divider {
+  width: 2rpx;
+  height: 48rpx;
+  background: #F0F0F0;
+  flex-shrink: 0;
+}
+
+/* ---- 进度条 ---- */
+.level-progress-bar {
+  height: 12rpx;
+  background: #FFF0F3;
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.level-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B8B, #FF8AA0);
+  border-radius: 6rpx;
+  transition: width 0.6s ease;
+}
+
+/* ---- 下一等级 ---- */
+.level-next {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  background: #FFFBF5;
+  border: 2rpx solid #FFF0E0;
+  border-radius: 20rpx;
+  padding: 14rpx 20rpx;
+}
+
+.level-next-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.level-next-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #FFB347;
+}
+
+.level-next-need {
+  font-size: 22rpx;
+  color: #BBB;
+  margin-left: auto;
+}
+
+/* ==========================================================
+   下一目标
+   ========================================================== */
+.target-section {
+  padding: 0 24rpx 20rpx;
+}
+
+.target-header {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 10rpx;
+  padding-left: 4rpx;
+}
+
+.target-header-icon {
+  font-size: 26rpx;
+}
+
+.target-header-text {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #FF6B8B;
+}
+
+.target-card {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+}
+
+.target-left {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-bottom: 14rpx;
+}
+
+.target-icon {
+  font-size: 44rpx;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF0F3;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.target-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.target-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #3D3D3D;
+  display: block;
+}
+
+.target-desc {
+  font-size: 22rpx;
+  color: #999;
+  display: block;
+  margin-top: 2rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.target-progress-section {
+  margin-left: 78rpx;
+}
+
+.target-progress-text {
+  font-size: 22rpx;
+  color: #FF6B8B;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.target-progress-bar {
+  height: 10rpx;
+  background: #FFF0F3;
+  border-radius: 5rpx;
+  overflow: hidden;
+}
+
+.target-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B8B, #FF8AA0);
+  border-radius: 5rpx;
+  transition: width 0.4s ease;
+}
+
+/* ==========================================================
+   分类Tab - 横向滚动胶囊
+   ========================================================== */
+.tab-section {
+  padding: 0 24rpx 16rpx;
+}
+
+.tab-scroll {
+  display: flex;
+  white-space: nowrap;
+  padding-bottom: 4rpx;
+}
+
+.tab-capsule {
+  display: inline-flex;
+  padding: 12rpx 26rpx;
+  margin-right: 10rpx;
+  background: #FFFFFF;
+  border-radius: 40rpx;
+  font-size: 25rpx;
+  color: #888;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+
+.tab-capsule-active {
+  background: #F56C8D;
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 4rpx 12rpx rgba(245,108,141,0.3);
+}
+
+/* ==========================================================
+   成就卡片列表
+   ========================================================== */
+.list-section {
+  padding: 0 24rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+/* ---- 卡片基础 ---- */
+.ach-card {
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ach-card:active {
+  transform: scale(0.98);
+}
+
+.ach-card-inner {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 24rpx;
+  gap: 18rpx;
+}
+
+/* ---- 已解锁（金色主题） ---- */
+.ach-card-unlocked {
+  border: 2rpx solid #FFD700;
+  box-shadow: 0 4rpx 20rpx rgba(255,215,0,0.12);
+}
+
+/* ---- 未解锁 ---- */
+.ach-card-locked {
+  opacity: 0.82;
+}
+
+/* ---- 隐藏 ---- */
+.ach-card-hidden {
+  opacity: 0.55;
+}
+
+/* ---- 图标 ---- */
+.ach-icon-wrap {
+  width: 68rpx;
+  height: 68rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF0F3;
+  border-radius: 18rpx;
+  flex-shrink: 0;
+}
+
+.icon-unlocked {
+  background: linear-gradient(135deg, #FFF8E1, #FFEECC);
+  box-shadow: 0 2rpx 10rpx rgba(255,215,0,0.25);
+}
+
+.ach-icon {
+  font-size: 36rpx;
+}
+
+/* ---- 信息 ---- */
+.ach-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ach-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-bottom: 2rpx;
+}
+
+.ach-name {
+  font-size: 27rpx;
+  font-weight: 700;
+  color: #3D3D3D;
+  display: inline;
+}
+
+.ach-name-hidden {
+  color: #999;
+  font-style: italic;
+}
+
+.ach-desc {
+  font-size: 22rpx;
+  color: #AAA;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ach-desc-hidden {
+  color: #CCC;
+}
+
+/* ---- 稀有度标签 ---- */
+.ach-rarity-badge {
+  font-size: 18rpx;
+  font-weight: 600;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+  display: inline-flex;
+  align-items: center;
+  transform: scale(0.88);
+  transform-origin: left center;
+}
+
+.rarity-1 { /* 普通 */
+  background: #F5F5F5;
+  color: #AAA;
+}
+.rarity-2 { /* 稀有 */
+  background: #E8F4FF;
+  color: #5A9BD5;
+}
+.rarity-3 { /* 史诗 */
+  background: #F3E8FF;
+  color: #9B59B6;
+}
+.rarity-4 { /* 传说 */
+  background: #FFF8E1;
+  color: #D4A017;
+}
+
+/* ---- 卡片内进度条 ---- */
+.ach-progress-section {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 10rpx;
+}
+
+.ach-progress-bar {
+  flex: 1;
+  height: 8rpx;
+  background: #F0F0F0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.ach-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B8B, #FF8AA0);
+  border-radius: 4rpx;
+  transition: width 0.4s ease;
+}
+
+.ach-progress-fill-done {
+  background: linear-gradient(90deg, #FFD700, #FFE44D);
+}
+
+.ach-progress-text {
+  font-size: 20rpx;
+  color: #FF6B8B;
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 56rpx;
+  text-align: right;
+}
+
+.ach-progress-text-done {
+  color: #D4A017;
+}
+
+.ach-progress-done {
+  opacity: 0.8;
+}
+
+/* ---- 状态标签（圆形） ---- */
+.ach-status-tag {
+  flex-shrink: 0;
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.ach-status-unlocked {
+  background: #FFF8E1;
+  box-shadow: 0 2rpx 8rpx rgba(255,215,0,0.2);
+}
+
+.ach-status-locked {
+  background: #F5F5F5;
+}
+
+.ach-status-icon {
+  font-size: 26rpx;
+}
+
+.ach-status-text {
+  font-size: 22rpx;
+}
+
+/* ---- 成长值奖励角标 ---- */
+.ach-reward {
+  background: linear-gradient(135deg, #FFFAF0, #FFF5E0);
+  padding: 6rpx 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 2rpx solid rgba(255,184,77,0.12);
+}
+
+.ach-reward-text {
+  font-size: 22rpx;
+  color: #D4A017;
+  font-weight: 700;
+}
+
+/* ==========================================================
+   空状态
+   ========================================================== */
+.empty-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 480rpx;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  display: block;
+  margin-bottom: 24rpx;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #3D3D3D;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.empty-heart {
+  color: #FF6B8B;
+}
+
+.empty-sub {
+  font-size: 24rpx;
+  color: #BBB;
+  display: block;
+  margin-bottom: 32rpx;
+}
+
+.empty-btn {
+  background: #F56C8D;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 20rpx 48rpx;
+  border-radius: 40rpx;
+  border: none;
+  box-shadow: 0 4rpx 16rpx rgba(245,108,141,0.3);
+  line-height: 1;
+}
+
+.empty-btn::after {
+  border: none;
+}
+
+/* ==========================================================
+   解锁动画
+   ========================================================== */
+@keyframes unlockPulse {
+  0% { transform: scale(1); box-shadow: 0 4rpx 20rpx rgba(255,215,0,0.12); }
+  50% { transform: scale(1.02); box-shadow: 0 8rpx 36rpx rgba(255,215,0,0.35); }
+  100% { transform: scale(1); box-shadow: 0 4rpx 20rpx rgba(255,215,0,0.12); }
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.35); }
+  70% { box-shadow: 0 0 0 16rpx rgba(255,215,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+}
+
+.unlock-animate {
+  animation: unlockPulse 0.6s ease, glowPulse 1.2s ease 0.6s 2;
+}
+
+@keyframes iconSparkle {
+  0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.4); }
+  100% { box-shadow: 0 0 20rpx 12rpx rgba(255,215,0,0); }
+}
+
+.ach-card-unlocked .icon-unlocked {
+  animation: iconSparkle 1.5s ease infinite;
+}
