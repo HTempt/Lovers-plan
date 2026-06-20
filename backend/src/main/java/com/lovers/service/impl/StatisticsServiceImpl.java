@@ -40,6 +40,9 @@ public class StatisticsServiceImpl implements IStatisticsService {
     @Autowired
     private AnniversaryRepository anniversaryRepository;
 
+    @Autowired
+    private FootprintRepository footprintRepository;
+
     /**
      * 获取情侣统计概览
      */
@@ -107,9 +110,9 @@ public class StatisticsServiceImpl implements IStatisticsService {
                 .findByCoupleIdAndStatusOrderByAnniversaryDateDesc(coupleId, 1).size();
         stats.put("anniversaryCount", anniversaryCount);
 
-        // 地点足迹数
-        long locationCount = diaryRepository.findDistinctLocationsByCoupleId(coupleId, 1).size();
-        stats.put("locationCount", locationCount);
+        // 共同城市数（足迹系统）
+        long cityCount = footprintRepository.countDistinctCityByCoupleId(coupleId);
+        stats.put("locationCount", cityCount);
 
         return stats;
     }

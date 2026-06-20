@@ -52,4 +52,11 @@ public interface TimeCapsuleRepository extends JpaRepository<TimeCapsule, Long> 
     /** 统计待当前用户写入的胶囊数（DRAFT 且不是自己创建的 = 伴侣创建了但自己还没写） */
     @Query("SELECT COUNT(t) FROM TimeCapsule t WHERE t.coupleId = :coupleId AND t.status = 0 AND t.userId <> :userId")
     long countPendingForUser(@Param("coupleId") Long coupleId, @Param("userId") Long userId);
+
+    /** 统计某状态以外的胶囊数 */
+    long countByCoupleIdAndStatusNot(Long coupleId, Integer status);
+
+    /** 统计双方共同完成的胶囊数（pairId 非空） */
+    @Query("SELECT COUNT(t) FROM TimeCapsule t WHERE t.coupleId = :coupleId AND t.pairId IS NOT NULL AND t.status >= 1")
+    long countDualCompleted(@Param("coupleId") Long coupleId);
 }

@@ -27,4 +27,8 @@ public interface FootprintRepository extends JpaRepository<Footprint, Long> {
 
     @Query("SELECT DISTINCT f.city FROM Footprint f WHERE f.coupleId = :coupleId AND f.city IS NOT NULL AND f.city <> ''")
     List<String> findDistinctCities(@Param("coupleId") Long coupleId);
+
+    /** 统计到达的不同省份数 */
+    @Query("SELECT COUNT(DISTINCT f.province) FROM Footprint f WHERE f.coupleId = :coupleId AND f.province IS NOT NULL AND f.province <> ''")
+    long countDistinctProvinces(@Param("coupleId") Long coupleId);
 }

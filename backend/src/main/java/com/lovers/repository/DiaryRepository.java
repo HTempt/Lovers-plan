@@ -21,6 +21,13 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     long countByCoupleIdAndStatus(Long coupleId, Integer status);
 
+    /** 统计情侣全部日记数（含已删除） */
+    long countByCoupleId(Long coupleId);
+
+    /** 统计带图片的日记数 */
+    @Query("SELECT COUNT(DISTINCT d.id) FROM Diary d JOIN DiaryMedia m ON d.id = m.diaryId WHERE d.coupleId = :coupleId AND d.status = 1 AND m.mediaType = 'image'")
+    long countPhotoDiaries(@Param("coupleId") Long coupleId);
+
     Optional<Diary> findByIdAndCreatorId(Long id, Long creatorId);
 
     @Query("SELECT DISTINCT d.location FROM Diary d WHERE d.coupleId = :coupleId AND d.status = :status AND d.location IS NOT NULL AND d.location <> ''")

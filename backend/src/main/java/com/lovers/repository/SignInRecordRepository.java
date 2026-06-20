@@ -23,4 +23,7 @@ public interface SignInRecordRepository extends JpaRepository<SignInRecord, Long
     List<SignInRecord> findRecentByUserId(@Param("userId") Long userId, Pageable pageable);
 
     long countByCoupleId(Long coupleId);
+
+    /** 查询情侣所有签到记录（按签到日期倒序） */
+    List<SignInRecord> findByCoupleIdOrderBySignDateDesc(Long coupleId);
 }
