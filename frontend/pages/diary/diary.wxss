@@ -104,6 +104,16 @@
   margin-bottom: 12rpx;
 }
 
+.timeline-mood {
+  font-size: 24rpx;
+  color: #FF6B81;
+  background: #FFE5EC;
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  margin-bottom: 12rpx;
+}
+
 .timeline-media {
   display: flex;
   gap: 8rpx;

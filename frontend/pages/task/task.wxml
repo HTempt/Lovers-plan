@@ -1,18 +1,8 @@
 <view class="task-container">
-  <!-- 成就墙 -->
-  <view class="badges-section" wx:if="{{badges.length > 0}}">
-    <view class="badges-header">
-      <text class="badges-title">🏆 成就墙</text>
-    </view>
-    <view class="badges-list">
-      <view class="badge-item" wx:for="{{badges}}" wx:key="id">
-        <text class="badge-icon">{{item.icon}}</text>
-        <view class="badge-info">
-          <text class="badge-name">{{item.title}}</text>
-          <text class="badge-date">获得于 {{item.earnedDateDisplay}}</text>
-        </view>
-      </view>
-    </view>
+  <!-- 顶部tab切换 -->
+  <view class="tab-switcher">
+    <view class="tab-item {{currentTab === 'task' ? 'active' : ''}}" bindtap="switchTab" data-tab="task">🎯 任务</view>
+    <view class="tab-item {{currentTab === 'wish' ? 'active' : ''}}" bindtap="switchTab" data-tab="wish">✨ 愿望</view>
   </view>
 
   <!-- 骨架屏加载 -->
@@ -28,70 +18,116 @@
   <view class="error-state" wx:elif="{{error}}">
     <text class="error-icon">😅</text>
     <text class="error-text">加载失败，请重试</text>
-    <button class="error-retry" bindtap="loadTasks">重新加载</button>
+    <button class="error-retry" bindtap="loadData">重新加载</button>
   </view>
 
-  <!-- 任务列表 -->
-  <view class="task-list" wx:elif="{{taskList.length > 0}}">
-    <view class="task-card" wx:for="{{taskList}}" wx:key="id">
-      <view class="task-header">
-        <text class="task-title">{{item.title}}</text>
-        <text class="task-status status-{{item.status}}">{{getStatusText(item.status)}}</text>
-      </view>
-
-      <!-- 进度条 -->
-      <view class="progress-section">
-        <view class="progress-bar">
-          <view class="progress-fill" style="width: {{getProgressPercent(item.currentCount, item.targetCount)}}%"></view>
+  <!-- ===== 任务Tab ===== -->
+  <view class="tab-content" wx:elif="{{currentTab === 'task'}}">
+    <view class="task-list" wx:if="{{taskList.length > 0}}">
+      <view class="task-card" wx:for="{{taskList}}" wx:key="id">
+        <view class="task-header">
+          <text class="task-title">{{item.title}}</text>
+          <text class="task-status status-{{item.status}}">{{getStatusText(item.status)}}</text>
         </view>
-        <text class="progress-text">{{item.currentCount}}/{{item.targetCount}}</text>
-      </view>
 
-      <view class="task-meta">
-        <text class="task-deadline" wx:if="{{item.deadline}}">截止 {{item.deadline}}</text>
-      </view>
+        <!-- 进度条 -->
+        <view class="progress-section">
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{getProgressPercent(item.currentCount, item.targetCount)}}%"></view>
+          </view>
+          <text class="progress-text">{{item.currentCount}}/{{item.targetCount}}</text>
+        </view>
 
-      <!-- 操作按钮 -->
-      <view class="task-actions">
-        <button class="btn-checkin" wx:if="{{item.status === 1}}" bindtap="handleCheckIn" data-id="{{item.id}}">打卡</button>
+        <view class="task-meta">
+          <text class="task-deadline" wx:if="{{item.deadline}}">截止 {{item.deadline}}</text>
+        </view>
 
-        <!-- 待确认的打卡记录 -->
-        <view class="pending-records" wx:if="{{item.records && item.records.length > 0}}">
-          <view class="record-item" wx:for="{{item.records}}" wx:for-item="record" wx:key="id">
-            <text wx:if="{{record.status === 0 && record.userId !== myUserId}}" class="record-pending">
-              对方已打卡 -
-              <text class="record-confirm" bindtap="handleConfirm" data-id="{{record.id}}">点击确认</text>
-            </text>
-            <text wx:elif="{{record.status === 0 && record.userId === myUserId}}" class="record-pending">等待对方确认</text>
-            <text wx:elif="{{record.status === 1}}" class="record-confirmed">✓ 已确认</text>
+        <!-- 操作按钮 -->
+        <view class="task-actions">
+          <button class="btn-checkin" wx:if="{{item.status === 1}}" bindtap="handleCheckIn" data-id="{{item.id}}">打卡</button>
+
+          <!-- 待确认的打卡记录 -->
+          <view class="pending-records" wx:if="{{item.records && item.records.length > 0}}">
+            <view class="record-item" wx:for="{{item.records}}" wx:for-item="record" wx:key="id">
+              <text wx:if="{{record.status === 0 && record.userId !== myUserId}}" class="record-pending">
+                对方已打卡 -
+                <text class="record-confirm" bindtap="handleConfirm" data-id="{{record.id}}">点击确认</text>
+              </text>
+              <text wx:elif="{{record.status === 0 && record.userId === myUserId}}" class="record-pending">等待对方确认</text>
+              <text wx:elif="{{record.status === 1}}" class="record-confirmed">✓ 已确认</text>
+            </view>
           </view>
         </view>
       </view>
     </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">🎯</text>
+      <text class="empty-title">还没有情侣任务</text>
+      <text class="empty-desc">一起设定一个共同目标吧</text>
+    </view>
+
+    <!-- 浮动创建按钮 -->
+    <view class="float-btn" bindtap="showCreateTaskModal">
+      <text class="float-btn-icon">+</text>
+    </view>
   </view>
 
-  <!-- 空状态 -->
-  <view class="empty-state" wx:else>
-    <text class="empty-icon">🎯</text>
-    <text class="empty-title">还没有情侣任务</text>
-    <text class="empty-desc">一起设定一个共同目标吧</text>
+  <!-- ===== 愿望Tab ===== -->
+  <view class="tab-content" wx:elif="{{currentTab === 'wish'}}">
+    <view class="wish-list" wx:if="{{wishList.length > 0}}">
+      <view class="wish-card {{item.status === 2 ? 'achieved' : ''}}" wx:for="{{wishList}}" wx:key="id">
+        <view class="wish-header">
+          <text class="wish-category-icon">{{getCategoryInfo(item.category).icon}}</text>
+          <view class="wish-info">
+            <text class="wish-title">{{item.title}}</text>
+            <text class="wish-category">{{getCategoryInfo(item.category).label}}</text>
+          </view>
+          <text class="wish-status" wx:if="{{item.status === 2}}">✅ 已达成</text>
+        </view>
+
+        <view class="wish-progress" wx:if="{{parseFloat(item.targetAmount) > 0}}">
+          <view class="progress-bar">
+            <view class="progress-fill wish-progress-fill" style="width: {{getWishProgressPercent(item.currentAmount, item.targetAmount)}}%"></view>
+          </view>
+          <text class="progress-text">{{formatAmount(item.currentAmount)}} / {{formatAmount(item.targetAmount)}}</text>
+        </view>
+
+        <view class="wish-meta" wx:if="{{item.targetDate}}">
+          <text class="wish-date">目标日期: {{item.targetDate}}</text>
+        </view>
+
+        <view class="wish-actions" wx:if="{{item.status === 1}}">
+          <button class="btn-progress" wx:if="{{parseFloat(item.targetAmount) > 0}}" bindtap="handleWishProgress" data-id="{{item.id}}">更新进度</button>
+          <button class="btn-achieve" bindtap="handleAchieveWish" data-id="{{item.id}}">梦想成真</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">✨</text>
+      <text class="empty-title">还没有许下愿望</text>
+      <text class="empty-desc">和TA一起许下美好愿望吧</text>
+    </view>
+
+    <!-- 浮动创建按钮 -->
+    <view class="float-btn" bindtap="showCreateWishModal">
+      <text class="float-btn-icon">+</text>
+    </view>
   </view>
 
-  <!-- 浮动创建按钮 -->
-  <view class="float-btn" bindtap="showCreateModal">
-    <text class="float-btn-icon">+</text>
-  </view>
-
-  <!-- 创建弹窗 -->
-  <view class="modal-overlay" wx:if="{{showCreateModal}}">
+  <!-- 创建任务弹窗 -->
+  <view class="modal-overlay" wx:if="{{showCreateTaskModal}}">
     <view class="modal-content">
       <view class="modal-header">
         <text class="modal-title">新建任务</text>
-        <text class="modal-close" bindtap="hideModal">✕</text>
+        <text class="modal-close" bindtap="hideTaskModal">✕</text>
       </view>
       <view class="form-group">
         <text class="form-label">任务名称</text>
-        <input class="form-input" placeholder="一起运动30次" value="{{formTitle}}" bindinput="onTitleInput" adjust-position="{{false}}" />
+        <input class="form-input" placeholder="一起运动30次" value="{{formTitle}}" bindinput="onTaskTitleInput" adjust-position="{{false}}" />
       </view>
       <view class="form-group">
         <text class="form-label">目标次数</text>
@@ -101,7 +137,36 @@
         <text class="form-label">截止日期</text>
         <input class="form-input" placeholder="YYYY-MM-DD" value="{{formDeadline}}" bindinput="onDeadlineInput" adjust-position="{{false}}" />
       </view>
-      <button class="btn-submit" bindtap="handleCreate">创建</button>
+      <button class="btn-submit" bindtap="handleCreateTask">创建</button>
+    </view>
+  </view>
+
+  <!-- 创建愿望弹窗 -->
+  <view class="modal-overlay" wx:if="{{showCreateWishModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">新建愿望</text>
+        <text class="modal-close" bindtap="hideWishModal">✕</text>
+      </view>
+      <view class="form-group">
+        <text class="form-label">愿望名称</text>
+        <input class="form-input" placeholder="一起去旅行" value="{{wishFormTitle}}" bindinput="onWishTitleInput" adjust-position="{{false}}" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">分类</text>
+        <view class="radio-group">
+          <view class="radio-item {{wishFormCategory === item.value ? 'active' : ''}}"
+                wx:for="{{wishCategories}}" wx:key="value"
+                bindtap="onWishCategoryChange" data-value="{{item.value}}">
+            {{item.icon}} {{item.label}}
+          </view>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">目标日期（选填）</text>
+        <input class="form-input" placeholder="YYYY-MM-DD" value="{{wishFormTargetDate}}" bindinput="onWishDateInput" adjust-position="{{false}}" />
+      </view>
+      <button class="btn-submit" bindtap="handleCreateWish">创建</button>
     </view>
   </view>
 </view>

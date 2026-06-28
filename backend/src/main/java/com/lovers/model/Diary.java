@@ -35,6 +35,9 @@ public class Diary {
     @Column(length = 50)
     private String city;
 
+    @Column(length = 20)
+    private String mood;
+
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
 

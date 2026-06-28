@@ -1,4 +1,15 @@
-const BASE_URL = 'http://localhost:8080/api';
+/**
+ * API 基础地址
+ * - 开发环境: 使用本地或服务器 IP
+ * - 生产环境: 使用已备案域名的 HTTPS 地址
+ *
+ * 切换方式:
+ *   开发工具中   -> 启用「不校验合法域名」即可用 HTTP
+ *   正式发布前   -> 修改为 https://你的域名.com/api
+ */
+const BASE_URL = 'http://47.93.25.125:8080/api';
+// 正式发布时改为:
+// const BASE_URL = 'https://你的域名.com/api';
 
 /**
  * 发起HTTP请求

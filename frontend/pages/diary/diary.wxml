@@ -3,7 +3,6 @@
   <view class="view-switcher">
     <view class="switch-item {{currentView === 'timeline' ? 'active' : ''}}" bindtap="switchView" data-view="timeline">时间轴</view>
     <view class="switch-item {{currentView === 'album' ? 'active' : ''}}" bindtap="switchView" data-view="album">相册</view>
-    <view class="switch-item {{currentView === 'map' ? 'active' : ''}}" bindtap="switchView" data-view="map">足迹</view>
   </view>
 
   <!-- 时间轴视图 -->
@@ -16,6 +15,8 @@
           <text class="timeline-title">{{item.title}}</text>
           <text class="timeline-content" wx:if="{{item.content}}">{{item.content}}</text>
           <text class="timeline-location" wx:if="{{item.location}}">📍 {{item.location}}</text>
+          <!-- 情绪标签 -->
+          <text class="timeline-mood" wx:if="{{item.mood}}">😊 {{item.mood}}</text>
           <view class="timeline-media" wx:if="{{item.mediaList && item.mediaList.length > 0}}">
             <image class="media-thumb" wx:for="{{item.mediaList}}" wx:key="id"
                    src="{{item.fileUrl}}" mode="aspectFill"
@@ -58,21 +59,6 @@
       <text class="empty-icon">📸</text>
       <text class="empty-title">还没有照片</text>
       <text class="empty-desc">记录生活中的美好瞬间吧</text>
-    </view>
-  </view>
-
-  <!-- 足迹视图 -->
-  <view class="map-view" wx:elif="{{currentView === 'map'}}">
-    <view class="location-list">
-      <view class="location-item" wx:for="{{mapLocations}}" wx:key="location">
-        <text class="location-icon">📍</text>
-        <text class="location-name">{{item.location}}</text>
-      </view>
-    </view>
-    <view class="empty-state" wx:if="{{mapLocations.length === 0}}">
-      <text class="empty-icon">📍</text>
-      <text class="empty-title">还没有地点记录</text>
-      <text class="empty-desc">一起探索更多有趣的地方吧</text>
     </view>
   </view>
 

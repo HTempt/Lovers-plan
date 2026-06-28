@@ -6,7 +6,6 @@ Page({
     currentView: 'timeline',
     timeline: [],
     album: {},
-    mapLocations: [],
     page: 0,
     hasMore: true,
     loading: false
@@ -49,20 +48,10 @@ Page({
     wx.hideLoading();
   },
 
-  async loadMap() {
-    wx.showLoading({ title: '加载中...' });
-    try {
-      const locations = await api.getMapLocations();
-      this.setData({ mapLocations: locations || [] });
-    } catch (err) {}
-    wx.hideLoading();
-  },
-
   switchView(e) {
     const view = e.currentTarget.dataset.view;
     this.setData({ currentView: view });
     if (view === 'album') this.loadAlbum();
-    if (view === 'map') this.loadMap();
   },
 
   onReachBottom() {

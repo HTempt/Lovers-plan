@@ -4,6 +4,23 @@
     <input class="title-input" placeholder="标题" value="{{title}}" bindinput="onTitleInput" />
   </view>
 
+  <!-- 心情标签 -->
+  <view class="form-group">
+    <view class="mood-picker">
+      <text class="mood-label">此刻心情</text>
+      <view class="mood-options">
+        <view class="mood-item {{mood === '开心' ? 'active' : ''}}" bindtap="selectMood" data-mood="开心">😊 开心</view>
+        <view class="mood-item {{mood === '幸福' ? 'active' : ''}}" bindtap="selectMood" data-mood="幸福">🥰 幸福</view>
+        <view class="mood-item {{mood === '感动' ? 'active' : ''}}" bindtap="selectMood" data-mood="感动">😭 感动</view>
+        <view class="mood-item {{mood === '平静' ? 'active' : ''}}" bindtap="selectMood" data-mood="平静">😌 平静</view>
+        <view class="mood-item {{mood === '想念' ? 'active' : ''}}" bindtap="selectMood" data-mood="想念">💭 想念</view>
+        <view class="mood-item {{mood === '小确幸' ? 'active' : ''}}" bindtap="selectMood" data-mood="小确幸">✨ 小确幸</view>
+        <view class="mood-item {{mood === '难过' ? 'active' : ''}}" bindtap="selectMood" data-mood="难过">😢 难过</view>
+        <view class="mood-item {{mood === '生气' ? 'active' : ''}}" bindtap="selectMood" data-mood="生气">😤 生气</view>
+      </view>
+    </view>
+  </view>
+
   <!-- 内容 -->
   <view class="form-group">
     <textarea class="content-input" placeholder="记录此刻的心情..." value="{{content}}" bindinput="onContentInput" maxlength="5000" auto-height />

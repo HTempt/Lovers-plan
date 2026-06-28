@@ -38,31 +38,6 @@
       </view>
     </view>
 
-    <!-- ===== 💕 恋爱数据 ===== -->
-    <view class="stats-section" wx:if="{{stats}}">
-      <view class="section-header">
-        <text class="section-title">💕 恋爱数据</text>
-      </view>
-      <view class="stats-grid">
-        <view class="stats-item" bindtap="goToPage" data-page="anniversary">
-          <text class="stats-value pink">{{stats.loveDays || 0}}</text>
-          <text class="stats-label">恋爱天数</text>
-        </view>
-        <view class="stats-item" bindtap="goToPage" data-page="anniversary">
-          <text class="stats-value pink">{{stats.anniversaryCount || 0}}</text>
-          <text class="stats-label">纪念日</text>
-        </view>
-        <view class="stats-item" bindtap="goToPage" data-page="diary">
-          <text class="stats-value pink">{{stats.diaryCount || 0}}</text>
-          <text class="stats-label">日记</text>
-        </view>
-        <view class="stats-item" bindtap="goToPage" data-page="footprint">
-          <text class="stats-value pink">{{stats.locationCount || 0}}</text>
-          <text class="stats-label">共同城市</text>
-        </view>
-      </view>
-    </view>
-
     <view class="grid-section">
       <view class="grid">
         <view class="grid-item" wx:for="{{gridItems}}" wx:key="key"

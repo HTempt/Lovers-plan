@@ -4,7 +4,6 @@
     "pages/index/index",
     "pages/diary/diary",
     "pages/task/task",
-    "pages/wish/wish",
     "pages/profile/profile",
     "pages/bind/bind",
     "pages/status/status",
@@ -20,7 +19,8 @@
     "pages/time-capsule-detail/time-capsule-detail",
     "pages/time-capsule-write/time-capsule-write",
     "pages/daily-question/daily-question",
-    "pages/achievement/achievement"
+    "pages/achievement/achievement",
+    "pages/wish/wish"
   ],
   "window": {
     "navigationBarTitleText": "双人岛",
@@ -52,12 +52,6 @@
         "text": "任务",
         "iconPath": "images/tab/task_gray.png",
         "selectedIconPath": "images/tab/task.png"
-      },
-      {
-        "pagePath": "pages/wish/wish",
-        "text": "愿望",
-        "iconPath": "images/tab/wish_gray.png",
-        "selectedIconPath": "images/tab/wish.png"
       },
       {
         "pagePath": "pages/profile/profile",

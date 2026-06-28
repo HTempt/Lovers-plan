@@ -63,7 +63,7 @@ public class DiaryServiceImpl implements IDiaryService {
     public Diary create(Long userId, Long coupleId, String title, String content,
                         String location, String province, String city,
                         BigDecimal latitude, BigDecimal longitude,
-                        List<Map<String, String>> mediaList) {
+                        String mood, List<Map<String, String>> mediaList) {
         if (title == null || title.isEmpty()) {
             throw new BusinessException("日记标题不能为空");
         }
@@ -76,6 +76,7 @@ public class DiaryServiceImpl implements IDiaryService {
         diary.setLocation(location);
         diary.setProvince(province);
         diary.setCity(city);
+        diary.setMood(mood);
         diary.setLatitude(latitude);
         diary.setLongitude(longitude);
         diary.setStatus(1);
@@ -133,6 +134,7 @@ public class DiaryServiceImpl implements IDiaryService {
             item.put("title", diary.getTitle());
             item.put("content", diary.getContent());
             item.put("location", diary.getLocation());
+            item.put("mood", diary.getMood());
             item.put("createTime", diary.getCreateTime());
 
             // 加载媒体

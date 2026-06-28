@@ -130,3 +130,37 @@
 .btn-submit[disabled] {
   opacity: 0.5;
 }
+
+/* Mood Picker */
+.mood-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.mood-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #3D3D3D;
+}
+
+.mood-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.mood-item {
+  font-size: 26rpx;
+  color: #666;
+  background: #F5F5F5;
+  padding: 12rpx 24rpx;
+  border-radius: 30rpx;
+  border: 2rpx solid transparent;
+}
+
+.mood-item.active {
+  color: #FF6B81;
+  background: #FFE5EC;
+  border-color: #FF6B81;
+}

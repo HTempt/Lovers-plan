@@ -44,11 +44,12 @@ public class DiaryController {
         String city = (String) request.get("city");
         BigDecimal latitude = request.get("latitude") != null ? new BigDecimal(request.get("latitude").toString()) : null;
         BigDecimal longitude = request.get("longitude") != null ? new BigDecimal(request.get("longitude").toString()) : null;
+        String mood = (String) request.get("mood");
         @SuppressWarnings("unchecked")
         List<Map<String, String>> mediaList = (List<Map<String, String>>) request.get("mediaList");
 
         Diary diary = diaryService.create(userId, user.getCoupleId(), title, content,
-                location, province, city, latitude, longitude, mediaList);
+                location, province, city, latitude, longitude, mood, mediaList);
         return Result.success(diary);
     }
 

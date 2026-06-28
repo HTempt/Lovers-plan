@@ -5,14 +5,11 @@ Page({
   data: {
     userInfo: null,
     coupleInfo: null,
-    stats: null,
     loading: true,
     genderText: '设置性别',
     gridItems: [
-      { key: 'anniversary', icon: '❤️', name: '纪念日', desc: '重要日子' },
-      { key: 'statistics', icon: '📊', name: '恋爱报告', desc: '数据分析' },
       { key: 'achievement', icon: '🏆', name: '情侣成就', desc: '收集奖励' },
-      { key: 'footprint', icon: '🌍', name: '我们的足迹', desc: '一起走过' },
+      { key: 'statistics', icon: '📊', name: '恋爱报告', desc: '数据分析' },
       { key: 'time-capsule', icon: '💌', name: '时光胶囊', desc: '寄往未来' },
       { key: 'subscribe', icon: '🔔', name: '消息订阅', desc: '推送通知' },
       { key: 'setting', icon: '⚙️', name: '设置', desc: '偏好管理' },
@@ -44,17 +41,9 @@ Page({
     const coupleId = this.data.userInfo?.coupleId;
     if (coupleId) {
       try {
-        const [coupleInfo, stats] = await Promise.all([
-          api.getCoupleInfo(),
-          api.getStatistics()
-        ]);
-        this.setData({ coupleInfo, stats });
-      } catch (err) {
-        try {
-          const coupleInfo = await api.getCoupleInfo();
-          this.setData({ coupleInfo });
-        } catch (e) {}
-      }
+        const coupleInfo = await api.getCoupleInfo();
+        this.setData({ coupleInfo });
+      } catch (err) {}
     }
     this.setData({ loading: false });
   },
@@ -103,21 +92,12 @@ Page({
   goToPage(e) {
     const page = e.currentTarget.dataset.page;
     const navPages = {
-      anniversary: '/pages/anniversary/anniversary',
       statistics: '/pages/statistics/statistics',
-      footprint: '/pages/footprint/footprint',
       achievement: '/pages/achievement/achievement',
       'love-tree': '/pages/love-tree/love-tree',
       'time-capsule': '/pages/time-capsule/time-capsule'
     };
-    const tabPages = {
-      diary: '/pages/diary/diary'
-    };
     // 特殊页面处理
-    if (page === 'partner') {
-      this.showPartnerInfo();
-      return;
-    }
     if (page === 'subscribe') {
       wx.navigateTo({ url: '/pages/subscribe/subscribe' });
       return;
@@ -128,11 +108,6 @@ Page({
     }
     if (page === 'feedback') {
       wx.showToast({ title: '功能开发中', icon: 'none' });
-      return;
-    }
-    const tabUrl = tabPages[page];
-    if (tabUrl) {
-      wx.switchTab({ url: tabUrl });
       return;
     }
     const navUrl = navPages[page];

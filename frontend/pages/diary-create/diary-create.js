@@ -37,6 +37,7 @@ Page({
   data: {
     title: '',
     content: '',
+    mood: '',
     location: '',
     province: '',
     city: '',
@@ -53,6 +54,10 @@ Page({
 
   onContentInput(e) {
     this.setData({ content: e.detail.value });
+  },
+
+  selectMood(e) {
+    this.setData({ mood: e.currentTarget.dataset.mood });
   },
 
   onLocationInput(e) {
@@ -252,6 +257,7 @@ Page({
       const data = {
         title: this.data.title,
         content: this.data.content,
+        mood: this.data.mood,
         location: this.data.location,
         province: this.data.province,
         city: this.data.city,
