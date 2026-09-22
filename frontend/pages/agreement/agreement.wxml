@@ -1,0 +1,27 @@
+<view class="doc-container" wx:if="{{doc}}">
+  <view class="doc-head">
+    <text class="doc-title">{{doc.title}}</text>
+    <text class="doc-meta">{{doc.meta}}</text>
+    <text class="doc-intro">{{doc.intro}}</text>
+  </view>
+
+  <view class="doc-body">
+    <view class="section" wx:for="{{doc.sections}}" wx:for-item="sec" wx:key="title">
+      <text class="section-title">{{sec.title}}</text>
+      <block wx:for="{{sec.blocks}}" wx:for-item="blk" wx:key="id">
+        <text class="para" wx:if="{{blk.type === 'p'}}">{{blk.text}}</text>
+        <view class="bullet-list" wx:elif="{{blk.type === 'ul'}}">
+          <view class="bullet-item" wx:for="{{blk.items}}" wx:for-item="li" wx:key="*this">
+            <text class="bullet-dot">·</text>
+            <text class="bullet-text">{{li}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="doc-foot">
+    <button class="btn-read" bindtap="handleBack">我已阅读</button>
+    <text class="foot-tip">如不同意本{{doc.type === 'privacy' ? '政策' : '协议'}}，请勿勾选同意并停止使用本小程序</text>
+  </view>
+</view>

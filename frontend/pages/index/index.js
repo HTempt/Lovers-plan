@@ -57,7 +57,20 @@ Page({
     leftCard: { type: 'milestone', icon: '❤️', title: '恋爱里程碑', subtitle: '加载中...', daysLeft: 0 },
 
     // 当前活跃tab
-    activeTab: 'index'
+    activeTab: 'index',
+
+    // 游客模式：未登录时展示可自由浏览的功能预览，不索取任何授权
+    guest: false,
+    features: [
+      { key: 'diary', icon: '📝', name: '恋爱日记', desc: '用图文记录每个瞬间' },
+      { key: 'task', icon: '🎯', name: '共同任务', desc: '一起打卡养成习惯' },
+      { key: 'wish', icon: '✨', name: '心愿清单', desc: '写下想一起做的事' },
+      { key: 'anniversary', icon: '❤️', name: '纪念日', desc: '重要日子不再忘记' },
+      { key: 'capsule', icon: '💌', name: '时光胶囊', desc: '写给未来的你们' },
+      { key: 'love-tree', icon: '🌱', name: '爱情树', desc: '每日陪伴慢慢长大' },
+      { key: 'footprint', icon: '🌏', name: '情侣足迹', desc: '一起去过的城市' },
+      { key: 'quiz', icon: '💬', name: '每日问答', desc: '每天更懂对方一点' }
+    ]
   },
 
   onLoad() {
@@ -66,6 +79,7 @@ Page({
       statusBarHeight: sysInfo.statusBarHeight,
       currentDate: util.formatDate(new Date())
     });
+    // 农历为公开接口，游客态下同样可以展示
     this.loadLunarDate();
   },
 
@@ -79,7 +93,27 @@ Page({
   },
 
   onShow() {
+    // 游客模式：不请求任何需要鉴权的接口，先让用户自由浏览功能
+    if (!app.isLoggedIn()) {
+      this.setData({ guest: true, loading: false, error: false });
+      return;
+    }
+    this.setData({ guest: false });
     this.loadHomeData();
+  },
+
+  // 游客点击功能入口：弹出可取消的询问框，由用户自行选择是否登录
+  onGuestFeatureTap(e) {
+    const name = e.currentTarget.dataset.name || '该功能';
+    app.requireLogin({
+      title: name,
+      content: `「${name}」需要登录后使用。您可以继续浏览其他内容，也可以现在登录。`
+    });
+  },
+
+  // 游客主动点击登录 / 注册
+  handleGuestLogin() {
+    wx.navigateTo({ url: '/pages/login/login' });
   },
 
   async loadHomeData() {
@@ -188,6 +222,11 @@ Page({
 
   // 下拉刷新
   async onRefresh() {
+    if (!app.isLoggedIn()) {
+      await this.loadLunarDate();
+      wx.stopPullDownRefresh();
+      return;
+    }
     this.setData({ feedPage: 0, feedHasMore: true });
     await this.loadHomeData();
     wx.stopPullDownRefresh();
@@ -462,7 +501,7 @@ Page({
 
   // 去个人页
   goToProfile() {
-    wx.navigateTo({ url: '/pages/profile/profile' });
+    wx.switchTab({ url: '/pages/profile/profile' });
   },
 
   // 每日一言点击跳转

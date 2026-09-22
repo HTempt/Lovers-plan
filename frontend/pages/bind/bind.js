@@ -12,6 +12,11 @@ Page({
   },
 
   onLoad() {
+    // 未登录（游客）时不发起鉴权请求，回到首页由用户自行决定是否登录
+    if (!app.isLoggedIn()) {
+      wx.reLaunch({ url: '/pages/index/index' });
+      return;
+    }
     // 检查是否已绑定
     this.checkBindStatus();
   },

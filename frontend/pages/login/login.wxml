@@ -23,7 +23,27 @@
   </view>
 
   <view class="login-footer">
-    <button class="btn-wechat" open-type="getUserInfo" bindgetuserinfo="handleLogin">❤️ 开始我们的故事</button>
-    <text class="login-agreement">登录即表示同意《用户协议》和《隐私政策》</text>
+    <!-- 协议勾选：默认不勾选，必须由用户阅读后主动选择 -->
+    <view class="agreement-row {{shakeAgreement ? 'shake' : ''}}">
+      <view class="checkbox-wrap" bindtap="toggleAgreement">
+        <view class="checkbox {{agreed ? 'checked' : ''}}">
+          <text class="checkbox-icon" wx:if="{{agreed}}">✓</text>
+        </view>
+      </view>
+      <view class="agreement-text">
+        <text class="agreement-plain" bindtap="toggleAgreement">我已阅读并同意</text>
+        <text class="agreement-link" catchtap="openAgreement" data-type="user">《用户服务协议》</text>
+        <text class="agreement-plain">和</text>
+        <text class="agreement-link" catchtap="openAgreement" data-type="privacy">《隐私政策》</text>
+      </view>
+    </view>
+
+    <button class="btn-wechat {{agreed ? '' : 'pending'}}" bindtap="handleStart" loading="{{loading}}">
+      ❤️ 开始我们的故事
+    </button>
+
+    <text class="login-tip">您可以随时在「我的」中查阅协议全文或撤回隐私授权</text>
+
+    <text class="login-skip" bindtap="handleSkip">暂不登录，先逛逛</text>
   </view>
 </view>

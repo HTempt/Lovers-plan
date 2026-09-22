@@ -1,4 +1,14 @@
 <view class="diary-container">
+  <!-- 游客态：未登录不请求数据，可先浏览功能再自行选择登录 -->
+  <view class="guest-state" wx:if="{{guest}}">
+    <text class="guest-icon">📖</text>
+    <text class="guest-title">登录后开始记录你们的日记</text>
+    <text class="guest-desc">日记、照片与回忆会同步给你和 TA。浏览功能无需登录。</text>
+    <button class="btn-primary" bindtap="handleLogin">登录 / 注册</button>
+    <text class="guest-later" bindtap="goHome">先回首页逛逛</text>
+  </view>
+
+  <block wx:else>
   <!-- 视图切换 -->
   <view class="view-switcher">
     <view class="switch-item {{currentView === 'timeline' ? 'active' : ''}}" bindtap="switchView" data-view="timeline">时间轴</view>
@@ -66,4 +76,5 @@
   <view class="float-btn" bindtap="goToCreate">
     <text class="float-btn-icon">✏️</text>
   </view>
+  </block>
 </view>

@@ -1,5 +1,6 @@
 const api = require('../../utils/api');
 const util = require('../../utils/util');
+const app = getApp();
 
 Page({
   data: {
@@ -8,11 +9,28 @@ Page({
     album: {},
     page: 0,
     hasMore: true,
-    loading: false
+    loading: false,
+    // 游客模式：未登录时不请求需要鉴权的接口，由用户自行决定是否登录
+    guest: false
   },
 
   onShow() {
+    if (!app.isLoggedIn()) {
+      this.setData({ guest: true, loading: false, timeline: [], album: {}, hasMore: false });
+      return;
+    }
+    this.setData({ guest: false });
     this.loadTimeline(true);
+  },
+
+  // 游客主动登录
+  handleLogin() {
+    wx.navigateTo({ url: '/pages/login/login' });
+  },
+
+  // 游客返回首页继续浏览
+  goHome() {
+    wx.switchTab({ url: '/pages/index/index' });
   },
 
   async loadTimeline(reset) {

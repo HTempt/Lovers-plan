@@ -1,4 +1,5 @@
 const api = require('../../utils/api');
+const legal = require('../../utils/legal');
 const app = getApp();
 
 Page({
@@ -7,6 +8,8 @@ Page({
     coupleInfo: null,
     loading: true,
     genderText: '设置性别',
+    // 游客模式：未登录时不请求需要鉴权的接口
+    guest: false,
     gridItems: [
       { key: 'achievement', icon: '🏆', name: '情侣成就', desc: '收集奖励' },
       { key: 'statistics', icon: '📊', name: '恋爱报告', desc: '数据分析' },
@@ -18,10 +21,29 @@ Page({
   },
 
   onShow() {
+    if (!app.isLoggedIn()) {
+      this.setData({ guest: true, loading: false, userInfo: null, coupleInfo: null });
+      return;
+    }
+    this.setData({ guest: false });
     this.loadInfo();
   },
 
+  // 游客主动登录
+  handleLogin() {
+    wx.navigateTo({ url: '/pages/login/login' });
+  },
+
+  // 游客返回首页继续浏览
+  goHome() {
+    wx.switchTab({ url: '/pages/index/index' });
+  },
+
   onPullDownRefresh() {
+    if (!app.isLoggedIn()) {
+      wx.stopPullDownRefresh();
+      return;
+    }
     this.loadInfo().then(() => {
       wx.stopPullDownRefresh();
     });
@@ -163,6 +185,33 @@ Page({
             this.loadInfo();
           } catch (err) {}
         }
+      }
+    });
+  },
+
+  // 查阅《用户服务协议》/《隐私政策》全文
+  openAgreement(e) {
+    const type = e.currentTarget.dataset.type === 'privacy' ? 'privacy' : 'user';
+    wx.navigateTo({ url: `/pages/agreement/agreement?type=${type}` });
+  },
+
+  // 撤回隐私授权：清除同意记录并退出登录，再次使用需重新阅读并主动同意
+  withdrawConsent() {
+    const consent = legal.getConsent();
+    const agreedAt = consent && consent.agreedAt
+      ? new Date(consent.agreedAt).toLocaleString()
+      : '';
+    wx.showModal({
+      title: '撤回隐私授权',
+      content: agreedAt
+        ? `您于 ${agreedAt} 同意《隐私政策》${consent.version || ''} 版本。撤回后我们将停止处理您的个人信息并退出登录，需要重新阅读并主动同意后才能继续使用。`
+        : '撤回后我们将停止处理您的个人信息并退出登录，需要重新阅读并主动同意后才能继续使用。',
+      confirmText: '确认撤回',
+      confirmColor: '#FF4D4F',
+      success: (res) => {
+        if (!res.confirm) return;
+        legal.clearConsent();
+        app.logout();
       }
     });
   },

@@ -1,5 +1,18 @@
 <view class="profile-container">
-  <view class="loading-wrap" wx:if="{{loading}}">
+  <!-- 游客态：未登录不请求数据，协议与隐私政策始终可查阅 -->
+  <view class="guest-state" wx:if="{{guest}}">
+    <text class="guest-icon">💕</text>
+    <text class="guest-title">还没有登录</text>
+    <text class="guest-desc">登录后可以设置昵称头像、绑定另一半，并查看你们的恋爱数据。浏览无需登录。</text>
+    <button class="btn-primary" bindtap="handleLogin">登录 / 注册</button>
+    <text class="guest-later" bindtap="goHome">先回首页逛逛</text>
+    <view class="guest-legal">
+      <text class="guest-legal-link" bindtap="openAgreement" data-type="user">《用户服务协议》</text>
+      <text class="guest-legal-link" bindtap="openAgreement" data-type="privacy">《隐私政策》</text>
+    </view>
+  </view>
+
+  <view class="loading-wrap" wx:elif="{{loading}}">
     <text class="loading-text">加载中...</text>
   </view>
 
@@ -20,7 +33,7 @@
           </view>
           <view class="user-meta">
             <text class="user-meta-item" bindtap="editGender">{{genderText}}</text>
-            <text class="user-meta-item" bindtap="editPhone">{{userInfo.phone || '绑定手机号'}}</text>
+            <text class="user-meta-item" bindtap="editPhone">{{userInfo.phone || '绑定手机号（选填）'}}</text>
           </view>
         </view>
       </view>
@@ -46,6 +59,22 @@
           <text class="grid-label">{{item.name}}</text>
           <text class="grid-desc">{{item.desc}}</text>
         </view>
+      </view>
+    </view>
+
+    <!-- ===== 协议与隐私 ===== -->
+    <view class="legal-section">
+      <view class="legal-row" bindtap="openAgreement" data-type="user">
+        <text class="legal-label">《用户服务协议》</text>
+        <text class="legal-arrow">›</text>
+      </view>
+      <view class="legal-row" bindtap="openAgreement" data-type="privacy">
+        <text class="legal-label">《隐私政策》</text>
+        <text class="legal-arrow">›</text>
+      </view>
+      <view class="legal-row" bindtap="withdrawConsent">
+        <text class="legal-label legal-danger">撤回隐私授权</text>
+        <text class="legal-arrow">›</text>
       </view>
     </view>
 

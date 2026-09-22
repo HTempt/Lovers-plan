@@ -27,6 +27,37 @@
     <text class="error-text">加载失败，下拉刷新试试</text>
   </view>
 
+  <!-- ===== 游客模式：未登录也可自由浏览功能，不强制授权登录 ===== -->
+  <scroll-view class="content-scroll" scroll-y enhanced
+    refresher-enabled bindrefresherrefresh="onRefresh" wx:elif="{{guest}}">
+
+    <view class="guest-hero">
+      <text class="guest-hero-icon">💕</text>
+      <text class="guest-hero-title">双人岛</text>
+      <text class="guest-hero-slogan">属于我们的秘密花园</text>
+      <text class="guest-hero-desc">先把功能逛一遍，觉得合适再登录</text>
+    </view>
+
+    <view class="guest-feature-section">
+      <view class="section-header">
+        <text class="section-title">🏝️ 这里可以做什么</text>
+      </view>
+      <view class="guest-feature-grid">
+        <view class="guest-feature-card" wx:for="{{features}}" wx:key="key"
+              bindtap="onGuestFeatureTap" data-name="{{item.name}}">
+          <text class="guest-feature-icon">{{item.icon}}</text>
+          <text class="guest-feature-name">{{item.name}}</text>
+          <text class="guest-feature-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="guest-login-section">
+      <button class="btn-primary guest-login-btn" bindtap="handleGuestLogin">登录 / 注册后开始使用</button>
+      <text class="guest-login-tip">浏览以上内容无需登录，我们不会索取您的任何信息</text>
+    </view>
+  </scroll-view>
+
   <!-- 首页内容主体 -->
   <scroll-view class="content-scroll" scroll-y enhanced
     enable-back-to-top refresher-enabled
