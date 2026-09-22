@@ -168,12 +168,21 @@ CREATE TABLE IF NOT EXISTS `user_status` (
 
 
 
--- 纪念日表添加 icon 字段
-ALTER TABLE `anniversary`
-    ADD COLUMN `icon` VARCHAR(20) DEFAULT '❤️' COMMENT '自定义图标' AFTER `type`;
--- 用户表添加手机号字段
-ALTER TABLE `user`
-    ADD COLUMN `phone` VARCHAR(20) DEFAULT '' COMMENT '手机号' AFTER `gender`;
+-- 纪念日表添加 icon 字段（幂等：建表语句已含 icon 时自动跳过）
+SET @has_col = (SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema = DATABASE() AND table_name = 'anniversary' AND column_name = 'icon');
+SET @ddl = IF(@has_col = 0,
+  'ALTER TABLE `anniversary` ADD COLUMN `icon` VARCHAR(20) DEFAULT ''❤️'' COMMENT ''自定义图标'' AFTER `type`',
+  'DO 0');
+PREPARE stmt FROM @ddl; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+
+-- 用户表添加手机号字段（幂等）
+SET @has_col = (SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema = DATABASE() AND table_name = 'user' AND column_name = 'phone');
+SET @ddl = IF(@has_col = 0,
+  'ALTER TABLE `user` ADD COLUMN `phone` VARCHAR(20) DEFAULT '''' COMMENT ''手机号'' AFTER `gender`',
+  'DO 0');
+PREPARE stmt FROM @ddl; EXECUTE stmt; DEALLOCATE PREPARE stmt;
 -- 爱情树成长系统
 -- V004: love_tree + love_tree_growth_record + sign_in_record
 
@@ -232,12 +241,17 @@ CREATE TABLE IF NOT EXISTS `footprint` (
     INDEX idx_city (`city`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='情侣足迹表';
 
--- 日记表增加位置详情字段
-ALTER TABLE `diary`
-    ADD COLUMN `province` VARCHAR(50) DEFAULT '' COMMENT '省份' AFTER `location`,
-    ADD COLUMN `city` VARCHAR(50) DEFAULT '' COMMENT '城市' AFTER `province`,
-    ADD COLUMN `latitude` DECIMAL(10,7) DEFAULT 0 COMMENT '纬度' AFTER `city`,
-    ADD COLUMN `longitude` DECIMAL(10,7) DEFAULT 0 COMMENT '经度' AFTER `latitude`;
+-- 日记表增加位置详情字段（幂等）
+SET @has_col = (SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema = DATABASE() AND table_name = 'diary' AND column_name = 'province');
+SET @ddl = IF(@has_col = 0,
+  'ALTER TABLE `diary`
+     ADD COLUMN `province` VARCHAR(50) DEFAULT '''' COMMENT ''省份'' AFTER `location`,
+     ADD COLUMN `city` VARCHAR(50) DEFAULT '''' COMMENT ''城市'' AFTER `province`,
+     ADD COLUMN `latitude` DECIMAL(10,7) DEFAULT 0 COMMENT ''纬度'' AFTER `city`,
+     ADD COLUMN `longitude` DECIMAL(10,7) DEFAULT 0 COMMENT ''经度'' AFTER `latitude`',
+  'DO 0');
+PREPARE stmt FROM @ddl; EXECUTE stmt; DEALLOCATE PREPARE stmt;
 -- 时光胶囊
 -- V006: time_capsule + time_capsule_media
 

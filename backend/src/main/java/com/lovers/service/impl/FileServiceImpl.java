@@ -29,6 +29,13 @@ public class FileServiceImpl implements IFileService {
     private String endpoint;
 
     /**
+     * 对外公网文件地址前缀（Nginx 反代到 MinIO，bucket 公共读），
+     * 例如 http://192.144.130.3/files 。为空时退回预签名URL（要求客户端能直连MinIO）。
+     */
+    @Value("${minio.public-endpoint:}")
+    private String publicEndpoint;
+
+    /**
      * 上传文件到MinIO
      */
     public String upload(MultipartFile file, String mediaType) {
@@ -54,23 +61,24 @@ public class FileServiceImpl implements IFileService {
     /**
      * 获取文件访问URL
      * - null/空 → null
-     * - MinIO完整URL（含endpoint）→ 提取路径后重新生成预签名URL（防止过期）
+     * - MinIO完整URL（含内网endpoint）→ 提取对象路径后转公网URL
      * - 第三方完整URL（WeChat等）→ 直接返回
-     * - 原始路径 → 生成预签名URL
+     * - 原始对象路径 → 转公网URL
+     *
+     * 说明：文件公网访问走 Nginx 反代 /files/ → MinIO（bucket 公共读）。
+     * 预签名URL签名中包含内网host，经代理后无法校验，故仅在未配置
+     * minio.public-endpoint 时作为回退。
      */
     public String getFileUrl(String filePath) {
         if (filePath == null || filePath.isEmpty()) return null;
 
-        // 提取MinIO URL中的对象路径（处理已过期的预签名URL）
+        // 提取MinIO对象路径（兼容旧存储值：内网完整URL / 预签名URL）
         String minioPrefix = endpoint + "/" + bucketName + "/";
         if (filePath.startsWith(minioPrefix)) {
-            // 从完整MinIO URL中提取路径: http://localhost:9000/lovers-plan/image/xxx.jpg?params...
             String pathWithParams = filePath.substring(minioPrefix.length());
-            // 去掉查询参数
             int queryIdx = pathWithParams.indexOf('?');
             String objectPath = queryIdx > 0 ? pathWithParams.substring(0, queryIdx) : pathWithParams;
-            // 重新生成新鲜URL
-            return generatePresignedUrl(objectPath);
+            return toPublic(objectPath);
         }
 
         // 第三方完整URL（WeChat头像等）→ 直接返回
@@ -78,8 +86,18 @@ public class FileServiceImpl implements IFileService {
             return filePath;
         }
 
-        // 原始MinIO路径 → 生成预签名URL
-        return generatePresignedUrl(filePath);
+        // 原始MinIO对象路径 → 公网URL
+        return toPublic(filePath);
+    }
+
+    /** 把对象路径转成客户端可访问的URL */
+    private String toPublic(String objectPath) {
+        if (objectPath == null || objectPath.isEmpty()) return null;
+        if (publicEndpoint != null && !publicEndpoint.isEmpty()) {
+            return publicEndpoint + "/" + objectPath;
+        }
+        // 回退：预签名URL（要求客户端能直连MinIO）
+        return generatePresignedUrl(objectPath);
     }
 
     /** 生成MinIO预签名URL */

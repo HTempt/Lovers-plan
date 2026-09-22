@@ -94,18 +94,51 @@ Page({
   },
 
   getLocation() {
-    // 先获取用户当前位置，作为定位地图的默认中心
-    wx.getLocation({
-      type: 'gcj02',
+    // 先检查位置权限
+    wx.getSetting({
+      success: (res) => {
+        if (!res.authSetting['scope.userLocation']) {
+          // 未授权，引导用户授权
+          wx.showModal({
+            title: '需要定位权限',
+            content: '获取位置信息需要授权，是否前往授权？',
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                wx.authorize({
+                  scope: 'scope.userLocation',
+                  success: () => {
+                    this.openLocationSelector();
+                  },
+                  fail: () => {
+                    wx.showToast({ title: '已拒绝授权', icon: 'none' });
+                  }
+                });
+              }
+            }
+          });
+        } else {
+          // 已授权，获取位置并打开选择器
+          this.openLocationSelector();
+        }
+      }
+    });
+  },
+
+  openLocationSelector() {
+    wx.showLoading({ title: '定位中...' });
+    wx.getFuzzyLocation({
       success: (loc) => {
+        wx.hideLoading();
         wx.chooseLocation({
           latitude: loc.latitude,
           longitude: loc.longitude,
+          name: '',
+          address: '',
           success: (res) => {
             const parts = [res.name, res.address].filter(Boolean);
-            const loc = parts.join(' · ') || '';
+            const locText = parts.join(' · ') || '';
             this.setData({
-              location: loc,
+              location: locText,
               latitude: res.latitude,
               longitude: res.longitude
             });
@@ -113,29 +146,16 @@ Page({
             this.resolveCity(res.latitude, res.longitude);
           },
           fail: (err) => {
+            wx.hideLoading();
             console.error('选择位置失败', err);
-            wx.showToast({ title: '获取位置失败', icon: 'none' });
+            wx.showToast({ title: '选择位置失败', icon: 'none' });
           }
         });
       },
-      fail: () => {
-        // 获取当前位置失败，直接打开选择（无默认位置）
-        wx.chooseLocation({
-          success: (res) => {
-            const parts = [res.name, res.address].filter(Boolean);
-            const loc = parts.join(' · ') || '';
-            this.setData({
-              location: loc,
-              latitude: res.latitude,
-              longitude: res.longitude
-            });
-            this.resolveCity(res.latitude, res.longitude);
-          },
-          fail: (err) => {
-            console.error('选择位置失败', err);
-            wx.showToast({ title: '获取位置失败', icon: 'none' });
-          }
-        });
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('获取位置失败', err);
+        wx.showToast({ title: '获取位置失败，请检查网络', icon: 'none' });
       }
     });
   },
@@ -158,8 +178,7 @@ Page({
 
   /** 获取当前所在城市（一键定位城市） */
   getCurrentCity() {
-    wx.getLocation({
-      type: 'gcj02',
+    wx.getFuzzyLocation({
       success: (res) => {
         wx.showLoading({ title: '定位中...' });
         reverseGeocode(res.latitude, res.longitude).then((geo) => {

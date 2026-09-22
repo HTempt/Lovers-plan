@@ -219,7 +219,6 @@
 
 .btn-submit {
   height: 88rpx;
-  line-height: 88rpx;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 32rpx;
@@ -254,7 +253,6 @@
 
 .btn-retry {
   height: 72rpx;
-  line-height: 72rpx;
   background: var(--primary-color);
   color: white;
   font-size: 28rpx;

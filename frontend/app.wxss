@@ -53,6 +53,35 @@ page {
 }
 
 /* ===== 通用按钮 ===== */
+/*
+ * 小程序原生 button 自带 padding、边框和特殊行高。各页面再用固定高度搭配
+ * 同值 line-height 时，文字的视觉中心会偏下。所有原生按钮统一使用 Flex
+ * 居中，页面只负责尺寸和颜色等变体。
+ */
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 1.2;
+  text-align: center;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+button::after {
+  border: none;
+}
+
+button:active {
+  opacity: 0.85;
+}
+
+button[disabled] {
+  opacity: 0.5;
+}
+
 .btn-primary {
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
@@ -197,7 +226,53 @@ page {
   opacity: 0.85;
 }
 
-/* ===== 空状态 ===== */
+/* ===== 游客态（未登录）引导 =====
+ * 未登录时页面不请求需要鉴权的接口，改为展示该状态，
+ * 由用户主动点击「登录 / 注册」后再进入授权流程。
+ */
+.guest-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 60rpx;
+  text-align: center;
+}
+
+.guest-state .guest-icon {
+  font-size: 96rpx;
+  margin-bottom: 28rpx;
+  display: block;
+}
+
+.guest-state .guest-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.guest-state .guest-desc {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  display: block;
+  margin-bottom: 44rpx;
+}
+
+.guest-state .btn-primary {
+  min-width: 380rpx;
+}
+
+.guest-state .guest-later {
+  font-size: 24rpx;
+  color: var(--text-light);
+  margin-top: 26rpx;
+  display: block;
+}
+
+/* ===== 通用空状态 ===== */
 .empty-state {
   display: flex;
   flex-direction: column;

@@ -280,7 +280,6 @@
 .btn-prev {
   flex: 1;
   height: 88rpx;
-  line-height: 88rpx;
   background: white;
   color: var(--text-secondary);
   font-size: 30rpx;
@@ -290,7 +289,6 @@
 
 .btn-next, .btn-submit {
   height: 88rpx;
-  line-height: 88rpx;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 30rpx;

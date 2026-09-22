@@ -36,6 +36,8 @@ minio:
   access-key: ${MINIO_ACCESS_KEY}
   secret-key: ${MINIO_SECRET_KEY}
   bucket-name: ${MINIO_BUCKET}
+  # 客户端可访问的公网文件前缀（Nginx 反代 /files/ → MinIO，bucket 公共读）
+  public-endpoint: ${MINIO_PUBLIC_ENDPOINT:}
 
 logging:
   level:

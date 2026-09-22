@@ -7,7 +7,7 @@
  *   开发工具中   -> 启用「不校验合法域名」即可用 HTTP
  *   正式发布前   -> 修改为 https://你的域名.com/api
  */
-const BASE_URL = 'http://47.93.25.125:8080/api';
+const BASE_URL = 'http://192.144.130.3/api';
 // 正式发布时改为:
 // const BASE_URL = 'https://你的域名.com/api';
 
@@ -30,10 +30,25 @@ function request(method, url, data = {}) {
       timeout: 10000,
       success: (res) => {
         if (res.statusCode === 401) {
-          // token过期，跳转登录页
+          // 登录状态失效：清除本地凭证，由页面以游客态展示
           wx.removeStorageSync('token');
-          wx.reLaunch({ url: '/pages/login/login' });
-          reject(new Error('登录已过期'));
+          const app = getApp();
+          if (app && app.globalData) {
+            app.globalData.token = '';
+            app.globalData.userInfo = null;
+            app.globalData.hasCouple = false;
+          }
+          // 仅当此前确实处于登录态（会话过期）时才提示重新登录；
+          // 纯游客访问到需要登录的页面不弹任何授权提示，只按失败处理
+          if (token && app && typeof app.requireLogin === 'function') {
+            app.requireLogin({
+              title: '登录状态已失效',
+              content: '需要重新登录后才能继续使用该功能，是否现在登录？'
+            });
+          }
+          const authErr = new Error('登录已过期');
+          authErr.authExpired = true;
+          reject(authErr);
           return;
         }
         if (res.data.code === 200) {

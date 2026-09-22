@@ -94,16 +94,11 @@
 
 .btn-subscribe {
   height: 64rpx;
-  line-height: 64rpx;
   padding: 0 28rpx;
   font-size: 26rpx;
   background: #FF6B81;
   color: white;
   border-radius: 40rpx;
-  border: none;
-}
-
-.btn-subscribe::after {
   border: none;
 }
 

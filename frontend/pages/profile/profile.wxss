@@ -17,6 +17,20 @@ page {
 .loading-text { font-size: 28rpx; color: #AAA; }
 
 /* ==========================================================
+   游客态：协议与隐私入口始终可查
+   ========================================================== */
+.guest-legal {
+  display: flex;
+  gap: 32rpx;
+  margin-top: 40rpx;
+}
+
+.guest-legal-link {
+  font-size: 24rpx;
+  color: #576B95;
+}
+
+/* ==========================================================
    顶部：用户信息 + 伴侣卡片
    ========================================================== */
 .top-section {
@@ -280,6 +294,54 @@ page {
 }
 
 /* ==========================================================
+   协议与隐私
+   ========================================================== */
+.legal-section {
+  margin: 16rpx 28rpx 0;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.legal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24rpx;
+  height: 88rpx;
+  position: relative;
+}
+
+.legal-row:active {
+  background: #FFF7F9;
+}
+
+.legal-row + .legal-row::before {
+  content: '';
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+  top: 0;
+  height: 2rpx;
+  background: #F5F5F5;
+}
+
+.legal-label {
+  font-size: 26rpx;
+  color: #555555;
+}
+
+.legal-danger {
+  color: #FF4D4F;
+}
+
+.legal-arrow {
+  font-size: 28rpx;
+  color: #DDDDDD;
+}
+
+/* ==========================================================
    操作按钮
    ========================================================== */
 .action-section {
@@ -291,7 +353,6 @@ page {
 
 .btn-unbind {
   height: 72rpx;
-  line-height: 72rpx;
   background: #FFFFFF;
   color: #FF4D4F;
   font-size: 26rpx;
@@ -300,11 +361,8 @@ page {
   text-align: center;
 }
 
-.btn-unbind::after { border: none; }
-
 .btn-logout {
   height: 72rpx;
-  line-height: 72rpx;
   background: #FFFFFF;
   color: #AAA;
   font-size: 26rpx;
@@ -312,5 +370,3 @@ page {
   border: 2rpx solid #F0F0F0;
   text-align: center;
 }
-
-.btn-logout::after { border: none; }

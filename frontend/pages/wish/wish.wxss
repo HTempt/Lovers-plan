@@ -81,7 +81,6 @@
 .btn-progress, .btn-achieve {
   flex: 1;
   height: 60rpx;
-  line-height: 60rpx;
   font-size: 24rpx;
   border-radius: 30rpx;
   text-align: center;
@@ -160,7 +159,6 @@
 
 .btn-submit {
   height: 88rpx;
-  line-height: 88rpx;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 32rpx;

@@ -163,7 +163,6 @@
 .btn-generate {
   width: 400rpx;
   height: 88rpx;
-  line-height: 88rpx;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 32rpx;
@@ -193,7 +192,6 @@
 
 .btn-copy, .btn-share {
   height: 88rpx;
-  line-height: 88rpx;
   border-radius: 50rpx;
   font-size: 30rpx;
   text-align: center;
@@ -259,7 +257,6 @@
 .btn-bind {
   width: 400rpx;
   height: 88rpx;
-  line-height: 88rpx;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 32rpx;

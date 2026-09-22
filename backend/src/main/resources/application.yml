@@ -6,9 +6,9 @@ spring:
     name: lovers-plan
 
   datasource:
-    url: jdbc:mysql://localhost:3306/lovers_plan?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.144.130.3:3306/lovers_plan?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: 123456
+    password: Root@2026!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   servlet:
@@ -55,6 +55,8 @@ minio:
   access-key: admin
   secret-key: admin1234
   bucket-name: lovers-plan
+  # 公网文件前缀（经Nginx /files/ 反代 + bucket公共读）；留空则用预签名URL
+  public-endpoint: ${MINIO_PUBLIC_ENDPOINT:}
 
 # Invite code Redis config
 invite:

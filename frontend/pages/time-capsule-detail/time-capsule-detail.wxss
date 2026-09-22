@@ -234,7 +234,6 @@
 
 .btn-delete {
   height: 80rpx;
-  line-height: 80rpx;
   background: white;
   color: #FF4757;
   font-size: 28rpx;

@@ -567,11 +567,6 @@ page {
   border-radius: 40rpx;
   border: none;
   box-shadow: 0 4rpx 16rpx rgba(245,108,141,0.3);
-  line-height: 1;
-}
-
-.empty-btn::after {
-  border: none;
 }
 
 /* ==========================================================

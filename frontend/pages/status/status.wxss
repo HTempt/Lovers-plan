@@ -132,7 +132,6 @@
 
 .btn-save {
   height: 88rpx;
-  line-height: 88rpx;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   font-size: 32rpx;
@@ -143,7 +142,6 @@
 
 .btn-clear {
   height: 80rpx;
-  line-height: 80rpx;
   background: white;
   color: var(--text-secondary);
   font-size: 28rpx;
